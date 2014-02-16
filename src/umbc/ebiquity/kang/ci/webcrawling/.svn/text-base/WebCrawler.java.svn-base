@@ -1,0 +1,359 @@
+package umbc.ebiquity.kang.ci.webcrawling;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+public class WebCrawler {
+	
+	public static final String REGEXP_HTTP = "<a href=\"http://(.)*\">";
+	public static final String REGEXP_RELATIVE = "<a href=\"(.)*\">";
+	public static final String USER_AGENT = "User-agent:";
+	public static final String DISALLOW = "Disallow:";
+	
+    private int maxNumberUrls;
+	private int maxDepth;
+	private long delayBetweenUrls;
+	
+	private Pattern regexSearchPattern;
+	private Pattern httpRegexp;
+	private Pattern relativeRegexp;
+	
+	private Map<String, CrawlerUrl> visitedUrls = null;
+	private Map<String, Collection<String>> sitePermissions = null;
+	private Queue<CrawlerUrl> urlQueue = null;
+	
+	private BufferedWriter crawlOutput = null;
+	private BufferedWriter crawlStatistics = null;
+	private int numberUrlsSaved = 0;
+
+	public WebCrawler(Queue<CrawlerUrl> urlQueue, int maxNumberUrls,
+			int maxDepth, long delayBetweenUrls, String regexpSearchPattern)
+			throws Exception {
+		
+		this.urlQueue = urlQueue;
+		this.maxNumberUrls = maxNumberUrls;
+		this.maxDepth = maxDepth;
+		this.delayBetweenUrls = delayBetweenUrls;
+
+		/**
+		 * Compiles the given regular expression into a pattern.
+		 * Parameters:regex - The expression to be compiled. 
+		 * Throws: PatternSyntaxException If the expression's syntax is invalid
+		 */
+		this.regexSearchPattern = Pattern.compile(regexpSearchPattern);
+		this.visitedUrls = new HashMap<String, CrawlerUrl>();
+		this.sitePermissions = new HashMap<String, Collection<String>>();
+		this.httpRegexp = Pattern.compile(REGEXP_HTTP);
+		this.relativeRegexp = Pattern.compile(REGEXP_RELATIVE);
+		this.crawlOutput = new BufferedWriter(new FileWriter("crawl.txt"));
+		this.crawlStatistics = new BufferedWriter(new FileWriter("crawlStatistics.txt"));
+		
+	}
+
+	public void crawl() throws Exception {
+
+		/***/
+		while (this.continueCrawling()) {
+
+			CrawlerUrl url = this.getNextUrl();
+			if (url != null) {
+
+				printCrawlInfo();
+				/***/
+				String content = this.getContent(url);
+				/***/
+				if (this.isContentRelevant(content, regexSearchPattern)) {
+					/***/
+					this.saveContent(url, content);
+					/***/
+					Collection<String> urlStrings = this.extractUrls(content,
+							url);
+					/***/
+					this.addUrlsToUrlQueue(url, urlStrings);
+				} else {
+					System.out.println(url + "is not relevent...");
+				}
+				
+				/***/
+				Thread.sleep(this.delayBetweenUrls);
+			}
+		}
+		
+		this.closeOutputSteam();
+	}
+
+	private void printCrawlInfo() throws Exception {
+		StringBuilder strbuilder = new StringBuilder();
+		
+		/** This style of coding is NOT that clear */
+		strbuilder.append("Queue length = ").append(this.urlQueue.size())
+				.append(" visited urls=").append(this.getNumberOfUrlsVisited())
+				.append(" site permissions=").append(
+						this.sitePermissions.size());
+		crawlStatistics.append("" + this.getNumberOfUrlsVisited()).append(
+				"," + this.numberUrlsSaved).append("," + this.urlQueue.size())
+				.append("," + this.sitePermissions.size() + "\n");
+		crawlStatistics.flush();
+		System.out.println(strbuilder.toString());
+	}
+
+	private boolean continueCrawling() {
+		return (!(urlQueue.isEmpty()) && (getNumberOfUrlsVisited() < this.maxNumberUrls));
+	}	
+
+	private CrawlerUrl getNextUrl() {
+		CrawlerUrl nextUrl = null;
+		while ((nextUrl == null) && (!this.urlQueue.isEmpty())) {
+//			CrawlerUrl crawlerUrl = this.urlQueue.poll();
+			CrawlerUrl crawlerUrl = this.urlQueue.remove();
+			if (doWeHavePermissionToVisit(crawlerUrl)
+					&& (!isUrlAlreadyVisited(crawlerUrl))
+					&& (isDepthAcceptable(crawlerUrl))) {
+				nextUrl = crawlerUrl;
+			}
+		}
+		return nextUrl;
+	}
+
+	private boolean isDepthAcceptable(CrawlerUrl crawlerUrl) {
+		return crawlerUrl.getDepth() <= this.maxDepth;
+	}
+
+	private boolean isUrlAlreadyVisited(CrawlerUrl crawlerUrl) {
+
+		if (this.visitedUrls.containsKey(crawlerUrl.getUrlString())) {
+			return true;
+		}
+//		if (crawlerUrl.isVisited()
+//				|| this.visitedUrls.containsKey(crawlerUrl.getUrlString())) {
+//			return true;
+//		}
+		return false;
+	}
+
+	private boolean doWeHavePermissionToVisit(CrawlerUrl crawlerUrl) {
+		if (crawlerUrl == null) {
+			return false;
+		}
+		if (!crawlerUrl.isCheckedForPermission()) {
+			crawlerUrl
+					.setAllowedToVisit(this.computePermissionForVisiting(crawlerUrl));
+		}
+		return crawlerUrl.isAllowedToVisit();
+	}
+	
+	private boolean computePermissionForVisiting(CrawlerUrl crawlerUrl) {
+		URL url = crawlerUrl.getURL();
+		boolean retValue = (url != null);
+		if (retValue) {
+			String host = url.getHost();
+			Collection<String> disallowedPaths = this.sitePermissions.get(host);
+			if (disallowedPaths == null) {
+				disallowedPaths = this
+						.parseRobotsTxtFileToGetDisallowedPaths(host);
+			}
+			
+			String path = url.getPath();
+			for(String disallowdPath: disallowedPaths){
+				if(path.contains(disallowdPath)){
+					retValue = false;
+				}
+			}
+
+		}
+		return retValue;
+	}
+	
+	private Collection<String> parseRobotsTxtFileToGetDisallowedPaths(
+			String host) {
+		String robotFilePath = this
+				.getContent("http://" + host + "/robots.txt");
+		Collection<String> disallowedPaths = new ArrayList<String>();
+		if (robotFilePath != null) {
+			Pattern p = Pattern.compile(USER_AGENT);
+			String[] permissionSets = p.split(robotFilePath);
+			String permissionString = "";
+			for (String permission : permissionSets) {
+				if (permission.trim().startsWith("*")) {
+					permissionString = permission.substring(1);
+				}
+			}
+			p = Pattern.compile(DISALLOW);
+			String[] items = p.split(permissionString);
+			for (String s : items) {
+				disallowedPaths.add(s.trim());
+			}
+		}
+		this.sitePermissions.put(host, disallowedPaths);
+		return disallowedPaths;
+	}
+
+	private String getContent(String urlString) {
+		return this.getContent(new CrawlerUrl(urlString, 0));
+	}
+	private String getContent(CrawlerUrl url) {
+		
+		HttpClient client = new DefaultHttpClient();
+		HttpGet httpget = new HttpGet(url.getUrlString()); 
+//		httpget.getParams().setParameter(null, httpget);
+	    String text = null;
+		try {
+			HttpResponse response = client.execute(httpget);
+			if (HttpStatus.SC_OK == response.getStatusLine().getStatusCode()) {
+				HttpEntity entity = response.getEntity();
+				if (entity != null) {
+					InputStream is = entity.getContent();
+					try {
+
+						text = readContentsFromStream(new InputStreamReader(is));
+					} finally {
+						is.close();
+					}
+				}
+			}
+			
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally{
+			
+		}
+		this.markUrlAsVisited(url);
+		return text;
+	}
+	
+	private void markUrlAsVisited(CrawlerUrl url) {
+		this.visitedUrls.put(url.getUrlString(), url);
+		url.setIsVisited();	
+	}
+
+	private static String readContentsFromStream(Reader input)
+			throws IOException {
+		BufferedReader bufferedReader = null;
+		if (input instanceof BufferedReader) {
+			bufferedReader = (BufferedReader) input;
+		} else {
+			bufferedReader = new BufferedReader(input);
+		}
+
+		StringBuilder sb = new StringBuilder();
+		char[] buffer = new char[4 * 1024];
+		int charsRead;
+		/** what does the BufferedReader.read() exactly mean? */
+		while ((charsRead = bufferedReader.read(buffer)) != -1) {
+			sb.append(buffer, 0, charsRead);
+		}
+		return sb.toString();
+	}
+
+	private boolean isContentRelevant(String content, Pattern pattern) {
+		boolean retValue = false;
+		if(content != null){
+			Matcher m = pattern.matcher(content);
+			retValue = m.find();
+		}
+		return retValue;
+	}
+
+	private void saveContent(CrawlerUrl url, String content) throws Exception {
+		System.out.println("in saveContent");
+		this.crawlOutput.append(url.getUrlString()).append("\n");
+		this.numberUrlsSaved++;
+	}
+
+	private List<String> extractUrls(String text, CrawlerUrl crawlerUrl) {
+		System.out.println("in extractUrls");
+		Map<String, String> urlMap = new HashMap<String, String>();
+		this.extractHttpUrls(urlMap, text);
+		this.extractRelativeUrls(urlMap, text, crawlerUrl);
+		ArrayList<String> retList = new ArrayList<String>(urlMap.keySet());
+		System.out.println("size of urls: " + retList.size());
+		return retList;
+	}
+	
+	private void extractHttpUrls(Map<String, String> urlMap, String text) {
+		System.out.println("in extractHttpUrls");
+		Matcher m = httpRegexp.matcher(text);
+		while (m.find()) {
+			System.out.println("in while of extractHttpUrls");
+			String url = m.group();
+			String[] terms = url.split("a href=\"");
+			for (String term : terms) {
+				if (term.startsWith("http")) {
+					int index = term.indexOf("\"");
+					if (index > 0) {
+						term = term.substring(0, index);
+					}
+					urlMap.put(term, term);
+				}
+			}
+		}
+	}
+
+	private void extractRelativeUrls(Map<String, String> urlMap, String text,
+			CrawlerUrl crawlerUrl) {
+		System.out.println("in extractRelativeUrls");
+		Matcher m = relativeRegexp.matcher(text);
+		URL textUrl = crawlerUrl.getURL();
+		String host = textUrl.getHost();
+		while (m.find()) {
+			System.out.println("in while of extractRelativeUrls");
+			String url = m.group();
+			String[] terms = url.split("a href=\"");
+			for (String term : terms) {
+				if (term.startsWith("/")) {
+					int index = term.indexOf("\"");
+					if (index > 0) {
+						term = term.substring(0, index);
+					}
+					String s = "http://" + host + term;
+					urlMap.put(s, s);
+				}
+			}
+		}
+	}
+
+	private void addUrlsToUrlQueue(CrawlerUrl url, Collection<String> urlStrings) {
+		int depth = url.getDepth() +1;
+		for(String urlString: urlStrings){
+			if(!this.visitedUrls.containsKey(urlString)){
+				this.urlQueue.add(new CrawlerUrl(urlString, depth));
+			}
+		}
+	}
+	
+	private int getNumberOfUrlsVisited() {
+		return this.visitedUrls.size();
+	}
+	
+	private void closeOutputSteam() throws Exception {
+		crawlOutput.flush();
+		crawlOutput.close();
+		crawlStatistics.flush();
+		crawlStatistics.close();
+	}
+
+}

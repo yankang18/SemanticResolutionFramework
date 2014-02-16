@@ -1,0 +1,172 @@
+package umbc.ebiquity.kang.ontologyinitializator.ontology;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.Concept;
+
+public class InstanceTripleSet {
+
+	private String subjectLabel;
+	private String processedSubjectLabel;
+	private Set<Triple> nonTaxonomicTriples;
+	private Set<Triple> taxonomicTriples;
+	
+	// instance to its concept set map
+	private Set<Triple> instance2ConceptSetTriples;
+	private Map<String, Set<String>> customRelation2ValueMap;
+	private Map<String, Set<String>> taxonomicRelationValueMap;
+	private Map<String, Set<Concept>> instance2ConceptMap;
+	private Set<Concept> conceptSet;
+	
+	public InstanceTripleSet(String subjectLabel) {
+		this.subjectLabel = subjectLabel.trim();
+		this.nonTaxonomicTriples = new LinkedHashSet<Triple>();
+		this.taxonomicTriples = new LinkedHashSet<Triple>();
+		this.instance2ConceptSetTriples = new LinkedHashSet<Triple>();
+		this.customRelation2ValueMap = new HashMap<String, Set<String>>();
+		this.taxonomicRelationValueMap = new HashMap<String, Set<String>>();
+		this.instance2ConceptMap = new HashMap<String, Set<Concept>>();
+		this.conceptSet = new HashSet<Concept>();
+	}
+
+	public void addInstance2ConceptTriple(Triple triple) {
+		
+		Concept concept = triple.getConcept();
+		conceptSet.add(concept);
+		String predicate = triple.getPredicate();
+//		String object = triple.getObject();
+		
+		Set<Concept> relationValueMap;
+		if(instance2ConceptMap.containsKey(predicate)){
+			relationValueMap = instance2ConceptMap.get(predicate);
+		} else {
+			relationValueMap = new HashSet<Concept>();
+			instance2ConceptMap.put(predicate, relationValueMap);
+		}
+		relationValueMap.add(concept);
+		
+		instance2ConceptSetTriples.add(triple);
+	}
+	
+	public void addNonTaxonomicTriple(Triple triple) {
+		String predicate = triple.getPredicate();
+		String object = triple.getObject();
+		
+		Set<String> relationValueMap;
+		if(customRelation2ValueMap.containsKey(predicate)){
+			relationValueMap = customRelation2ValueMap.get(predicate);
+		} else {
+			relationValueMap = new HashSet<String>();
+			customRelation2ValueMap.put(predicate, relationValueMap);
+		}
+		relationValueMap.add(object);
+//		nonTaxonomicRelationValueMap.put(predicate, relationValueMap);
+		nonTaxonomicTriples.add(triple);
+	}
+
+	public void addTaxonomicTriple(Triple triple) {
+		String predicate = triple.getPredicate();
+		String object = triple.getObject();
+		
+		Set<String> relationValueMap;
+		if(taxonomicRelationValueMap.containsKey(predicate)){
+			relationValueMap = taxonomicRelationValueMap.get(predicate);
+		} else {
+			relationValueMap = new HashSet<String>();
+			taxonomicRelationValueMap.put(predicate, relationValueMap);
+		}
+		relationValueMap.add(object);
+//		taxonomicRelationValueMap.put(predicate, relationValueMap);
+		taxonomicTriples.add(triple);
+	}
+
+	public void printTriples() {
+		System.out.println("* <" + subjectLabel + ">");
+		for (String predicate : customRelation2ValueMap.keySet()) {
+			System.out.println("      <" + predicate + ">");
+			Collection<String> objects = customRelation2ValueMap.get(predicate);
+			for (String object : objects) {
+				System.out.println("                  <" + object + ">");
+			}
+		}
+		for (String predicate : instance2ConceptMap.keySet()) {
+			System.out.println("   <" + predicate + ">");
+			Collection<Concept> concepts = instance2ConceptMap.get(predicate);
+			for (Concept concept : concepts) {
+				System.out.println("              <" + concept.getConceptName() + ">  <" + concept.getScore() + ">");
+			}
+		}
+	}
+	
+//	public Collection<String> getConceptSetOfInstance(String predicate){
+//		return instanceConceptRelationValueMap.get(predicate);
+//	}
+	
+	public Collection<Concept> getConceptSet(){
+		return this.conceptSet;
+	}
+//	
+//	public Collection<String> getNonTaxonomicRelationValue(String relation){
+//		return nonTaxonomicRelationValueMap.get(relation);
+//	}
+	
+	public Collection<String> getCustomRelation(){
+		return customRelation2ValueMap.keySet();
+	}
+	
+	public Collection<String> getCustomRelationValue(String relation){
+		return customRelation2ValueMap.get(relation);
+	}
+	
+	public Collection<String> getTaxonomicRelationValue() {
+		Collection<String> emptyCollection = new ArrayList<String>();
+		if (taxonomicRelationValueMap.get("SubConcept") == null) {
+			return emptyCollection;
+		}
+		return taxonomicRelationValueMap.get("SubConcept");
+	}
+
+	public Map<String, Set<String>> getCustomRelation2ValueMap(){
+		return this.customRelation2ValueMap;
+	}
+	
+	public Map<String, Set<String>> getTaxonomicRelation2ValueMap(){
+		return this.taxonomicRelationValueMap;
+	}
+	
+	public Map<String, Set<Concept>> getInstance2ConceptSetMap(){
+		return this.instance2ConceptMap;
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.subjectLabel.trim().hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		InstanceTripleSet cluster = (InstanceTripleSet) obj;
+		return this.getSubjectLabel().equals(cluster.getSubjectLabel());
+	}
+
+	public String getSubjectLabel() {
+		return subjectLabel;
+	}
+
+	public void setProcessedSubjectLabel(String processedSubjectLabel) {
+		this.processedSubjectLabel = processedSubjectLabel;
+	}
+
+	public String getProcessedSubjectLabel() {
+		return processedSubjectLabel;
+	}
+}

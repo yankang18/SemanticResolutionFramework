@@ -1,0 +1,5 @@
+package umbc.ebiquity.kang.textprocessing;
+
+public class TermVector {
+
+}

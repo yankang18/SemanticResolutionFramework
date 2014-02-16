@@ -1,0 +1,30 @@
+package umbc.ebiquity.kang.lucene.test;
+//import junit.framework.TestCase;
+
+import umbc.ebiquity.kang.blog.search.BlogQueryParameter;
+import umbc.ebiquity.kang.blog.search.BlogQueryResult;
+import umbc.ebiquity.kang.blog.search.BlogSearcher;
+import umbc.ebiquity.kang.blog.search.BlogQueryParameter.QueryParameter;
+import umbc.ebiquity.kang.blog.search.impl.rss.RSSFeedBlogQueryParameterImpl;
+import umbc.ebiquity.kang.blog.search.impl.rss.RSSFeedBlogSearcherImpl;
+import umbc.ebiquity.kang.blog.search.impl.rss.RSSFeedBlogQueryParameterImpl.RSSProviderURL;
+
+public class BlogSearcherText {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) throws Exception {
+
+		BlogQueryParameter tagQueryParam = new RSSFeedBlogQueryParameterImpl(RSSProviderURL.MSN);
+		BlogSearcher bs = new RSSFeedBlogSearcherImpl();
+
+		tagQueryParam.setParameter(QueryParameter.START_INDEX, "1");
+		tagQueryParam.setParameter(QueryParameter.LIMIT, "10");
+		tagQueryParam.setParameter(QueryParameter.QUERY, "kangyan");
+		BlogQueryResult tagResult = bs.getRelevantBlogs(tagQueryParam);
+
+		System.out.println(tagResult);
+	}
+
+}

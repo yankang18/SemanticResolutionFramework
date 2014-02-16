@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/221/trunk/LuceneInAction/jar
+END
+commons-logging-1.1.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/221/trunk/LuceneInAction/jar/commons-logging-1.1.1.jar
+END
+httpmime-4.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/221/trunk/LuceneInAction/jar/httpmime-4.1.jar
+END
+resolver.jar
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/221/trunk/LuceneInAction/jar/resolver.jar
+END
+lucene-core-3.0.3.jar
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/221/trunk/LuceneInAction/jar/lucene-core-3.0.3.jar
+END
+commons-codec-1.4.jar
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/221/trunk/LuceneInAction/jar/commons-codec-1.4.jar
+END
+xercesImpl.jar
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/221/trunk/LuceneInAction/jar/xercesImpl.jar
+END
+simmetrics.jar
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/221/trunk/LuceneInAction/jar/simmetrics.jar
+END
+xercesSamples.jar
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/221/trunk/LuceneInAction/jar/xercesSamples.jar
+END
+httpclient-4.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/221/trunk/LuceneInAction/jar/httpclient-4.1.jar
+END
+xml-apis.jar
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/221/trunk/LuceneInAction/jar/xml-apis.jar
+END
+httpcore-4.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/221/trunk/LuceneInAction/jar/httpcore-4.1.jar
+END
+serializer.jar
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/221/trunk/LuceneInAction/jar/serializer.jar
+END
+httpclient-cache-4.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/221/trunk/LuceneInAction/jar/httpclient-cache-4.1.jar
+END
+lucene-demos-3.0.3.jar
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/221/trunk/LuceneInAction/jar/lucene-demos-3.0.3.jar
+END

@@ -1,0 +1,76 @@
+8
+
+dir
+569
+svn+semweb://dev.semwebprogramming.org/semwebprogramming/trunk/CodePackage/Chapter2/HelloSemanticWeb/Ontologies
+svn+semweb://dev.semwebprogramming.org/semwebprogramming
+
+
+
+2009-03-21T12:29:03.376620Z
+494
+jhebeler
+
+
+svn:special svn:externals svn:needs-lock
+
+FOAFFriends.rdf
+file
+
+
+
+
+2009-03-01T00:45:35.000000Z
+d892b8a98738d0d7d6f0d41078495487
+2009-03-21T12:29:03.376620Z
+494
+jhebeler
+
+additionalFriends.owl
+file
+
+
+
+
+2009-03-01T00:45:35.000000Z
+c6a527f35dbb26a6ff09a1b42c955cc8
+2009-03-21T12:29:03.376620Z
+494
+jhebeler
+
+additionalFriendsSchema.owl
+file
+
+
+
+
+2009-03-01T00:45:35.000000Z
+fc8597bd205b7f7ca66e9b3691fbab7a
+2009-03-21T12:29:03.376620Z
+494
+jhebeler
+
+foaf.rdf
+file
+
+
+
+
+2009-03-01T00:45:35.000000Z
+91be48924c2a7a688f56db51c2cb1fa2
+2009-03-21T12:29:03.376620Z
+494
+jhebeler
+
+restriction.owl
+file
+
+
+
+
+2009-03-01T00:45:35.000000Z
+445c2cbf65c28312925c364a64edd2b3
+2009-03-21T12:29:03.376620Z
+494
+jhebeler
+

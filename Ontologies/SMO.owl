@@ -1,0 +1,1322 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY SMO "http://www.semanticweb.org/ontologies/2012/4/SMO.owl#" >
+    <!ENTITY PatternOnto "http://www.semanticweb.org/ontologies/2012/6/PatternOnto.owl#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.semanticweb.org/ontologies/2012/4/SMO.owl#"
+     xml:base="http://www.semanticweb.org/ontologies/2012/4/SMO.owl"
+     xmlns:SMO="http://www.semanticweb.org/ontologies/2012/4/SMO.owl#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:PatternOnto="http://www.semanticweb.org/ontologies/2012/6/PatternOnto.owl#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/ontologies/2012/4/SMO.owl"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#IndustryServed -->
+
+    <owl:ObjectProperty rdf:about="&SMO;IndustryServed">
+        <rdfs:range rdf:resource="&SMO;Industry"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#hasCertification -->
+
+    <owl:ObjectProperty rdf:about="&SMO;hasCertification">
+        <rdfs:range rdf:resource="&SMO;Certification"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#hasDiameter -->
+
+    <owl:ObjectProperty rdf:about="&SMO;hasDiameter">
+        <rdfs:range rdf:resource="&SMO;ValueRange"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#hasEquipment -->
+
+    <owl:ObjectProperty rdf:about="&SMO;hasEquipment">
+        <rdfs:range rdf:resource="&SMO;Equipment"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#hasProduct -->
+
+    <owl:ObjectProperty rdf:about="&SMO;hasProduct">
+        <rdfs:range rdf:resource="&SMO;Product"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#hasService -->
+
+    <owl:ObjectProperty rdf:about="&SMO;hasService">
+        <rdfs:range rdf:resource="&SMO;Service"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#hasSupportingService -->
+
+    <owl:ObjectProperty rdf:about="&SMO;hasSupportingService">
+        <rdfs:domain rdf:resource="&SMO;Service"/>
+        <rdfs:range rdf:resource="&SMO;Service"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#hasThickness -->
+
+    <owl:ObjectProperty rdf:about="&SMO;hasThickness">
+        <rdfs:range rdf:resource="&SMO;ValueRange"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#hasTolerance -->
+
+    <owl:ObjectProperty rdf:about="&SMO;hasTolerance">
+        <rdfs:range rdf:resource="&SMO;ValueRange"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#hasUnit -->
+
+    <owl:ObjectProperty rdf:about="&SMO;hasUnit">
+        <rdfs:range rdf:resource="&SMO;Unit"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#materialUsed -->
+
+    <owl:ObjectProperty rdf:about="&SMO;materialUsed">
+        <rdfs:range rdf:resource="&SMO;Material"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#serviceInvolved -->
+
+    <owl:ObjectProperty rdf:about="&SMO;serviceInvolved">
+        <rdfs:domain rdf:resource="&SMO;Product"/>
+        <rdfs:range rdf:resource="&SMO;Service"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#hasAddress -->
+
+    <owl:DatatypeProperty rdf:about="&SMO;hasAddress">
+        <rdfs:domain rdf:resource="&SMO;Supplier"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#hasFax -->
+
+    <owl:DatatypeProperty rdf:about="&SMO;hasFax">
+        <rdfs:domain rdf:resource="&SMO;Supplier"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#hasMaxValue -->
+
+    <owl:DatatypeProperty rdf:about="&SMO;hasMaxValue"/>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#hasMinValue -->
+
+    <owl:DatatypeProperty rdf:about="&SMO;hasMinValue"/>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#hasName -->
+
+    <owl:DatatypeProperty rdf:about="&SMO;hasName">
+        <rdfs:domain rdf:resource="&SMO;Supplier"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#hasPhone -->
+
+    <owl:DatatypeProperty rdf:about="&SMO;hasPhone">
+        <rdfs:domain rdf:resource="&SMO;Supplier"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#hasValue -->
+
+    <owl:DatatypeProperty rdf:about="&SMO;hasValue"/>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#hasWebSite -->
+
+    <owl:DatatypeProperty rdf:about="&SMO;hasWebSite">
+        <rdfs:domain rdf:resource="&SMO;Supplier"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#AS -->
+
+    <owl:Class rdf:about="&SMO;AS">
+        <rdfs:subClassOf rdf:resource="&SMO;QualityCertification"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#AS9000 -->
+
+    <owl:Class rdf:about="&SMO;AS9000">
+        <rdfs:subClassOf rdf:resource="&SMO;AS"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#AS9100 -->
+
+    <owl:Class rdf:about="&SMO;AS9100">
+        <rdfs:subClassOf rdf:resource="&SMO;AS"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Aerospace -->
+
+    <owl:Class rdf:about="&SMO;Aerospace">
+        <rdfs:subClassOf rdf:resource="&SMO;Transportation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#AgricultureMachinery -->
+
+    <owl:Class rdf:about="&SMO;AgricultureMachinery">
+        <rdfs:subClassOf rdf:resource="&SMO;MachineryManufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#AlloySteel -->
+
+    <owl:Class rdf:about="&SMO;AlloySteel">
+        <rdfs:subClassOf rdf:resource="&SMO;Ferrous"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#AluminiumProduction -->
+
+    <owl:Class rdf:about="&SMO;AluminiumProduction">
+        <rdfs:subClassOf rdf:resource="&SMO;PrimaryMetalManufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Aluminum -->
+
+    <owl:Class rdf:about="&SMO;Aluminum">
+        <rdfs:subClassOf rdf:resource="&SMO;NonFerrous"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Application -->
+
+    <owl:Class rdf:about="&SMO;Application"/>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Assembly -->
+
+    <owl:Class rdf:about="&SMO;Assembly">
+        <rdfs:subClassOf rdf:resource="&SMO;Manufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Automotive -->
+
+    <owl:Class rdf:about="&SMO;Automotive">
+        <rdfs:subClassOf rdf:resource="&SMO;Transportation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Bearing -->
+
+    <owl:Class rdf:about="&SMO;Bearing">
+        <rdfs:subClassOf rdf:resource="&SMO;Manufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Boring -->
+
+    <owl:Class rdf:about="&SMO;Boring">
+        <rdfs:subClassOf rdf:resource="&SMO;Turning"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Brass -->
+
+    <owl:Class rdf:about="&SMO;Brass">
+        <rdfs:subClassOf rdf:resource="&SMO;NonFerrous"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Broaching -->
+
+    <owl:Class rdf:about="&SMO;Broaching">
+        <rdfs:subClassOf rdf:resource="&SMO;MechanicalMachining"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Bronze -->
+
+    <owl:Class rdf:about="&SMO;Bronze">
+        <rdfs:subClassOf rdf:resource="&SMO;NonFerrous"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Burring -->
+
+    <owl:Class rdf:about="&SMO;Burring">
+        <rdfs:subClassOf rdf:resource="&SMO;Grinding"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#CarbonSteel -->
+
+    <owl:Class rdf:about="&SMO;CarbonSteel">
+        <rdfs:subClassOf rdf:resource="&SMO;Ferrous"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#CastAluminumAlloy -->
+
+    <owl:Class rdf:about="&SMO;CastAluminumAlloy">
+        <rdfs:subClassOf rdf:resource="&SMO;Aluminum"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#CastIron -->
+
+    <owl:Class rdf:about="&SMO;CastIron">
+        <rdfs:subClassOf rdf:resource="&SMO;Ferrous"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Casting -->
+
+    <owl:Class rdf:about="&SMO;Casting">
+        <rdfs:subClassOf rdf:resource="&SMO;Manufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Ceramic -->
+
+    <owl:Class rdf:about="&SMO;Ceramic">
+        <rdfs:subClassOf rdf:resource="&SMO;Material"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Certification -->
+
+    <owl:Class rdf:about="&SMO;Certification"/>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#ChemicalManufacturing -->
+
+    <owl:Class rdf:about="&SMO;ChemicalManufacturing">
+        <rdfs:subClassOf rdf:resource="&SMO;Industry"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#ChemicalProcessing -->
+
+    <owl:Class rdf:about="&SMO;ChemicalProcessing">
+        <rdfs:subClassOf rdf:resource="&SMO;Manufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#CommercialMachinery -->
+
+    <owl:Class rdf:about="&SMO;CommercialMachinery">
+        <rdfs:subClassOf rdf:resource="&SMO;MachineryManufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Composite -->
+
+    <owl:Class rdf:about="&SMO;Composite">
+        <rdfs:subClassOf rdf:resource="&SMO;Material"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#ComputerProductManufacturing -->
+
+    <owl:Class rdf:about="&SMO;ComputerProductManufacturing">
+        <rdfs:subClassOf rdf:resource="&SMO;Industry"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#ConstructionMachinery -->
+
+    <owl:Class rdf:about="&SMO;ConstructionMachinery">
+        <rdfs:subClassOf rdf:resource="&SMO;MachineryManufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Copper -->
+
+    <owl:Class rdf:about="&SMO;Copper">
+        <rdfs:subClassOf rdf:resource="&SMO;NonFerrous"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#CopperRollingAlloying -->
+
+    <owl:Class rdf:about="&SMO;CopperRollingAlloying">
+        <rdfs:subClassOf rdf:resource="&SMO;PrimaryMetalManufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#CounterBoring -->
+
+    <owl:Class rdf:about="&SMO;CounterBoring">
+        <rdfs:subClassOf rdf:resource="&SMO;HoleMaking"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#CounterSinking -->
+
+    <owl:Class rdf:about="&SMO;CounterSinking">
+        <rdfs:subClassOf rdf:resource="&SMO;HoleMaking"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#CutOff -->
+
+    <owl:Class rdf:about="&SMO;CutOff">
+        <rdfs:subClassOf rdf:resource="&SMO;Turning"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Deburring -->
+
+    <owl:Class rdf:about="&SMO;Deburring">
+        <rdfs:subClassOf rdf:resource="&SMO;Grinding"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#DeepHoleDrilling -->
+
+    <owl:Class rdf:about="&SMO;DeepHoleDrilling">
+        <rdfs:subClassOf rdf:resource="&SMO;Drilling"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#DefenseAndMilitary -->
+
+    <owl:Class rdf:about="&SMO;DefenseAndMilitary">
+        <rdfs:subClassOf rdf:resource="&SMO;Industry"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#DieSteel -->
+
+    <owl:Class rdf:about="&SMO;DieSteel">
+        <rdfs:subClassOf rdf:resource="&SMO;Ferrous"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Drilling -->
+
+    <owl:Class rdf:about="&SMO;Drilling">
+        <rdfs:subClassOf rdf:resource="&SMO;HoleMaking"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Elastomer -->
+
+    <owl:Class rdf:about="&SMO;Elastomer">
+        <rdfs:subClassOf rdf:resource="&SMO;Polymer"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#ElectricalApplianceManufacturing -->
+
+    <owl:Class rdf:about="&SMO;ElectricalApplianceManufacturing">
+        <rdfs:subClassOf rdf:resource="&SMO;Industry"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#ElectricalComponentManufacturing -->
+
+    <owl:Class rdf:about="&SMO;ElectricalComponentManufacturing">
+        <rdfs:subClassOf rdf:resource="&SMO;Industry"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#ElectricalDischargeMachining -->
+
+    <owl:Class rdf:about="&SMO;ElectricalDischargeMachining">
+        <rdfs:subClassOf rdf:resource="&SMO;Machining"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#ElectroDischargeMachining -->
+
+    <owl:Class rdf:about="&SMO;ElectroDischargeMachining">
+        <rdfs:subClassOf rdf:resource="&SMO;NonTraditionalMachining"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#ElectronicProductManufacturing -->
+
+    <owl:Class rdf:about="&SMO;ElectronicProductManufacturing">
+        <rdfs:subClassOf rdf:resource="&SMO;Industry"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Energy -->
+
+    <owl:Class rdf:about="&SMO;Energy">
+        <rdfs:subClassOf rdf:resource="&SMO;Industry"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#EngineTurbineMachinery -->
+
+    <owl:Class rdf:about="&SMO;EngineTurbineMachinery">
+        <rdfs:subClassOf rdf:resource="&SMO;MachineryManufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Engineering -->
+
+    <owl:Class rdf:about="&SMO;Engineering">
+        <rdfs:subClassOf rdf:resource="&SMO;Service"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#EngravingAndMarking -->
+
+    <owl:Class rdf:about="&SMO;EngravingAndMarking">
+        <rdfs:subClassOf rdf:resource="&SMO;Manufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Equipment -->
+
+    <owl:Class rdf:about="&SMO;Equipment"/>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Facing -->
+
+    <owl:Class rdf:about="&SMO;Facing">
+        <rdfs:subClassOf rdf:resource="&SMO;Turning"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Ferrous -->
+
+    <owl:Class rdf:about="&SMO;Ferrous">
+        <rdfs:subClassOf rdf:resource="&SMO;Metal"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Finishing -->
+
+    <owl:Class rdf:about="&SMO;Finishing">
+        <rdfs:subClassOf rdf:resource="&SMO;Manufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#FoodProductMachinery -->
+
+    <owl:Class rdf:about="&SMO;FoodProductMachinery">
+        <rdfs:subClassOf rdf:resource="&SMO;MachineryManufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Forging -->
+
+    <owl:Class rdf:about="&SMO;Forging">
+        <rdfs:subClassOf rdf:resource="&SMO;Manufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Foundry -->
+
+    <owl:Class rdf:about="&SMO;Foundry">
+        <rdfs:subClassOf rdf:resource="&SMO;PrimaryMetalManufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Grinding -->
+
+    <owl:Class rdf:about="&SMO;Grinding">
+        <rdfs:subClassOf rdf:resource="&SMO;MechanicalMachining"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Grooving -->
+
+    <owl:Class rdf:about="&SMO;Grooving">
+        <rdfs:subClassOf rdf:resource="&SMO;Turning"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Hastelloy -->
+
+    <owl:Class rdf:about="&SMO;Hastelloy">
+        <rdfs:subClassOf rdf:resource="&SMO;SuperAlloy"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#HeatTreating -->
+
+    <owl:Class rdf:about="&SMO;HeatTreating">
+        <rdfs:subClassOf rdf:resource="&SMO;Manufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#HoleMaking -->
+
+    <owl:Class rdf:about="&SMO;HoleMaking">
+        <rdfs:subClassOf rdf:resource="&SMO;MechanicalMachining"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Honing -->
+
+    <owl:Class rdf:about="&SMO;Honing">
+        <rdfs:subClassOf rdf:resource="&SMO;Grinding"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#ISO -->
+
+    <owl:Class rdf:about="&SMO;ISO">
+        <rdfs:subClassOf rdf:resource="&SMO;QualityCertification"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#ISO14000 -->
+
+    <owl:Class rdf:about="&SMO;ISO14000">
+        <rdfs:subClassOf rdf:resource="&SMO;ISO"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#ISO9000 -->
+
+    <owl:Class rdf:about="&SMO;ISO9000">
+        <rdfs:subClassOf rdf:resource="&SMO;ISO"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Inconel -->
+
+    <owl:Class rdf:about="&SMO;Inconel">
+        <rdfs:subClassOf rdf:resource="&SMO;SuperAlloy"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Industry -->
+
+    <owl:Class rdf:about="&SMO;Industry"/>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#IronAndSteelMillProduction -->
+
+    <owl:Class rdf:about="&SMO;IronAndSteelMillProduction">
+        <rdfs:subClassOf rdf:resource="&SMO;PrimaryMetalManufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Lapping -->
+
+    <owl:Class rdf:about="&SMO;Lapping">
+        <rdfs:subClassOf rdf:resource="&SMO;Grinding"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#LaserBeamCutting -->
+
+    <owl:Class rdf:about="&SMO;LaserBeamCutting">
+        <rdfs:subClassOf rdf:resource="&SMO;NonTraditionalMachining"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#LaserCutting -->
+
+    <owl:Class rdf:about="&SMO;LaserCutting">
+        <rdfs:subClassOf rdf:resource="&SMO;MetalFabrication"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Locomotive -->
+
+    <owl:Class rdf:about="&SMO;Locomotive">
+        <rdfs:subClassOf rdf:resource="&SMO;Transportation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#MIL -->
+
+    <owl:Class rdf:about="&SMO;MIL">
+        <rdfs:subClassOf rdf:resource="&SMO;QualityCertification"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#MachineryManufacturing -->
+
+    <owl:Class rdf:about="&SMO;MachineryManufacturing">
+        <rdfs:subClassOf rdf:resource="&SMO;Industry"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Machining -->
+
+    <owl:Class rdf:about="&SMO;Machining">
+        <rdfs:subClassOf rdf:resource="&SMO;Manufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Magnesium -->
+
+    <owl:Class rdf:about="&SMO;Magnesium">
+        <rdfs:subClassOf rdf:resource="&SMO;NonFerrous"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Manufacturing -->
+
+    <owl:Class rdf:about="&SMO;Manufacturing">
+        <rdfs:subClassOf rdf:resource="&SMO;Service"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Material -->
+
+    <owl:Class rdf:about="&SMO;Material"/>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#MechanicalMachining -->
+
+    <owl:Class rdf:about="&SMO;MechanicalMachining">
+        <rdfs:subClassOf rdf:resource="&SMO;Machining"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Medical -->
+
+    <owl:Class rdf:about="&SMO;Medical">
+        <rdfs:subClassOf rdf:resource="&SMO;Industry"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Metal -->
+
+    <owl:Class rdf:about="&SMO;Metal">
+        <rdfs:subClassOf rdf:resource="&SMO;Material"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#MetalFabrication -->
+
+    <owl:Class rdf:about="&SMO;MetalFabrication">
+        <rdfs:subClassOf rdf:resource="&SMO;Manufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#MiningMachinery -->
+
+    <owl:Class rdf:about="&SMO;MiningMachinery">
+        <rdfs:subClassOf rdf:resource="&SMO;MachineryManufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Molding -->
+
+    <owl:Class rdf:about="&SMO;Molding">
+        <rdfs:subClassOf rdf:resource="&SMO;Manufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Nickel -->
+
+    <owl:Class rdf:about="&SMO;Nickel">
+        <rdfs:subClassOf rdf:resource="&SMO;NonFerrous"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#NonFerrous -->
+
+    <owl:Class rdf:about="&SMO;NonFerrous">
+        <rdfs:subClassOf rdf:resource="&SMO;Metal"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#NonTraditionalMachining -->
+
+    <owl:Class rdf:about="&SMO;NonTraditionalMachining">
+        <rdfs:subClassOf rdf:resource="&SMO;Machining"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Nylon -->
+
+    <owl:Class rdf:about="&SMO;Nylon">
+        <rdfs:subClassOf rdf:resource="&SMO;Thermoplastic"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Packaging -->
+
+    <owl:Class rdf:about="&SMO;Packaging">
+        <rdfs:subClassOf rdf:resource="&SMO;Service"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#PackagingDesign -->
+
+    <owl:Class rdf:about="&SMO;PackagingDesign">
+        <rdfs:subClassOf rdf:resource="&SMO;Packaging"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#PaperProcessingMachinery -->
+
+    <owl:Class rdf:about="&SMO;PaperProcessingMachinery">
+        <rdfs:subClassOf rdf:resource="&SMO;MachineryManufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Petrochemical -->
+
+    <owl:Class rdf:about="&SMO;Petrochemical">
+        <rdfs:subClassOf rdf:resource="&SMO;ChemicalManufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#PlasmaCutting -->
+
+    <owl:Class rdf:about="&SMO;PlasmaCutting">
+        <rdfs:subClassOf rdf:resource="&SMO;MetalFabrication"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#PlasticsAndRubberMachinery -->
+
+    <owl:Class rdf:about="&SMO;PlasticsAndRubberMachinery">
+        <rdfs:subClassOf rdf:resource="&SMO;MachineryManufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Polyester -->
+
+    <owl:Class rdf:about="&SMO;Polyester">
+        <rdfs:subClassOf rdf:resource="&SMO;Thermoplastic"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Polymer -->
+
+    <owl:Class rdf:about="&SMO;Polymer">
+        <rdfs:subClassOf rdf:resource="&SMO;Material"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#PowerTransmissionMachinery -->
+
+    <owl:Class rdf:about="&SMO;PowerTransmissionMachinery">
+        <rdfs:subClassOf rdf:resource="&SMO;MachineryManufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#PrimaryMetalManufacturing -->
+
+    <owl:Class rdf:about="&SMO;PrimaryMetalManufacturing">
+        <rdfs:subClassOf rdf:resource="&SMO;Industry"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#PrintingMachinery -->
+
+    <owl:Class rdf:about="&SMO;PrintingMachinery">
+        <rdfs:subClassOf rdf:resource="&SMO;MachineryManufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Product -->
+
+    <owl:Class rdf:about="&SMO;Product"/>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Punching -->
+
+    <owl:Class rdf:about="&SMO;Punching">
+        <rdfs:subClassOf rdf:resource="&SMO;MetalFabrication"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#QS9000 -->
+
+    <owl:Class rdf:about="&SMO;QS9000">
+        <rdfs:subClassOf rdf:resource="&SMO;QualityCertification"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#QualityCertification -->
+
+    <owl:Class rdf:about="&SMO;QualityCertification">
+        <rdfs:subClassOf rdf:resource="&SMO;Certification"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#QualityControl -->
+
+    <owl:Class rdf:about="&SMO;QualityControl">
+        <rdfs:subClassOf rdf:resource="&SMO;Service"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#RamEDM -->
+
+    <owl:Class rdf:about="&SMO;RamEDM">
+        <rdfs:subClassOf rdf:resource="&SMO;ElectricalDischargeMachining"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Reaming -->
+
+    <owl:Class rdf:about="&SMO;Reaming">
+        <rdfs:subClassOf rdf:resource="&SMO;HoleMaking"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Repair -->
+
+    <owl:Class rdf:about="&SMO;Repair">
+        <rdfs:subClassOf rdf:resource="&SMO;Service"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Sawing -->
+
+    <owl:Class rdf:about="&SMO;Sawing">
+        <rdfs:subClassOf rdf:resource="&SMO;MechanicalMachining"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#SawmillMachinery -->
+
+    <owl:Class rdf:about="&SMO;SawmillMachinery">
+        <rdfs:subClassOf rdf:resource="&SMO;MachineryManufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#SemiconductorMachinery -->
+
+    <owl:Class rdf:about="&SMO;SemiconductorMachinery">
+        <rdfs:subClassOf rdf:resource="&SMO;MachineryManufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Service -->
+
+    <owl:Class rdf:about="&SMO;Service"/>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Shaping -->
+
+    <owl:Class rdf:about="&SMO;Shaping">
+        <rdfs:subClassOf rdf:resource="&SMO;MechanicalMachining"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#SheetMetal -->
+
+    <owl:Class rdf:about="&SMO;SheetMetal">
+        <rdfs:subClassOf rdf:resource="&SMO;MetalFabrication"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#SinkerEDM -->
+
+    <owl:Class rdf:about="&SMO;SinkerEDM">
+        <rdfs:subClassOf rdf:resource="&SMO;ElectricalDischargeMachining"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#SmallHoleEDM -->
+
+    <owl:Class rdf:about="&SMO;SmallHoleEDM">
+        <rdfs:subClassOf rdf:resource="&SMO;ElectricalDischargeMachining"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#SportingAndAthletic -->
+
+    <owl:Class rdf:about="&SMO;SportingAndAthletic">
+        <rdfs:subClassOf rdf:resource="&SMO;Industry"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#StainlessSteel -->
+
+    <owl:Class rdf:about="&SMO;StainlessSteel">
+        <rdfs:subClassOf rdf:resource="&SMO;Ferrous"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Stellite -->
+
+    <owl:Class rdf:about="&SMO;Stellite">
+        <rdfs:subClassOf rdf:resource="&SMO;SuperAlloy"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#StraightTurning -->
+
+    <owl:Class rdf:about="&SMO;StraightTurning">
+        <rdfs:subClassOf rdf:resource="&SMO;Turning"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#SuperAlloy -->
+
+    <owl:Class rdf:about="&SMO;SuperAlloy">
+        <rdfs:subClassOf rdf:resource="&SMO;Metal"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Supplier -->
+
+    <owl:Class rdf:about="&SMO;Supplier"/>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Tapping -->
+
+    <owl:Class rdf:about="&SMO;Tapping">
+        <rdfs:subClassOf rdf:resource="&SMO;HoleMaking"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#TextileMachinery -->
+
+    <owl:Class rdf:about="&SMO;TextileMachinery">
+        <rdfs:subClassOf rdf:resource="&SMO;MachineryManufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Thermoplastic -->
+
+    <owl:Class rdf:about="&SMO;Thermoplastic">
+        <rdfs:subClassOf rdf:resource="&SMO;Polymer"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Thermoset -->
+
+    <owl:Class rdf:about="&SMO;Thermoset">
+        <rdfs:subClassOf rdf:resource="&SMO;Polymer"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Titanium -->
+
+    <owl:Class rdf:about="&SMO;Titanium">
+        <rdfs:subClassOf rdf:resource="&SMO;NonFerrous"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#ToolSteel -->
+
+    <owl:Class rdf:about="&SMO;ToolSteel">
+        <rdfs:subClassOf rdf:resource="&SMO;Ferrous"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Transportation -->
+
+    <owl:Class rdf:about="&SMO;Transportation">
+        <rdfs:subClassOf rdf:resource="&SMO;Industry"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Turning -->
+
+    <owl:Class rdf:about="&SMO;Turning">
+        <rdfs:subClassOf rdf:resource="&SMO;MechanicalMachining"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Unit -->
+
+    <owl:Class rdf:about="&SMO;Unit">
+        <rdfs:subClassOf rdf:resource="&owl;Thing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#ValueRange -->
+
+    <owl:Class rdf:about="&SMO;ValueRange"/>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#WaterJetCutting -->
+
+    <owl:Class rdf:about="&SMO;WaterJetCutting">
+        <rdfs:subClassOf rdf:resource="&SMO;NonTraditionalMachining"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Welding -->
+
+    <owl:Class rdf:about="&SMO;Welding">
+        <rdfs:subClassOf rdf:resource="&SMO;MetalFabrication"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#WireEDM -->
+
+    <owl:Class rdf:about="&SMO;WireEDM">
+        <rdfs:subClassOf rdf:resource="&SMO;ElectricalDischargeMachining"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#WoodProductMachinery -->
+
+    <owl:Class rdf:about="&SMO;WoodProductMachinery">
+        <rdfs:subClassOf rdf:resource="&SMO;MachineryManufacturing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#WroughtAluminumAlloy -->
+
+    <owl:Class rdf:about="&SMO;WroughtAluminumAlloy">
+        <rdfs:subClassOf rdf:resource="&SMO;Aluminum"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Zinc -->
+
+    <owl:Class rdf:about="&SMO;Zinc">
+        <rdfs:subClassOf rdf:resource="&SMO;NonFerrous"/>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Feet -->
+
+    <owl:NamedIndividual rdf:about="&SMO;Feet">
+        <rdf:type rdf:resource="&SMO;Unit"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/ontologies/2012/4/SMO.owl#Inch -->
+
+    <owl:NamedIndividual rdf:about="&SMO;Inch">
+        <rdf:type rdf:resource="&SMO;Unit"/>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.2.3.22702) http://owlapi.sourceforge.net -->
+

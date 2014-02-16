@@ -1,0 +1,70 @@
+10
+
+dir
+0
+https://xssm.googlecode.com/svn/trunk/LuceneInAction/conf/configuration/WordNet
+https://xssm.googlecode.com/svn
+add
+
+
+
+
+
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+abdc874f-713e-0410-a7f5-67f85424188b
+
+WordNet-3.0
+dir
+
+
+
+add
+
+domain_independent.txt
+file
+
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+
+ic-bnc-resnik-add1.dat
+file
+
+
+
+add
+
+wordnet.xml
+file
+
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+

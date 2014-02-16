@@ -1,0 +1,42 @@
+10
+
+dir
+0
+https://xssm.googlecode.com/svn/trunk/LuceneInAction/src/umbc/ebiquity/kang/textprocessing/impl
+https://xssm.googlecode.com/svn
+add
+
+
+
+
+
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+abdc874f-713e-0410-a7f5-67f85424188b
+
+CombinationInOrderPhraseExtractor.java
+file
+
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+

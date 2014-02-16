@@ -1,0 +1,32 @@
+package umbc.ebiquity.kang.ci.webcrawling;
+
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class WebCrawlerText {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		try {
+			// String url = "http://www.manning.com" ;
+			// String url = "http://www.amazon.com" ;
+			// String url = "http://www.wikipedia.org" ;
+			Queue<CrawlerUrl> urlQueue = new LinkedList<CrawlerUrl>();
+			String url = "http://en.wikipedia.org/wiki/Collective_intelligence";
+			String regexp = "collective.*intelligence";
+			urlQueue.add(new CrawlerUrl(url, 0));
+			WebCrawler crawler = new WebCrawler(urlQueue, 100, 5, 1000L, regexp);
+			// boolean allowCrawl = crawler.areWeAllowedToVisit(url);
+			// System.out.println("Allowed to crawl: " + url + " " +
+			// allowCrawl);
+			crawler.crawl();
+			// crawler.testRegExp(regexp, "http://collective+intelligenceadf");
+		} catch (Throwable t) {
+			System.out.println(t.toString());
+			t.printStackTrace();
+		}
+	}
+
+}

@@ -1,0 +1,323 @@
+<KB_URI>&&&<http://www.bassettinc.com/>
+<KB_NAME>&&&<bassettinc>
+<CNC Machining>&&&<Preferred Drawing File Formats>&&&<SolidWorks Files, Part, Assembly, Drawing, DXF, DWG, Adobe Photoshop Files, Adobe Illustrator Files, Lib Feat Part, Template, Parasolid, IGES, STEP AP203/214, ACIS, VDAFS, VRML, STL, Catia Graphics, ProE Part, ProE Assembly, UGII, Inventor Part, Inventor Assembly, Solid Edge Part, Solid Edge Assembly, CADKEY, IDF, Rhino Files>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Materials Used>&&&<Stainless Steel:>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Materials Used>&&&<(B210, 1100, 2024, 3003, 5052, 6061, 6063)>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Materials Used>&&&<(A106, A500 Type 1-5, A513 Type 1-5, A53, ROPS, A36, A1008, A1011, A514, A656 Gr50 & Gr80, 1018, 1020, 1035, 1040, 1045, 4130, 4140, Hot Rolled, HRP&O, HREW, HSLA (High Strength / Low Alloy), CR (Cold Rolled)>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Materials Used>&&&<Aluminum:>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Materials Used>&&&<(A249, A269, 303, 304, 304 L, 309, 310, 316, 316 L, 317L, 410, 416, Nitronic 30, Nitronic 50, Nitronic 60, 17-4)>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Materials Used>&&&<Steel>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Tolerance>&&&<+/- 0.001 inches>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Secondary Services>&&&<Threading>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Secondary Services>&&&<Milling>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Secondary Services>&&&<Machining>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Secondary Services>&&&<Flaring>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Secondary Services>&&&<Beading>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Secondary Services>&&&<Swaging>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Secondary Services>&&&<Swaging / Flaring>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Secondary Services>&&&<Drilling>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Secondary Services>&&&<Notching>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Secondary Services>&&&<Piercing>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Secondary Services>&&&<Flattening>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Secondary Services>&&&<Punching>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Secondary Services>&&&<Slotting>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Secondary Services>&&&<Coping>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Designing Assistance>&&&<The tighter the tolerance, the greater the cost. Don't pay for something you don't need.>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Designing Assistance>&&&<Tolerances:>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Industries Served>&&&<Agricultural, Alternative Energy, Appliance, Automotive, Computers, Construction, Distribution, Electronic, Fabrication, Furniture, Hardware, Health and Fitness, Heating and AC, Heavy Equipment, Lawn and Garden, Material Handling, Petroleum and Mining, Race Car & Stock Car, Refrigeration, Retail & Display, Solar Energy, Wind Energy>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Production Runs>&&&<From prototyping to high volume production>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Quality Process and Certifications>&&&<ISO 9001-2008>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Quality Process and Certifications>&&&<AWS D1.1 & 1.3 Welding Certification>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Quality Process and Certifications>&&&<Statistical Process Control (SPC)>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<Quality Process and Certifications>&&&<Just In Time (JIT) Compliant Delivery>&&&< >&&&< >&&&<Custom>
+<CNC Machining>&&&<isAspectOf>&&&<cnc machining>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Laser Cutting>&&&<Preferred Drawing File Formats>&&&<SolidWorks Files, Part, Assembly, Drawing, DXF, DWG, Adobe Photoshop Files, Adobe Illustrator Files, Lib Feat Part, Template, Parasolid, IGES, STEP AP203/214, ACIS, VDAFS, VRML, STL, Catia Graphics, ProE Part, ProE Assembly, UGII, Inventor Part, Inventor Assembly, Solid Edge Part, Solid Edge Assembly, CADKEY, IDF, Rhino Files>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Materials Used>&&&<Stainless Steel:>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Materials Used>&&&<(B210, 1100, 2024, 3003, 5052, 6061, 6063)>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Materials Used>&&&<Aluminum:>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Materials Used>&&&<(A249, A269, 303, 304, 304 L, 309, 310, 316, 316 L, 317L, 410, 416)>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Materials Used>&&&<Steel>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Materials Used>&&&<(A106, A500 Type 1-5, A513 Type 1-5, A53, ROPS, HREW)>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Tolerance>&&&<+/- 0.002 inches>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Secondary Services>&&&<Threading>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Secondary Services>&&&<Milling>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Secondary Services>&&&<Machining>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Secondary Services>&&&<Flaring>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Secondary Services>&&&<Beading>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Secondary Services>&&&<Swaging>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Secondary Services>&&&<Swaging / Flaring>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Secondary Services>&&&<Drilling>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Secondary Services>&&&<Notching>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Secondary Services>&&&<Piercing>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Secondary Services>&&&<Flattening>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Secondary Services>&&&<Punching>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Secondary Services>&&&<Slotting>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Secondary Services>&&&<Coping>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Industries Served>&&&<Agricultural, Alternative Energy, Appliance, Automotive, Computers, Construction, Distribution, Electronic, Fabrication, Furniture, Hardware, Health and Fitness, Heating and AC, Heavy Equipment, Lawn and Garden, Material Handling, Petroleum and Mining, Race Car & Stock Car, Refrigeration, Retail & Display, Solar Energy, Wind Energy>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Plate Thickness>&&&<Up to and including 1 inch thick material>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Production Runs>&&&<From prototyping to high volume production>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Quality Process and Certifications>&&&<ISO 9001-2008>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Quality Process and Certifications>&&&<AWS D1.1 & 1.3 Welding Certification>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Quality Process and Certifications>&&&<Statistical Process Control (SPC)>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Quality Process and Certifications>&&&<Just In Time (JIT) Compliant Delivery>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<Plate Size>&&&<Large, 72 x 144 inches sheet size capability>&&&< >&&&< >&&&<Custom>
+<Laser Cutting>&&&<isAspectOf>&&&<types fabricating>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Laser Cutting>&&&<isAspectOf>&&&<laser cutting>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Tube Bending and Fabrication>&&&<Preferred Drawing File Formats>&&&<SolidWorks Files, Part, Assembly, Drawing, DXF, DWG, Adobe Photoshop Files, Adobe Illustrator Files, Lib Feat Part, Template, Parasolid, IGES, STEP AP203/214, ACIS, VDAFS, VRML, STL, Catia Graphics, ProE Part, ProE Assembly, UGII, Inventor Part, Inventor Assembly, Solid Edge Part, Solid Edge Assembly, CADKEY, IDF, Rhino Files>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Materials Used>&&&<Stainless Steel:>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Materials Used>&&&<(B210, 1100, 2024, 3003, 5052, 6061, 6063)>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Materials Used>&&&<Aluminum:>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Materials Used>&&&<(A249, A269, 303, 304, 304 L, 309, 310, 316, 316 L, 317L, 410, 416)>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Materials Used>&&&<Steel>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Materials Used>&&&<(A106, A500 Type 1-5, A513 Type 1-5, A53, ROPS, HREW)>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Tolerance>&&&<+/- 0.005 inches>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Secondary Services>&&&<Threading>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Secondary Services>&&&<Milling>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Secondary Services>&&&<Machining>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Secondary Services>&&&<Flaring>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Secondary Services>&&&<Beading>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Secondary Services>&&&<Swaging>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Secondary Services>&&&<Swaging / Flaring>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Secondary Services>&&&<Drilling>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Secondary Services>&&&<Notching>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Secondary Services>&&&<Piercing>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Secondary Services>&&&<Flattening>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Secondary Services>&&&<Punching>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Secondary Services>&&&<Slotting>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Secondary Services>&&&<Coping>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Tube Size>&&&<Round Tubing>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Tube Size>&&&<Up to 8 inch diameter>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Tube Size>&&&<3/8 to 10 inches Diameter>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Tube Size>&&&<5/8>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Tube Size>&&&<inch diameter>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Tube Size>&&&<Up to 8>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Tube Size>&&&<Bend>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Tube Size>&&&<All bending and fabrication up to 27 feet length>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Tube Size>&&&<Fabrication>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Industries Served>&&&<Agricultural, Alternative Energy, Appliance, Automotive, Computers, Construction, Distribution, Electronic, Fabrication, Furniture, Hardware, Health and Fitness, Heating and AC, Heavy Equipment, Lawn and Garden, Material Handling, Petroleum and Mining, Race Car & Stock Car, Refrigeration, Retail & Display, Solar Energy, Wind Energy>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Production Runs>&&&<From prototyping to high volume production>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Quality Process and Certifications>&&&<ISO 9001-2008>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Quality Process and Certifications>&&&<AWS D1.1 & 1.3 Welding Certification>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Quality Process and Certifications>&&&<Statistical Process Control (SPC)>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Quality Process and Certifications>&&&<Just In Time (JIT) Compliant Delivery>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Tube Shapes>&&&<Square>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Tube Shapes>&&&<Round>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Tube Shapes>&&&<Rectangular>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<Tube Shapes>&&&<Oval>&&&< >&&&< >&&&<Custom>
+<Tube Bending and Fabrication>&&&<isAspectOf>&&&<tube bending>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Roll Bending>&&&<Preferred Drawing File Formats>&&&<SolidWorks Files, Part, Assembly, Drawing, DXF, DWG, Adobe Photoshop Files, Adobe Illustrator Files, Lib Feat Part, Template, Parasolid, IGES, STEP AP203/214, ACIS, VDAFS, VRML, STL, Catia Graphics, ProE Part, ProE Assembly, UGII, Inventor Part, Inventor Assembly, Solid Edge Part, Solid Edge Assembly, CADKEY, IDF, Rhino Files>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Materials Used>&&&<Stainless Steel:>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Materials Used>&&&<(B210, 1100, 2024, 3003, 5052, 6061, 6063)>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Materials Used>&&&<Aluminum:>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Materials Used>&&&<(A249, A269, 303, 304, 304 L, 309, 310, 316, 316 L, 317L, 410, 416)>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Materials Used>&&&<Steel>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Materials Used>&&&<(A106, A500 Type 1-5, A513 Type 1-5, A53, ROPS, HREW)>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Tolerance>&&&<+/- 0.005 inches>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Secondary Services>&&&<Threading>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Secondary Services>&&&<Milling>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Secondary Services>&&&<Machining>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Secondary Services>&&&<Flaring>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Secondary Services>&&&<Beading>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Secondary Services>&&&<Swaging>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Secondary Services>&&&<Swaging / Flaring>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Secondary Services>&&&<Drilling>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Secondary Services>&&&<Notching>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Secondary Services>&&&<Piercing>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Secondary Services>&&&<Flattening>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Secondary Services>&&&<Punching>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Secondary Services>&&&<Slotting>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Secondary Services>&&&<Coping>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Industries Served>&&&<Agricultural, Alternative Energy, Appliance, Automotive, Computers, Construction, Distribution, Electronic, Fabrication, Furniture, Hardware, Health and Fitness, Heating and AC, Heavy Equipment, Lawn and Garden, Material Handling, Petroleum and Mining, Race Car & Stock Car, Refrigeration, Retail & Display, Solar Energy, Wind Energy>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Production Runs>&&&<From prototyping to high volume production>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Quality Process and Certifications>&&&<ISO 9001-2008>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Quality Process and Certifications>&&&<AWS D1.1 & 1.3 Welding Certification>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Quality Process and Certifications>&&&<Statistical Process Control (SPC)>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Quality Process and Certifications>&&&<Just In Time (JIT) Compliant Delivery>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Tube Shapes>&&&<Square>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Tube Shapes>&&&<Round>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Tube Shapes>&&&<Rectangular>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<Tube Shapes>&&&<Oval>&&&< >&&&< >&&&<Custom>
+<Roll Bending>&&&<isAspectOf>&&&<types fabricating>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Roll Bending>&&&<isAspectOf>&&&<roll bending>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Manual and Robotic Welding Services Pictures>&&&<Preferred Drawing File Formats>&&&<SolidWorks Files, Part, Assembly, Drawing, DXF, DWG, Adobe Photoshop Files, Adobe Illustrator Files, Lib Feat Part, Template, Parasolid, IGES, STEP AP203/214, ACIS, VDAFS, VRML, STL, Catia Graphics, ProE Part, ProE Assembly, UGII, Inventor Part, Inventor Assembly, Solid Edge Part, Solid Edge Assembly, CADKEY, IDF, Rhino Files>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Materials Used>&&&<Stainless Steel:>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Materials Used>&&&<(3003, 5052, 6061)>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Materials Used>&&&<(304, 316)>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Materials Used>&&&<Aluminum:>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Types of Welding>&&&<MIG Welding>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Types of Welding>&&&<Spot Welding>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Types of Welding>&&&<TIG Welding>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Types of Welding>&&&<Manual and Robotic Welding>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Secondary Services>&&&<Threading>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Secondary Services>&&&<Milling>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Secondary Services>&&&<Machining>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Secondary Services>&&&<Flaring>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Secondary Services>&&&<Beading>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Secondary Services>&&&<Swaging>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Secondary Services>&&&<Swaging / Flaring>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Secondary Services>&&&<Drilling>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Secondary Services>&&&<Notching>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Secondary Services>&&&<Piercing>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Secondary Services>&&&<Flattening>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Secondary Services>&&&<Punching>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Secondary Services>&&&<Slotting>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Secondary Services>&&&<Coping>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Industries Served>&&&<Agricultural, Alternative Energy, Appliance, Automotive, Computers, Construction, Distribution, Electronic, Fabrication, Furniture, Hardware, Health and Fitness, Heating and AC, Heavy Equipment, Lawn and Garden, Material Handling, Petroleum and Mining, Race Car & Stock Car, Refrigeration, Retail & Display, Solar Energy, Wind Energy>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Quality Process and Certifications>&&&<ISO 9001-2008>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Quality Process and Certifications>&&&<AWS D1.1 & 1.3 Welding Certification>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Quality Process and Certifications>&&&<Statistical Process Control (SPC)>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Quality Process and Certifications>&&&<Just In Time (JIT) Compliant Delivery>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<Size>&&&<Size ranges from &frac14; inch bar to 50 feet frames>&&&< >&&&< >&&&<Custom>
+<Manual and Robotic Welding Services Pictures>&&&<isAspectOf>&&&<robotic welding services pictures>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Rectangular>&&&<isAspectOf>&&&<rectangular>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Rectangular>&&&<isAspectOf>&&&<tube shapes>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Continue reading>&&&<isAspectOf>&&&<continue reading>&&&< >&&&< >&&&<Builtin>&&&<true>
+<ISO 9001-2008>&&&<isAspectOf>&&&<iso 9001 2008>&&&< >&&&< >&&&<Builtin>&&&<true>
+<ISO 9001-2008>&&&<isAspectOf>&&&<quality process certifications>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Phone:>&&&<isAspectOf>&&&<phone>&&&< >&&&< >&&&<Builtin>&&&<true>
+<5/8>&&&<isAspectOf>&&&<5>&&&< >&&&< >&&&<Builtin>&&&<true>
+<5/8>&&&<isAspectOf>&&&<tube size>&&&< >&&&< >&&&<Builtin>&&&<false>
+<5/8>&&&<isAspectOf>&&&<8>&&&< >&&&< >&&&<Builtin>&&&<true>
+<TIG Welding>&&&<isAspectOf>&&&<tig welding>&&&< >&&&< >&&&<Builtin>&&&<true>
+<TIG Welding>&&&<isAspectOf>&&&<types welding>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Piercing>&&&<isAspectOf>&&&<types service>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Piercing>&&&<isAspectOf>&&&<piercing>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Piercing>&&&<isAspectOf>&&&<secondary services>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Flattening>&&&<isAspectOf>&&&<types service>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Flattening>&&&<isAspectOf>&&&<secondary services>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Flattening>&&&<isAspectOf>&&&<flattening>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Bend>&&&<isAspectOf>&&&<tube size>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Bend>&&&<isAspectOf>&&&<bend>&&&< >&&&< >&&&<Builtin>&&&<true>
+<About Bassett>&&&<isAspectOf>&&&<bassett>&&&< >&&&< >&&&<Builtin>&&&<true>
+<AWS D1.1 & 1.3 Welding Certification>&&&<isAspectOf>&&&<13 welding certification>&&&< >&&&< >&&&<Builtin>&&&<true>
+<AWS D1.1 & 1.3 Welding Certification>&&&<isAspectOf>&&&<quality process certifications>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Round>&&&<isAspectOf>&&&<round>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Round>&&&<isAspectOf>&&&<tube shapes>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Milling>&&&<isAspectOf>&&&<types service>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Milling>&&&<isAspectOf>&&&<secondary services>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Milling>&&&<isAspectOf>&&&<milling>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Swaging / Flaring>&&&<isAspectOf>&&&<types service>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Swaging / Flaring>&&&<isAspectOf>&&&<swaging>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Swaging / Flaring>&&&<isAspectOf>&&&<secondary services>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Swaging / Flaring>&&&<isAspectOf>&&&<flaring>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Spot Welding>&&&<isAspectOf>&&&<spot welding>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Spot Welding>&&&<isAspectOf>&&&<types welding>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Just In Time (JIT) Compliant Delivery>&&&<isAspectOf>&&&<time jit compliant delivery>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Just In Time (JIT) Compliant Delivery>&&&<isAspectOf>&&&<quality process certifications>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Saw Cutting>&&&<isAspectOf>&&&<types fabricating>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Saw Cutting>&&&<isAspectOf>&&&<cutting>&&&< >&&&< >&&&<Builtin>&&&<true>
+<+/- 0.001 inches>&&&<isAspectOf>&&&<0001 inches>&&&< >&&&< >&&&<Builtin>&&&<true>
+<+/- 0.001 inches>&&&<isAspectOf>&&&<tolerance>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Aluminum:>&&&<isAspectOf>&&&<materials>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Aluminum:>&&&<isAspectOf>&&&<aluminum>&&&< >&&&< >&&&<Builtin>&&&<true>
+<architectural grille>&&&<isAspectOf>&&&<architectural grille>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Tube Fabricating>&&&<isAspectOf>&&&<tube fabricating>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Tube Fabricating>&&&<isAspectOf>&&&<categories>&&&< >&&&< >&&&<Builtin>&&&<false>
+<8 inch laser tube cutting>&&&<isAspectOf>&&&<8inch laser tube cutting>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Oval>&&&<isAspectOf>&&&<oval>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Oval>&&&<isAspectOf>&&&<tube shapes>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Straight between bends:>&&&<isAspectOf>&&&<designing assistance>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Straight between bends:>&&&<isAspectOf>&&&<straight bends>&&&< >&&&< >&&&<Builtin>&&&<true>
+<CLR>&&&<isAspectOf>&&&<clr>&&&< >&&&< >&&&<Builtin>&&&<true>
+<CLR>&&&<isAspectOf>&&&<designing assistance>&&&< >&&&< >&&&<Builtin>&&&<false>
+<| Fax:>&&&<isAspectOf>&&&<fax>&&&< >&&&< >&&&<Builtin>&&&<true>
+<| Fax:>&&&<isAspectOf>&&&<327>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Stainless Steel Grades:>&&&<isAspectOf>&&&<materials>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Stainless Steel Grades:>&&&<isAspectOf>&&&<stainless steel grades>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Recent Posts>&&&<isAspectOf>&&&<recent posts>&&&< >&&&< >&&&<Builtin>&&&<true>
+<+/- 0.002 inches>&&&<isAspectOf>&&&<0002 inches>&&&< >&&&< >&&&<Builtin>&&&<true>
+<+/- 0.002 inches>&&&<isAspectOf>&&&<tolerance>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Coping>&&&<isAspectOf>&&&<types service>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Coping>&&&<isAspectOf>&&&<secondary services>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Coping>&&&<isAspectOf>&&&<coping>&&&< >&&&< >&&&<Builtin>&&&<true>
+<3/8 to 10 inches Diameter>&&&<isAspectOf>&&&<tube size>&&&< >&&&< >&&&<Builtin>&&&<false>
+<3/8 to 10 inches Diameter>&&&<isAspectOf>&&&<810 inches diameter>&&&< >&&&< >&&&<Builtin>&&&<true>
+<± 0.005 inches>&&&<isAspectOf>&&&<0005 inches>&&&< >&&&< >&&&<Builtin>&&&<true>
+<± 0.005 inches>&&&<isAspectOf>&&&<tolerance>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Minimum hole diameter:>&&&<isAspectOf>&&&<designing assistance>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Minimum hole diameter:>&&&<isAspectOf>&&&<minimum hole diameter>&&&< >&&&< >&&&<Builtin>&&&<true>
+<MIG Welding>&&&<isAspectOf>&&&<mig welding>&&&< >&&&< >&&&<Builtin>&&&<true>
+<MIG Welding>&&&<isAspectOf>&&&<types welding>&&&< >&&&< >&&&<Builtin>&&&<false>
+<| Email:>&&&<isAspectOf>&&&<327>&&&< >&&&< >&&&<Builtin>&&&<false>
+<| Email:>&&&<isAspectOf>&&&<email>&&&< >&&&< >&&&<Builtin>&&&<true>
+<From prototyping to high volume production>&&&<isAspectOf>&&&<prototyping high volume production>&&&< >&&&< >&&&<Builtin>&&&<true>
+<From prototyping to high volume production>&&&<isAspectOf>&&&<production runs>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Tube Fabricating News>&&&<isAspectOf>&&&<tube fabricating news>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Manual and Robotic Welding>&&&<isAspectOf>&&&<robotic welding>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Manual and Robotic Welding>&&&<isAspectOf>&&&<types welding>&&&< >&&&< >&&&<Builtin>&&&<false>
+<quality tube laser cutting>&&&<isAspectOf>&&&<quality tube laser cutting>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Beading>&&&<isAspectOf>&&&<beading>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Beading>&&&<isAspectOf>&&&<types service>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Beading>&&&<isAspectOf>&&&<secondary services>&&&< >&&&< >&&&<Builtin>&&&<false>
+<+/- 0.005 inches>&&&<isAspectOf>&&&<0005 inches>&&&< >&&&< >&&&<Builtin>&&&<true>
+<+/- 0.005 inches>&&&<isAspectOf>&&&<tolerance>&&&< >&&&< >&&&<Builtin>&&&<false>
+<thefabricator.com>&&&<isAspectOf>&&&<thefabricatorcom>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Notching>&&&<isAspectOf>&&&<types service>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Notching>&&&<isAspectOf>&&&<secondary services>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Notching>&&&<isAspectOf>&&&<notching>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Tube Laser Cutting>&&&<isAspectOf>&&&<categories>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Tube Laser Cutting>&&&<isAspectOf>&&&<tube laser cutting>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Up to 8 inch diameter>&&&<isAspectOf>&&&<8inch diameter>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Up to 8 inch diameter>&&&<isAspectOf>&&&<tube size>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Laser Cutting Considerations:>&&&<isAspectOf>&&&<designing assistance>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Laser Cutting Considerations:>&&&<isAspectOf>&&&<laser cutting considerations>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Drilling>&&&<isAspectOf>&&&<types service>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Drilling>&&&<isAspectOf>&&&<secondary services>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Drilling>&&&<isAspectOf>&&&<drilling>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Request Information>&&&<isAspectOf>&&&<types fabricating>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Request Information>&&&<isAspectOf>&&&<roll bending>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Request Information>&&&<isAspectOf>&&&<request information>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Machining>&&&<isAspectOf>&&&<types service>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Machining>&&&<isAspectOf>&&&<secondary services>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Machining>&&&<isAspectOf>&&&<machining>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Tolerances:>&&&<isAspectOf>&&&<designing assistance>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Tolerances:>&&&<isAspectOf>&&&<tolerances>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Mailing Address:>&&&<isAspectOf>&&&<mailing address>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Punching>&&&<isAspectOf>&&&<punching>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Punching>&&&<isAspectOf>&&&<types service>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Punching>&&&<isAspectOf>&&&<secondary services>&&&< >&&&< >&&&<Builtin>&&&<false>
+<327>&&&<isAspectOf>&&&<327>&&&< >&&&< >&&&<Builtin>&&&<true>
+<8 inch tube bending and fabricating>&&&<isAspectOf>&&&<8inch tube bending>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Slotting>&&&<isAspectOf>&&&<types service>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Slotting>&&&<isAspectOf>&&&<slotting>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Slotting>&&&<isAspectOf>&&&<secondary services>&&&< >&&&< >&&&<Builtin>&&&<false>
+<and tagged>&&&<isAspectOf>&&&<tube>&&&< >&&&< >&&&<Builtin>&&&<false>
+<and tagged>&&&<isAspectOf>&&&<categories>&&&< >&&&< >&&&<Builtin>&&&<false>
+<and tagged>&&&<isAspectOf>&&&<tagged>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Fabrication>&&&<isAspectOf>&&&<tube size>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Fabrication>&&&<isAspectOf>&&&<fabrication>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Threading>&&&<isAspectOf>&&&<types service>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Threading>&&&<isAspectOf>&&&<secondary services>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Threading>&&&<isAspectOf>&&&<threading>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Steel>&&&<isAspectOf>&&&<materials>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Steel>&&&<isAspectOf>&&&<steel>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Statistical Process Control (SPC)>&&&<isAspectOf>&&&<quality process certifications>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Statistical Process Control (SPC)>&&&<isAspectOf>&&&<statistical process control spc>&&&< >&&&< >&&&<Builtin>&&&<true>
+<bassett industries>&&&<isAspectOf>&&&<bassett industries>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Tube Bending considerations>&&&<isAspectOf>&&&<tube bending considerations>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Aluminum Grades:>&&&<isAspectOf>&&&<aluminum grades>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Aluminum Grades:>&&&<isAspectOf>&&&<materials>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Circular bar rings>&&&<isAspectOf>&&&<circular bar rings>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Circular bar rings>&&&<isAspectOf>&&&<types fabricating>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Circular bar rings>&&&<isAspectOf>&&&<roll bending>&&&< >&&&< >&&&<Builtin>&&&<false>
+<tube fabricating quality>&&&<isAspectOf>&&&<tube fabricating quality>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Swaging>&&&<isAspectOf>&&&<swaging>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Swaging>&&&<isAspectOf>&&&<types>&&&< >&&&< >&&&<Builtin>&&&<false>
+<admin>&&&<isAspectOf>&&&<continuous improvement product technology implementation>&&&< >&&&< >&&&<Builtin>&&&<false>
+<admin>&&&<isAspectOf>&&&<admin>&&&< >&&&< >&&&<Builtin>&&&<true>
+<admin>&&&<isAspectOf>&&&<8inch diameter tube bending fabricating>&&&< >&&&< >&&&<Builtin>&&&<false>
+<admin>&&&<isAspectOf>&&&<tube fabricating news>&&&< >&&&< >&&&<Builtin>&&&<false>
+<inch diameter>&&&<isAspectOf>&&&<58>&&&< >&&&< >&&&<Builtin>&&&<false>
+<inch diameter>&&&<isAspectOf>&&&<inch diameter>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Categories>&&&<isAspectOf>&&&<categories>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Square>&&&<isAspectOf>&&&<square>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Square>&&&<isAspectOf>&&&<tube shapes>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Tagged>&&&<isAspectOf>&&&<tagged>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Round Tubing>&&&<isAspectOf>&&&<tube size>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Round Tubing>&&&<isAspectOf>&&&<round tubing>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Up to 8>&&&<isAspectOf>&&&<tube size>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Up to 8>&&&<isAspectOf>&&&<8>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Stainless Steel:>&&&<isAspectOf>&&&<materials>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Stainless Steel:>&&&<isAspectOf>&&&<stainless steel>&&&< >&&&< >&&&<Builtin>&&&<true>
+<Flaring>&&&<isAspectOf>&&&<types>&&&< >&&&< >&&&<Builtin>&&&<false>
+<Flaring>&&&<isAspectOf>&&&<flaring>&&&< >&&&< >&&&<Builtin>&&&<true>

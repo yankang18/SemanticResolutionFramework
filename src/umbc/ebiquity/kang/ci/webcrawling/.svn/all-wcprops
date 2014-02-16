@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/221/trunk/LuceneInAction/src/umbc/ebiquity/kang/ci/webcrawling
+END
+WebCrawler.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/221/trunk/LuceneInAction/src/umbc/ebiquity/kang/ci/webcrawling/WebCrawler.java
+END
+NaiveCrawler.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/221/trunk/LuceneInAction/src/umbc/ebiquity/kang/ci/webcrawling/NaiveCrawler.java
+END
+WebCrawlerText.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/!svn/ver/221/trunk/LuceneInAction/src/umbc/ebiquity/kang/ci/webcrawling/WebCrawlerText.java
+END
+CrawlerUrl.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/221/trunk/LuceneInAction/src/umbc/ebiquity/kang/ci/webcrawling/CrawlerUrl.java
+END

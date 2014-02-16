@@ -1,0 +1,203 @@
+10
+
+dir
+0
+https://xssm.googlecode.com/svn/trunk/LuceneInAction/conf/configuration/WordNet/WordNet-3.0/dict
+https://xssm.googlecode.com/svn
+add
+
+
+
+
+
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+abdc874f-713e-0410-a7f5-67f85424188b
+
+Makefile
+file
+
+
+
+add
+
+Makefile.am
+file
+
+
+
+add
+
+Makefile.in
+file
+
+
+
+add
+
+adj.exc
+file
+
+
+
+add
+
+adv.exc
+file
+
+
+
+add
+
+cntlist
+file
+
+
+
+add
+
+cntlist.rev
+file
+
+
+
+add
+
+data.adj
+file
+
+
+
+add
+
+data.adv
+file
+
+
+
+add
+
+data.noun
+file
+
+
+
+add
+
+data.verb
+file
+
+
+
+add
+
+frames.vrb
+file
+
+
+
+add
+
+index.adj
+file
+
+
+
+add
+
+index.adv
+file
+
+
+
+add
+
+index.noun
+file
+
+
+
+add
+
+index.sense
+file
+
+
+
+add
+
+index.verb
+file
+
+
+
+add
+
+lexnames
+file
+
+
+
+add
+
+log.grind.3.0
+file
+
+
+
+add
+
+noun.exc
+file
+
+
+
+add
+
+sense.idx
+file
+
+
+
+add
+
+sentidx.vrb
+file
+
+
+
+add
+
+sents.vrb
+file
+
+
+
+add
+
+verb.Framestext
+file
+
+
+
+add
+
+verb.exc
+file
+
+
+
+add
+

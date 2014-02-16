@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/236/trunk/LuceneInAction/src/umbc/ebiquity/kang/textprocessing
+END
+TermVector.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/221/trunk/LuceneInAction/src/umbc/ebiquity/kang/textprocessing/TermVector.java
+END
+Term.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/221/trunk/LuceneInAction/src/umbc/ebiquity/kang/textprocessing/Term.java
+END
+Synonyms.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/236/trunk/LuceneInAction/src/umbc/ebiquity/kang/textprocessing/Synonyms.java
+END
+SynonymMatcher.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/!svn/ver/236/trunk/LuceneInAction/src/umbc/ebiquity/kang/textprocessing/SynonymMatcher.java
+END
+SynonymPhraseCombiner.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/!svn/ver/221/trunk/LuceneInAction/src/umbc/ebiquity/kang/textprocessing/SynonymPhraseCombiner.java
+END
+TextContentMatcher.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/!svn/ver/221/trunk/LuceneInAction/src/umbc/ebiquity/kang/textprocessing/TextContentMatcher.java
+END
+GGramMatcher.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/236/trunk/LuceneInAction/src/umbc/ebiquity/kang/textprocessing/GGramMatcher.java
+END
+PorterStemmer.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/221/trunk/LuceneInAction/src/umbc/ebiquity/kang/textprocessing/PorterStemmer.java
+END
+ExactStringMatcher.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/!svn/ver/236/trunk/LuceneInAction/src/umbc/ebiquity/kang/textprocessing/ExactStringMatcher.java
+END
+Matcher.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/236/trunk/LuceneInAction/src/umbc/ebiquity/kang/textprocessing/Matcher.java
+END
+TextProcessingUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/!svn/ver/221/trunk/LuceneInAction/src/umbc/ebiquity/kang/textprocessing/TextProcessingUtils.java
+END
