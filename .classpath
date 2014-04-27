@@ -17,7 +17,6 @@
 	<classpathentry kind="lib" path="jar/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="jar/xercesSamples.jar"/>
 	<classpathentry kind="lib" path="jar/xml-apis.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/OntologyMatcher"/>
 	<classpathentry kind="lib" path="jena/arq-2.8.4.jar"/>
 	<classpathentry kind="lib" path="jena/icu4j-3.4.4.jar"/>
 	<classpathentry kind="lib" path="jena/iri-0.8-sources.jar"/>
@@ -54,5 +53,6 @@
 	<classpathentry kind="lib" path="jar/json-simple-1.1.1.jar"/>
 	<classpathentry kind="lib" path="jsoup/jsoup-1.6.2.jar"/>
 	<classpathentry kind="lib" path="jar/stanford-postagger-3.2.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/OntologyMatcher"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

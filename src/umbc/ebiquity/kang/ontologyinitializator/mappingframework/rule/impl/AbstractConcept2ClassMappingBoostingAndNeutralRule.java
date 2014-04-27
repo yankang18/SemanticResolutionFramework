@@ -1,16 +1,17 @@
 package umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.impl;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Concept;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter.MappingRelationType;
-import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ManufacturingLexicalMappingRepository.MappingVericationResult;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRecordsAccessor;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRepository;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRecordsUpdater.MappingVericationResult;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
 
 public abstract class AbstractConcept2ClassMappingBoostingAndNeutralRule extends AbstractConcept2ClassMappingRule  {
 
 	protected AbstractConcept2ClassMappingBoostingAndNeutralRule(IOntologyRepository ontologyRepository,
-			IManufacturingLexicalMappingRepository MLRepository) {
+			IManufacturingLexicalMappingRecordsAccessor MLRepository) {
 		super(ontologyRepository, MLRepository);
 	}
 	
@@ -30,7 +31,7 @@ public abstract class AbstractConcept2ClassMappingBoostingAndNeutralRule extends
 				this.getManfacturingLexiconRepository().updateConcept2OntoClassMappingRelation(concept, newMappedClass, relation);
 			} else {
 				// if the mapping is new mapping, add this mapping.
-				double sim = 0.7; // default similarity for new mapping
+				double sim = 0.75; // default similarity for new mapping
 				this.getManfacturingLexiconRepository().addNewConcept2OntoClassMapping(concept, relation, newMappedClass, sim);
 			}
 			

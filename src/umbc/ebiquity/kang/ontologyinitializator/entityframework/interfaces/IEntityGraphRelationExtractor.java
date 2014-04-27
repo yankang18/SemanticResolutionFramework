@@ -1,6 +1,6 @@
 package umbc.ebiquity.kang.ontologyinitializator.entityframework.interfaces;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.EntityNode;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityNode;
 
 public interface IEntityGraphRelationExtractor extends IReadOnlyEntityGraph {
 	

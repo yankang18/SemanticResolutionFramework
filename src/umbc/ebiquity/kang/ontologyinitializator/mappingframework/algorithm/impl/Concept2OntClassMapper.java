@@ -3,9 +3,10 @@ package umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Concept;
-import umbc.ebiquity.kang.ontologyinitializator.mappingframework.SimilarityAlgorithm;
+
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IConcept2OntClassMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IConcept2OntClassMappingPairLookUpper;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
@@ -21,11 +22,13 @@ public class Concept2OntClassMapper implements IConcept2OntClassMapper {
 	private Map<String, String> domainSpecificTermMap;
 	private IConcept2OntClassMappingPairLookUpper concept2OntClassMappingPairLookUpper;
 	private ILabelSimilarity labelSimilarity;
+	private boolean applyMappingRule = true;
 	
-	public Concept2OntClassMapper(IConcept2OntClassMappingPairLookUpper concept2OntClassMappingPairLookUpper){
+	public Concept2OntClassMapper(IConcept2OntClassMappingPairLookUpper concept2OntClassMappingPairLookUpper, boolean applyMappingRule){
 		this.domainSpecificTermMap = new HashMap<String, String>();
 		this.concept2OntClassMappingPairLookUpper = concept2OntClassMappingPairLookUpper;
-		labelSimilarity = new SubSumptionRelationshipBoostingLabelSimilarity(new OrderedWordListSimilarity(), true);
+		this.labelSimilarity = new SubSumptionRelationshipBoostingLabelSimilarity(new OrderedWordListSimilarity(), true);
+		this.applyMappingRule = applyMappingRule;
 	}
 	
 	@Override
@@ -36,28 +39,35 @@ public class Concept2OntClassMapper implements IConcept2OntClassMapper {
 	@Override
 	public Collection<Concept2OntClassMapping> mapConcept2OntClass(Collection<Concept> conceptSet, Collection<OntoClassInfo> ontClasses) {
 		
-		Collection<Concept2OntClassMapping> concept2OntClassMappingPairs = new ArrayList<Concept2OntClassMapping>(); 
+		List<Concept2OntClassMapping> concept2OntClassMappingPairs = new ArrayList<Concept2OntClassMapping>(); 
 //		Concept2OntClassMappingPairLookUpper lookUpper = new Concept2OntClassMappingPairLookUpper(0.75, MLRepository, this.domaindOntology);
 		for (Concept concept : conceptSet) {
 
 			/*
 			 * 
 			 */
-			Collection<Concept2OntClassMapping> concept2OntClassMappingPairsFromMLP = concept2OntClassMappingPairLookUpper.lookupConcept2OntClassMappingPairs(concept);
-			if (concept2OntClassMappingPairsFromMLP.size() != 0) {
-				concept2OntClassMappingPairs.addAll(concept2OntClassMappingPairsFromMLP);
-				continue;
+			if (applyMappingRule) {
+				List<Concept2OntClassMapping> concept2OntClassMappingPairsFromMLP = concept2OntClassMappingPairLookUpper
+						.lookupConcept2OntClassMappingPairs(concept);
+				if (concept2OntClassMappingPairsFromMLP.size() != 0) {
+					concept2OntClassMappingPairs.addAll(concept2OntClassMappingPairsFromMLP);
+				}
+				
+				if (concept2OntClassMappingPairsFromMLP.size() > 0) {
+					continue;
+				}
 			}
+			
 			
 			/*
 			 * 
 			 */
-			for (String relation : domainSpecificTermMap.keySet()) {
-				double sim = labelSimilarity.computeLabelSimilarity(concept.getConceptName(), relation);
-				if (sim >= this.equalityThreshold) {
-					concept.updateConceptName(domainSpecificTermMap.get(relation)); 
-				}
-			}
+//			for (String relation : domainSpecificTermMap.keySet()) {
+//				double sim = labelSimilarity.computeLabelSimilarity(concept.getConceptName(), relation);
+//				if (sim >= this.equalityThreshold) {
+//					concept.updateComputingLabel(domainSpecificTermMap.get(relation)); 
+//				}
+//			}
 			
 			/*
 			 * initialize the maxSimiliarty to the threshold of legitimate
@@ -109,7 +119,7 @@ public class Concept2OntClassMapper implements IConcept2OntClassMapper {
 	 * @return the similarity
 	 */
 	private double computeLabelSimilarity(Concept concept, OntoClassInfo ontoClassInfo){
-		double similarity = labelSimilarity.computeLabelSimilarity(concept.getConceptName(), ontoClassInfo.getOntClassName());
+		double similarity = labelSimilarity.computeLabelSimilarity(concept.getComputingLabel(), ontoClassInfo.getOntClassName());
 		ontoClassInfo.setSimilarityToConcept(similarity);
 		return similarity;
 	}

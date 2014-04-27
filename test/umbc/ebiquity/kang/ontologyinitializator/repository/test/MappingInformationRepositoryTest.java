@@ -9,7 +9,7 @@ import java.util.Collection;
 
 import org.junit.Test;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Concept;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingBasicInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingDetailInfo;
@@ -23,7 +23,7 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2O
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IMappingInfoRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IUpdatedInstanceRecord;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceRecord;
 
 public class MappingInformationRepositoryTest {
 	private static IMappingInfoRepository _mappingResult ;
@@ -51,7 +51,7 @@ public class MappingInformationRepositoryTest {
 	
 	@Test
 	public void updateMappingInfoRepositoryWithUpdatedInstance(){
-		IUpdatedInstanceRecord instanceRecordSetter = _mappingResult.createInstanceClassificationRecord();
+		IInstanceRecord instanceRecordSetter = _mappingResult.createInstanceClassificationRecord();
 		
 		String origInstanceName = "CNC Vertical & Horizontal Milling";
 		String updatedInstanceLabel = "CNC Vertical and Horizontal Milling";
@@ -64,7 +64,7 @@ public class MappingInformationRepositoryTest {
 		instanceRecordSetter.setUpdatedClassName(updatedOntoClassLabel);
 		instanceRecordSetter.isUpdatedInstance(true);
 		
-		Collection<IUpdatedInstanceRecord> instances = new ArrayList<IUpdatedInstanceRecord>();
+		Collection<IInstanceRecord> instances = new ArrayList<IInstanceRecord>();
 		instances.add(instanceRecordSetter);
 		
 		_mappingResult.updateMappingInfo(instances);
@@ -79,7 +79,7 @@ public class MappingInformationRepositoryTest {
 	@Test
 	public void updateMappingInfoRepositoryWithUpdatedClass(){ 
 		
-		IUpdatedInstanceRecord instanceRecordSetter = _mappingResult.createInstanceClassificationRecord();
+		IInstanceRecord instanceRecordSetter = _mappingResult.createInstanceClassificationRecord();
 		
 		String origInstanceName = "Milling";
 		String updatedInstanceLabel = "Milling";
@@ -92,7 +92,7 @@ public class MappingInformationRepositoryTest {
 		instanceRecordSetter.setUpdatedClassName(updatedOntoClassLabel);
 		instanceRecordSetter.isUpdatedInstance(true);
 		
-		Collection<IUpdatedInstanceRecord> instances = new ArrayList<IUpdatedInstanceRecord>();
+		Collection<IInstanceRecord> instances = new ArrayList<IInstanceRecord>();
 		instances.add(instanceRecordSetter);
 		
 		_mappingResult.updateMappingInfo(instances);
@@ -107,7 +107,7 @@ public class MappingInformationRepositoryTest {
 	public void updateMappingInfoRepositoryWithUpdatedConcept2ClassMappingPenalizing() throws NoSuchEntryItemException{ 
 		System.out.println("------------------------------------ ");
 		
-		IUpdatedInstanceRecord instanceRecordSetter = _mappingResult.createInstanceClassificationRecord();
+		IInstanceRecord instanceRecordSetter = _mappingResult.createInstanceClassificationRecord();
 		
 		String origInstanceName = "Blanchard Grinder";
 		String updatedInstanceLabel = "Blanchard Grinder";
@@ -129,7 +129,7 @@ public class MappingInformationRepositoryTest {
 		OntoClassInfo oldOntClass = _ontologyRepository.getLightWeightOntClassByName(oldClassName);
 		Concept concept = new Concept(conceptName);
 		instanceRecordSetter.addConcept2OntClassMappingPair(concept, relation, newOntClass, true, false, similarity);
-		Collection<IUpdatedInstanceRecord> instances = new ArrayList<IUpdatedInstanceRecord>();
+		Collection<IInstanceRecord> instances = new ArrayList<IInstanceRecord>();
 		instances.add(instanceRecordSetter);
 		
 		// get statistic information before updating the concept-to-class mapping
@@ -187,7 +187,7 @@ public class MappingInformationRepositoryTest {
 	public void updateMappingInfoRepositoryWithUpdatedConcept2ClassMappingBoosting() throws NoSuchEntryItemException {
 		System.out.println("------------------------------------ ");
 		
-		IUpdatedInstanceRecord instanceRecordSetter = _mappingResult.createInstanceClassificationRecord();
+		IInstanceRecord instanceRecordSetter = _mappingResult.createInstanceClassificationRecord();
 
 		String origInstanceName = "Finish Grinding";
 		String updatedInstanceLabel = "Finish Grinding";
@@ -212,7 +212,7 @@ public class MappingInformationRepositoryTest {
 		
 		instanceRecordSetter.addConcept2OntClassMappingPair(concept, relation, newOntClass, true, false, similarity);
 
-		Collection<IUpdatedInstanceRecord> instances = new ArrayList<IUpdatedInstanceRecord>();
+		Collection<IInstanceRecord> instances = new ArrayList<IInstanceRecord>();
 		instances.add(instanceRecordSetter);
 
 		IConcept2OntClassMappingStatistics statistics0 = _MLReposiory.getConcept2ClassMappingStatistics(concept, oldOntClass);

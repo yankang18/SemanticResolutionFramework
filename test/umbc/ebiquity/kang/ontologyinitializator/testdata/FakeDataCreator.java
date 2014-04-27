@@ -7,12 +7,11 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Concept;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.InstanceTripleSet;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.MatchedOntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter.MappingRelationType;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ClassifiedInstanceDetailRecord;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.Concept2OntClassMapping;
@@ -20,20 +19,129 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.impl.UpdatedInstanceR
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstanceDetailRecord;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMapping;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IUpdatedInstanceRecord;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceRecord;
 
 public class FakeDataCreator {
 	
 	private static IOntologyRepository _ontologyRepository;
 	
 	public FakeDataCreator() throws IOException {
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/kangyan2003/Desktop/";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/kangyan2003/Desktop/Ontology/MSDL-Fullv2.owl";
+//		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
+//		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
 		_ontologyRepository = OntologyRepositoryFactory.createOntologyRepository();
 	}
 	
-	public Map<IUpdatedInstanceRecord, IClassifiedInstanceDetailRecord> createUpdatedInstanceRecordsAndClassifiedInstanceRecords() {
-		Map<IUpdatedInstanceRecord, IClassifiedInstanceDetailRecord> XXX = new LinkedHashMap<IUpdatedInstanceRecord, IClassifiedInstanceDetailRecord>();
+	public Map<IInstanceRecord, IClassifiedInstanceDetailRecord> createUpdatedInstanceRecordsAndClassifiedInstanceRecords1() {
+		Map<IInstanceRecord, IClassifiedInstanceDetailRecord> XXX = new LinkedHashMap<IInstanceRecord, IClassifiedInstanceDetailRecord>();
+
+		String instanceName = "Precision Machining";
+		String originalClassName = "SheetMetalService";
+		String updatedClassName = "Process";
+		Map<String, String> c2cMapping = new HashMap<String, String>();
+		c2cMapping.put("sheet metal fabrication", "SheetMetalService");
+		c2cMapping.put("products", "Product");
+		c2cMapping.put("ManufacturingService", "Service");
+		XXX.put(createUpdatedInstanceRecord(instanceName, instanceName, instanceName, originalClassName, updatedClassName, c2cMapping),
+				createClassifiedInstanceRecord(instanceName, originalClassName, c2cMapping));
+
+		instanceName = "Abrasive Waterjet Cutting";
+		originalClassName = "ManufacturingService";
+		updatedClassName = "WaterJetCutting";
+		c2cMapping = new HashMap<String, String>();
+		c2cMapping.put("sheet metal fabrication", "SheetMetalService");
+		c2cMapping.put("capabilities", "Process");
+		c2cMapping.put("carbon steel shims", "CarbonSteel");
+		XXX.put(createUpdatedInstanceRecord(instanceName, instanceName, instanceName, originalClassName, updatedClassName, c2cMapping),
+				createClassifiedInstanceRecord(instanceName, originalClassName, c2cMapping));
+
+		instanceName = "Shim Sets";
+		originalClassName = "SheetMetalService";
+		updatedClassName = "Product";
+		c2cMapping = new HashMap<String, String>();
+		c2cMapping.put("sheet metal fabrication", "SheetMetalService");
+		c2cMapping.put("shims", "NULL");
+		c2cMapping.put("shim types", "NULL");
+		XXX.put(createUpdatedInstanceRecord(instanceName, instanceName, instanceName, originalClassName, updatedClassName, c2cMapping),
+				createClassifiedInstanceRecord(instanceName, originalClassName, c2cMapping));
+
+		instanceName = "Shims";
+		originalClassName = "SheetMetalService";
+		updatedClassName = "Product";
+		c2cMapping = new HashMap<String, String>();
+		c2cMapping.put("sheet metal fabrication", "SheetMetalService");
+		c2cMapping.put("ManufacturingService", "Service");
+		c2cMapping.put("military defense", "DefenseAndMilitary");
+		XXX.put(createUpdatedInstanceRecord(instanceName, instanceName, instanceName, originalClassName, updatedClassName, c2cMapping),
+				createClassifiedInstanceRecord(instanceName, originalClassName, c2cMapping));
+
+		instanceName = "Spiral Wound Gaskets";
+		originalClassName = "SheetMetalService";
+		updatedClassName = "Product";
+		c2cMapping = new HashMap<String, String>();
+		c2cMapping.put("sheet metal fabrication", "SheetMetalService");
+		c2cMapping.put("types gaskets", "NULL");
+		c2cMapping.put("gaskets", "NULL");
+		XXX.put(createUpdatedInstanceRecord(instanceName, instanceName, instanceName, originalClassName, updatedClassName, c2cMapping),
+				createClassifiedInstanceRecord(instanceName, originalClassName, c2cMapping));
+
+		return XXX;
+	}
+	
+	
+	public Map<IInstanceRecord, IClassifiedInstanceDetailRecord> createUpdatedInstanceRecordsAndClassifiedInstanceRecords2() {
+		Map<IInstanceRecord, IClassifiedInstanceDetailRecord> XXX = new LinkedHashMap<IInstanceRecord, IClassifiedInstanceDetailRecord>();
+
+		String instanceName = "Sheet Metal Fabrication";
+		String originalClassName = "SheetMetalService";
+		String updatedClassName = "Process";
+		Map<String, String> c2cMapping = new HashMap<String, String>();
+		c2cMapping.put("ManufacturingService", "Service");
+		c2cMapping.put("products", "Product");
+		XXX.put(createUpdatedInstanceRecord(instanceName, instanceName, instanceName, originalClassName, updatedClassName, c2cMapping),
+				createClassifiedInstanceRecord(instanceName, originalClassName, c2cMapping));
+
+		instanceName = "Sheet Metal Fabrications";
+		originalClassName = "SheetMetalService";
+		updatedClassName = "Process";
+		c2cMapping = new HashMap<String, String>();
+		c2cMapping.put("sheet metal fabrication", "SheetMetalService");
+		c2cMapping.put("products", "Product");
+		XXX.put(createUpdatedInstanceRecord(instanceName, instanceName, instanceName, originalClassName, updatedClassName, c2cMapping),
+				createClassifiedInstanceRecord(instanceName, originalClassName, c2cMapping));
+
+		instanceName = "Aerospace Waterjet Cutting";
+		originalClassName = "WaterjetCuttingService";
+		updatedClassName = "WaterJetCutting";
+		c2cMapping = new HashMap<String, String>();
+		c2cMapping.put("ManufacturingService", "Service");
+		c2cMapping.put("abrasive waterjet cutting", "WaterjetCuttingService");
+		XXX.put(createUpdatedInstanceRecord(instanceName, instanceName, instanceName, originalClassName, updatedClassName, c2cMapping),
+				createClassifiedInstanceRecord(instanceName, originalClassName, c2cMapping));
+
+		instanceName = "ShellMoldCasting&SandCasting";
+		originalClassName = "ExpendableMold";
+		updatedClassName = "Casting";
+		c2cMapping = new HashMap<String, String>();
+		c2cMapping.put("Casting", "Casting");
+		c2cMapping.put("ShellModeCasting", "ShellMoldCasting");
+		c2cMapping.put("SandCasting", "SandCasting");
+		XXX.put(createUpdatedInstanceRecord(instanceName, instanceName, instanceName, originalClassName, updatedClassName, c2cMapping),
+				createClassifiedInstanceRecord(instanceName, originalClassName, c2cMapping));
+
+		instanceName = "Aerospace Waterjet Cutting";
+		originalClassName = "Machining";
+		updatedClassName = "WaterJetCutting";
+		c2cMapping = new HashMap<String, String>();
+		c2cMapping.put("WaterJetCutting", "WaterJetCutting");
+		c2cMapping.put("MechanicalMachining", "MechanicalMachining");
+		c2cMapping.put("Machining", "Machining");
+		XXX.put(createUpdatedInstanceRecord(instanceName, instanceName, instanceName, originalClassName, updatedClassName, c2cMapping),
+				createClassifiedInstanceRecord(instanceName, originalClassName, c2cMapping));
+		return XXX;
+	}
+	
+	public Map<IInstanceRecord, IClassifiedInstanceDetailRecord> createUpdatedInstanceRecordsAndClassifiedInstanceRecords() {
+		Map<IInstanceRecord, IClassifiedInstanceDetailRecord> XXX = new LinkedHashMap<IInstanceRecord, IClassifiedInstanceDetailRecord>();
 
 		String instanceName = "Precision Machining";
 		String originalClassName = "SheetMetalService";
@@ -134,10 +242,10 @@ public class FakeDataCreator {
 		return XXX;
 	}
 
-	public IUpdatedInstanceRecord createUpdatedInstanceRecord(String prevenanceInstanceName, String originalInstanceName, String currentInstanceName, String originalClassName, String updatedClassName,
+	public IInstanceRecord createUpdatedInstanceRecord(String prevenanceInstanceName, String originalInstanceName, String currentInstanceName, String originalClassName, String updatedClassName,
 			Map<String, String> conept2classMappings) {
 
-		IUpdatedInstanceRecord updatedInstanceRecord = new UpdatedInstanceRecord();
+		IInstanceRecord updatedInstanceRecord = new UpdatedInstanceRecord();
 		updatedInstanceRecord.setOriginalInstanceName(originalInstanceName);
 		updatedInstanceRecord.setUpdatedInstanceName(currentInstanceName);
 		updatedInstanceRecord.setPrevenanceOfInstance(prevenanceInstanceName);

@@ -1,29 +1,21 @@
 package umbc.ebiquity.kang.ontologyinitializator.repository.impl;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
-import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.RuleEngine;
-import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrectionRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstanceBasicRecord;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstanceDetailRecord;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstancesRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMapping;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IProprietoryClassifiedInstancesRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IUpdatedInstanceRecord;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstancesRepository;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceRecord;
 
 public class MappingDataGateway {
 
 	private IManufacturingLexicalMappingRepository _manufacturingLexicalMappingRepository;
 	private IClassificationCorrectionRepository _classificationCorrectionRepository;
-	private IProprietoryClassifiedInstancesRepository _proprietoryClassifiedInstanceRepository;
+	private IClassifiedInstancesRepository _proprietoryClassifiedInstanceRepository;
 	
 	public MappingDataGateway(
-							  IProprietoryClassifiedInstancesRepository classifiedInstanceRepository,
+							  IClassifiedInstancesRepository classifiedInstanceRepository,
 		                      IClassificationCorrectionRepository classificationCorrectionRepository,
 			                  IManufacturingLexicalMappingRepository manufacturingLexicalMappingRepository
 			                  ) {
@@ -32,10 +24,10 @@ public class MappingDataGateway {
 		this._classificationCorrectionRepository = classificationCorrectionRepository;
 	}
 	
-	public void updateMappingInfo(Collection<IUpdatedInstanceRecord> instances){
+	public void updateMappingInfo(Collection<IInstanceRecord> instances){
 
 //		StringBuilder correctedInstancesInfo = new StringBuilder();
-		for (IUpdatedInstanceRecord updatedInstance : instances) {
+		for (IInstanceRecord updatedInstance : instances) {
 			System.out.println("----------------------------------------");
 			String origInstanceName = updatedInstance.getOriginalInstanceName();
 			IClassifiedInstanceDetailRecord originalInstance = this._proprietoryClassifiedInstanceRepository.getClassifiedInstanceDetailRecordByInstanceName(origInstanceName);
@@ -43,11 +35,10 @@ public class MappingDataGateway {
 			_classificationCorrectionRepository.extractCorrection(updatedInstance, originalInstance);
 			_manufacturingLexicalMappingRepository.updateValidityOfConcept2OntClassMapping(updatedInstance, originalInstance);
 		}
-		
 //		System.out.println(correctedInstancesInfo.toString());
 	}
 	
-	public IUpdatedInstanceRecord createInstanceClassificationRecord(){
+	public IInstanceRecord createInstanceClassificationRecord(){
 		return new UpdatedInstanceRecord();
 	}
 

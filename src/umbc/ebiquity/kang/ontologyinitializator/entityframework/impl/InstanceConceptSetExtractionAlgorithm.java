@@ -6,11 +6,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Concept;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.EntityNode;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityNode;
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.interfaces.IEntityGraphInstanceConceptsExtractor;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.LongestCommonPhraseAnalyzer;
 import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
+import umbc.ebiquity.kang.textprocessing.stemmer.PluralStemmer;
 
 public class InstanceConceptSetExtractionAlgorithm {
 	
@@ -116,7 +117,7 @@ public class InstanceConceptSetExtractionAlgorithm {
 	private void extractConcepts(Map<Concept, Concept> conceptSet, Collection<EntityNode> instanceNodes, double distanceDegree){
 		Map<String, Double> commonInstancePhraseMap = commonPhraseAnalyzer.computeCommonPhrases(instanceNodes);
 		for (String commonPhrase : commonInstancePhraseMap.keySet()) {
-			Concept concept = new Concept(commonPhrase);
+			Concept concept = new Concept(TextProcessingUtils.pluralStem(commonPhrase));
 			double phraseCount = commonInstancePhraseMap.get(commonPhrase);
 			double distanceDecayFactor = Math.pow(this._distanceDecayFactor, distanceDegree);
 			double totalScore = concept.getScore() * phraseCount * distanceDecayFactor;

@@ -13,9 +13,10 @@ import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.inter
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ClassifiedInstanceDetailRecord;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.MatchedOntProperty;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ProprietoryClassifiedInstancesRepository;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRecordsReader;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IProprietoryClassifiedInstancesRepository;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstancesRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.ITripleRepository;
 
 /***
@@ -25,6 +26,7 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.ITripleRep
  * @author kangyan2003
  * 
  */
+@Deprecated
 public class TS2OntoMappingAlgorithm implements IMappingAlgorithmVisitor, IMappingAlgorithm {
 
 	/**
@@ -36,7 +38,8 @@ public class TS2OntoMappingAlgorithm implements IMappingAlgorithmVisitor, IMappi
 	 * Java representation of the specific domain ontology
 	 */
 	private IOntologyRepository ontologyRepository;
-	private IManufacturingLexicalMappingRepository manufacturingLexicalMappingRepository;
+	private IManufacturingLexicalMappingRepository _proprietaryManufacturingLexicalMappingRepository;
+	private IManufacturingLexicalMappingRecordsReader _aggregratedManufacturingLexicalMappingRepository;
 	
 	private Map<String, MatchedOntProperty> relation2PropertyMap;
 	private Map<String, String> informativeRelation2PropertyMap;
@@ -44,19 +47,22 @@ public class TS2OntoMappingAlgorithm implements IMappingAlgorithmVisitor, IMappi
 	
 	private List<IMappingAlgorithmComponent> mappingAlgorithmComponents;
 	
+	
 	public TS2OntoMappingAlgorithm(ITripleRepository tripleStore, 
 			                       IOntologyRepository ontologyRepository,
-                                   IManufacturingLexicalMappingRepository MLRepository) {
+			                       IManufacturingLexicalMappingRepository proprietaryManufacturingLexicalMappingRepository,
+			                       IManufacturingLexicalMappingRecordsReader aggregratedManufacturingLexicalMappingRepository) {
 		this.tripleStore = tripleStore;
 		this.ontologyRepository = ontologyRepository;
-		this.manufacturingLexicalMappingRepository = MLRepository;
+		this._proprietaryManufacturingLexicalMappingRepository = proprietaryManufacturingLexicalMappingRepository;
+		this._aggregratedManufacturingLexicalMappingRepository = aggregratedManufacturingLexicalMappingRepository;
 		this.addAlgorithmComponents();
 	}
 
 	private void addAlgorithmComponents() {
 		this.mappingAlgorithmComponents = new ArrayList<IMappingAlgorithmComponent>();
 		this.mappingAlgorithmComponents.add(new Relation2PropertyMappingAlgorithm(tripleStore, ontologyRepository, new Relation2PropertyMapper()));
-		this.mappingAlgorithmComponents.add(new InstanceClassificationAlgorithm(tripleStore, ontologyRepository, new Concept2OntClassMapper(new Concept2OntClassMappingPairLookUpper(manufacturingLexicalMappingRepository, ontologyRepository))));
+//		this.mappingAlgorithmComponents.add(new InstanceClassificationAlgorithm(tripleStore, ontologyRepository, new Concept2OntClassMapper(new Concept2OntClassMappingPairLookUpper(_aggregratedManufacturingLexicalMappingRepository, ontologyRepository), false)));
 	}
 
 	@Override
@@ -67,10 +73,10 @@ public class TS2OntoMappingAlgorithm implements IMappingAlgorithmVisitor, IMappi
 	}
 	
 	@Override
-	public IProprietoryClassifiedInstancesRepository getProprietoryClassifiedInstancesRepository() {
-		IProprietoryClassifiedInstancesRepository repo = new ProprietoryClassifiedInstancesRepository(tripleStore.getRepositoryName(), 
+	public IClassifiedInstancesRepository getProprietoryClassifiedInstancesRepository() {
+		IClassifiedInstancesRepository repo = new ProprietoryClassifiedInstancesRepository(tripleStore.getRepositoryName(), 
 																									  ontologyRepository, 
-																									  manufacturingLexicalMappingRepository, 
+																									  _proprietaryManufacturingLexicalMappingRepository, 
 																									  relation2PropertyMap, 
 																									  classifiedInstances);
 		return repo;
@@ -89,5 +95,15 @@ public class TS2OntoMappingAlgorithm implements IMappingAlgorithmVisitor, IMappi
 		algorithm.getConcept2OntClassMapper().setDomainSpecificConceptMap(informativeRelation2PropertyMap);
 		algorithm.classifyInstances();
 		classifiedInstances = algorithm.getClassifiedInstances();
+	}
+
+	@Override
+	public Collection<ClassifiedInstanceDetailRecord> getClassifiedInstances() {
+		return this.classifiedInstances;
+	}
+
+	@Override
+	public Map<String, MatchedOntProperty> getRelation2PropertyMap() {
+		return this.relation2PropertyMap;
 	}
 }

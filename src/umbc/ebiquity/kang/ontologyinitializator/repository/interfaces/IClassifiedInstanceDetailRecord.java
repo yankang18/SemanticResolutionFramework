@@ -31,8 +31,10 @@ public interface IClassifiedInstanceDetailRecord extends IClassifiedInstanceBasi
 
 	void addProperty2Values(OntPropertyInfo property, Collection<String> values);
 
-	void clearProperty2Values();
+	void clearProperty2Values(); 
 
-	InstanceTripleSet getTripleSet(); 
+	InstanceTripleSet getTripleSet();
+
+	void setConcept2OntClassMappingPairs(Collection<IConcept2OntClassMapping> concept2OntClassMappings); 
 
 }

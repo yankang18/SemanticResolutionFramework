@@ -3,18 +3,18 @@ package umbc.ebiquity.kang.ontologyinitializator.repository.factories;
 import java.io.IOException;
 import java.net.URL;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.impl.EntityGraph;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityGraph;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityPathExtractor;
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.impl.InstanceConceptSetExtractionAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.impl.RelationExtractionAlgorithm;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.impl.SimpleEntityPathExtractor;
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.interfaces.IRelationExtractionAlgorithm;
-import umbc.ebiquity.kang.ontologyinitializator.mappingframework.SimplePageTemplatesSplitter;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.TripleRepositoryExtractor;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.ITripleRepositoryExtractor;
 import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.TripleRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.ITripleRepository;
 import umbc.ebiquity.kang.ontologyinitializator.utilities.FileUtility;
+import umbc.ebiquity.kang.webpageparser.SimplePageTemplatesSplitter;
 import umbc.ebiquity.kang.webpageparser.WebSiteCrawler;
 
 public class TripleRepositoryFactory {
@@ -23,11 +23,16 @@ public class TripleRepositoryFactory {
 		return createTripleRepository(webSiteURL, true);
 	}
 	
+	public static boolean existTripleRepository(URL webSiteURL){
+	  String repositoryFullName = getRepositoryFullName(webSiteURL);
+		return FileUtility.exists(repositoryFullName);
+	}
+	
 	public static ITripleRepository createTripleRepository(URL webSiteURL, boolean localLoad) throws IOException {
 		
 		String tripleRepositoryName = FileUtility.convertURL2FileName(webSiteURL);
 		String directory = RepositoryParameterConfiguration.getTripleRepositoryDirectoryFullPath();
-		String fileFullName = directory + tripleRepositoryName;
+		String fileFullName = getRepositoryFullName(webSiteURL);
 		if (localLoad && FileUtility.exists(fileFullName)) {
 			ITripleRepository tripleStore = new TripleRepository();
 			boolean succeed = tripleStore.loadRepository(tripleRepositoryName);
@@ -55,9 +60,9 @@ public class TripleRepositoryFactory {
 		/*
 		 * extract Entity Paths and create Entity Graph
 		 */
-
-		EntityGraph entityGraph = new EntityGraph(new SimpleEntityPathExtractor(crawler, new SimplePageTemplatesSplitter()));
-		entityGraph.analyzeEntityGraph(new RelationExtractionAlgorithm(), new InstanceConceptSetExtractionAlgorithm());
+//		EntityGraph entityGraph = new EntityGraph(new EntityPathExtractor(crawler, null));
+		EntityGraph entityGraph = new EntityGraph(new EntityPathExtractor(crawler, new SimplePageTemplatesSplitter()));
+		entityGraph.labelEntityGraph(new RelationExtractionAlgorithm(), new InstanceConceptSetExtractionAlgorithm());
 		/*
 		 * extract triples from the Entity Graph
 		 */
@@ -69,6 +74,13 @@ public class TripleRepositoryFactory {
 		} else {
 			throw new IOException("Create Triple Repository Failed");
 		}
+	}
+	
+	private static String getRepositoryFullName(URL webSiteURL){
+		String tripleRepositoryName = FileUtility.convertURL2FileName(webSiteURL);
+		String directory = RepositoryParameterConfiguration.getTripleRepositoryDirectoryFullPath();
+		String repositoryFullName = directory + tripleRepositoryName;
+		return repositoryFullName;
 	}
 
 }

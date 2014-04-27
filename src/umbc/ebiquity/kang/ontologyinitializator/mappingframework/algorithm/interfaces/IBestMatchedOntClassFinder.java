@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import umbc.ebiquity.kang.ontologyinitializator.ontology.MatchedOntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.Concept2OntClassMapping;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrectionRepository;
 
 public interface IBestMatchedOntClassFinder {
 	/**
@@ -17,6 +18,8 @@ public interface IBestMatchedOntClassFinder {
 	 * @return an instance of MatchedOntClass - the best matched class including
 	 *         similarity score
 	 */
-	public MatchedOntoClassInfo findBestMatchedOntoClass(String instanceLable, Collection<Concept2OntClassMapping> concept2OntClassMappingPairs);
+	public MatchedOntoClassInfo findBestMatchedOntoClass(String instanceLable, 
+			 											 Collection<Concept2OntClassMapping> concept2OntClassMappingPairs,
+			 											 IClassificationCorrectionRepository aggregratedClassificationCorrectionRepository);
 		
 }

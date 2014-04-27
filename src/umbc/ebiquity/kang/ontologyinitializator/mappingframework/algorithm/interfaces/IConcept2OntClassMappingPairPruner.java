@@ -2,7 +2,7 @@ package umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.inte
 
 import java.util.Collection;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Concept;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.Concept2OntClassMapping;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMapping;
 

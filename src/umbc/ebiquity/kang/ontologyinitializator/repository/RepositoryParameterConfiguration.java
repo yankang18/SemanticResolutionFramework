@@ -17,13 +17,15 @@ public class RepositoryParameterConfiguration {
 	/**
 	 * 
 	 */
-	public static String ONTOLOGY_OWL_FILE_FULL_PATH = System.getProperty("user.dir") + "/MSDL-Fullv1.owl";
+	public static String ONTOLOGY_OWL_FILE_FULL_PATH = System.getProperty("user.dir") + "/MSDL-Fullv2.owl";
 	
 	/*
 	 * 
 	 */
 	
-	
+	public static String CLASSIFIED_INSTANCE_HOST_DIRECTORY = REPOSITORIES_DIRECTORY_FULL_PATH;
+	public static String MANUFACTUIRNG_LEXICON_HOST_DIRECTORY = REPOSITORIES_DIRECTORY_FULL_PATH;
+	public static String CLASSIFICATION_CORRECTION_HOST_DIRECTORY = REPOSITORIES_DIRECTORY_FULL_PATH;
 	/**
 	 *  
 	 */
@@ -71,7 +73,7 @@ public class RepositoryParameterConfiguration {
 	 * 
 	 */
 	private final static String CLASSIFICATION_CORRECTION_DIRECTORY = "/ClassificationCorrectionRepository/";
-	
+	private final static String INTERPRETATION_CORRECTION_DIRECTORY = "/InterpretationCorrectionRepository/";
 	
 	/**
 	 * 
@@ -82,7 +84,7 @@ public class RepositoryParameterConfiguration {
 	 * 
 	 */
 	private final static String MAPPING_DETAIL_INFO_DIRECTORY = "/MappingInformationRepository/DetailInfo/";
-	
+	private final static String MAPPING_HUMAN_INFO_DIRECTORY = "/MappingInformationRepository/Humanreadable/";
 	
 	private final static String REPOSITORIES_DIRECTORY_NAME = "/Repositories";
 
@@ -93,13 +95,19 @@ public class RepositoryParameterConfiguration {
 	}
 	
 	public static String getClassificationCorrectionDirectoryFullPath(){
-		String projectDir = RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH + REPOSITORIES_DIRECTORY_NAME;
+		String projectDir = RepositoryParameterConfiguration.CLASSIFICATION_CORRECTION_HOST_DIRECTORY + REPOSITORIES_DIRECTORY_NAME;
 		String storageDir = RepositoryParameterConfiguration.CLASSIFICATION_CORRECTION_DIRECTORY;
+		return projectDir + storageDir;
+	}
+	
+	public static String getInterpretationCorrectionDirectoryFullPath(){
+		String projectDir = RepositoryParameterConfiguration.CLASSIFICATION_CORRECTION_HOST_DIRECTORY + REPOSITORIES_DIRECTORY_NAME;
+		String storageDir = RepositoryParameterConfiguration.INTERPRETATION_CORRECTION_DIRECTORY;
 		return projectDir + storageDir;
 	}
 
 	public static String getManufacturingLexiconDirectoryFullPath() {
-		String projectDir = RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH + REPOSITORIES_DIRECTORY_NAME;
+		String projectDir = RepositoryParameterConfiguration.MANUFACTUIRNG_LEXICON_HOST_DIRECTORY + REPOSITORIES_DIRECTORY_NAME;
 		String storageDir = RepositoryParameterConfiguration.MANUFACTURING_LEXICON_DIRECTORY;
 		return projectDir + storageDir;
 	}
@@ -111,14 +119,20 @@ public class RepositoryParameterConfiguration {
 	}
 
 	public static String getMappingBasicInfoDirectoryFullPath() {
-		String projectDir = RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH + REPOSITORIES_DIRECTORY_NAME;
+		String projectDir = RepositoryParameterConfiguration.CLASSIFIED_INSTANCE_HOST_DIRECTORY + REPOSITORIES_DIRECTORY_NAME;
 		String storageDir = RepositoryParameterConfiguration.MAPPING_BASIC_INFO_DIRECTORY;
 		return projectDir + storageDir;
 	}
 
 	public static String getMappingDetailinfoDirectoryFullPath() {
-		String projectDir = RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH + REPOSITORIES_DIRECTORY_NAME;
+		String projectDir = RepositoryParameterConfiguration.CLASSIFIED_INSTANCE_HOST_DIRECTORY + REPOSITORIES_DIRECTORY_NAME;
 		String storageDir = RepositoryParameterConfiguration.MAPPING_DETAIL_INFO_DIRECTORY;
+		return projectDir + storageDir;
+	}
+	
+	public static String getMappingHumanReadableDirectoryFullPath() {
+		String projectDir = RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH + REPOSITORIES_DIRECTORY_NAME;
+		String storageDir = RepositoryParameterConfiguration.MAPPING_HUMAN_INFO_DIRECTORY;
 		return projectDir + storageDir;
 	}
 }

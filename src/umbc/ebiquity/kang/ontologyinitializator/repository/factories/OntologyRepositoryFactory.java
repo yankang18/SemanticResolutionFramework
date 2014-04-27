@@ -40,6 +40,7 @@ public class OntologyRepositoryFactory {
 				return createRepostory(directory);
 
 			} else {
+				System.out.println("DIRECTORY: " + directory);
 				boolean succeed = FileUtility.createDirectories(directory);
 				if (succeed) {
 					return createRepostory(directory);
@@ -94,6 +95,4 @@ public class OntologyRepositoryFactory {
 			throw new IOException("Create Ontology Repository Failed");
 		}
 	}
-	
-
 }

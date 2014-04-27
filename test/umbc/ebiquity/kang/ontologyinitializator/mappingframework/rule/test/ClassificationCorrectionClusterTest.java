@@ -22,9 +22,9 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRep
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ClassificationCorrectionRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrectionRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstanceDetailRecord;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceMembershipInfereceFact;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceClassificationEvidence;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IUpdatedInstanceRecord;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceRecord;
 import umbc.ebiquity.kang.ontologyinitializator.testdata.FakeDataCreator;
 import umbc.ebiquity.kang.textprocessing.impl.SequenceInReversedOrderPhraseExtractor;
 
@@ -45,16 +45,16 @@ public class ClassificationCorrectionClusterTest {
 		_correctionRepository = new ClassificationCorrectionRepository(_ontologyRepository);
 		
 		FakeDataCreator fakeDataCreator = new FakeDataCreator();
-		Map<IUpdatedInstanceRecord, IClassifiedInstanceDetailRecord> XXX = fakeDataCreator.createUpdatedInstanceRecordsAndClassifiedInstanceRecords();
-		for (IUpdatedInstanceRecord updatedInstanceRecord : XXX.keySet()) {
+		Map<IInstanceRecord, IClassifiedInstanceDetailRecord> XXX = fakeDataCreator.createUpdatedInstanceRecordsAndClassifiedInstanceRecords();
+		for (IInstanceRecord updatedInstanceRecord : XXX.keySet()) {
 			IClassifiedInstanceDetailRecord originalClassifiedInstance = XXX.get(updatedInstanceRecord);
 			_correctionRepository.extractCorrection(updatedInstanceRecord, originalClassifiedInstance);
 		}
 		
-		_instanceC2CMappingExtractor = new InstanceConcept2OntClassMappingFeatureExtractor(new CorrectionClusterCodeGenerator(), _correctionRepository);
+		_instanceC2CMappingExtractor = new InstanceConcept2OntClassMappingFeatureExtractor(new CorrectionClusterCodeGenerator(), _correctionRepository, _ontologyRepository);
 
 		_instanceLexicalFeatureExtractor = new InstanceLexicalFeatureExtractor(
-				ClassifiedInstancesRepositoryFactory.createClassifiedInstancesRepository(_ontologyRepository), new SimpleLexicalFeatureExtractor(
+				ClassifiedInstancesRepositoryFactory.createAggregatedClassifiedInstancesRepository(_ontologyRepository), new SimpleLexicalFeatureExtractor(
 						new SequenceInReversedOrderPhraseExtractor()));
 
 	}
@@ -76,8 +76,8 @@ public class ClassificationCorrectionClusterTest {
 
 		CorrectionClusterFeatureWrapper wrapper = cluster.getCorrectionClusterFeature();
 		Map<LexicalFeature, Double> lexicalFeatures = wrapper.getTargetClassInstanceLexicalFeatures();
-		Map<IInstanceMembershipInfereceFact, Double> negativeFeatures = wrapper.getNegativeMappingSetsWithLocalRateToCorrectionTargetClass();
-		Map<IInstanceMembershipInfereceFact, Double> positiveFeatures = wrapper.getPositiveMappingSetsWithLocalRateToCorrectionTargetClass();
+		Map<IInstanceClassificationEvidence, Double> negativeFeatures = wrapper.getNegativeMappingSetsWithLocalRateToCorrectionTargetClass();
+		Map<IInstanceClassificationEvidence, Double> positiveFeatures = wrapper.getPositiveMappingSetsWithLocalRateToCorrectionTargetClass();
 		
 		printLexicalFeatures(lexicalFeatures, "Lexical Features");
 		printMappingFeatures(positiveFeatures, "Positive Features");
@@ -101,13 +101,13 @@ public class ClassificationCorrectionClusterTest {
 		System.out.println("total: " + total);
 	}
 
-	private void printMappingFeatures(Map<IInstanceMembershipInfereceFact, Double> mappingFeatures, String label) {
-		for (IInstanceMembershipInfereceFact f : mappingFeatures.keySet()) {
+	private void printMappingFeatures(Map<IInstanceClassificationEvidence, Double> mappingFeatures, String label) {
+		for (IInstanceClassificationEvidence f : mappingFeatures.keySet()) {
 			double representativeness = mappingFeatures.get(f);
 			if (f == null) {
 				System.out.println(label + ": default2 " + representativeness);
 			} else {
-				System.out.println(label + ": " + f.getMembershipInferenceFactCode() + ",  " + representativeness);
+				System.out.println(label + ": " + f.getEvidenceCode() + ",  " + representativeness);
 			}
 		}
 	}

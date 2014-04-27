@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Concept;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
 
 public class InstanceTripleSet {
 
@@ -22,7 +22,7 @@ public class InstanceTripleSet {
 	private Set<Triple> instance2ConceptSetTriples;
 	private Map<String, Set<String>> customRelation2ValueMap;
 	private Map<String, Set<String>> taxonomicRelationValueMap;
-	private Map<String, Set<Concept>> instance2ConceptMap;
+	private Map<String, Set<Concept>> instance2ConceptualSetMap;
 	private Set<Concept> conceptSet;
 	
 	public InstanceTripleSet(String subjectLabel) {
@@ -32,7 +32,7 @@ public class InstanceTripleSet {
 		this.instance2ConceptSetTriples = new LinkedHashSet<Triple>();
 		this.customRelation2ValueMap = new HashMap<String, Set<String>>();
 		this.taxonomicRelationValueMap = new HashMap<String, Set<String>>();
-		this.instance2ConceptMap = new HashMap<String, Set<Concept>>();
+		this.instance2ConceptualSetMap = new HashMap<String, Set<Concept>>();
 		this.conceptSet = new HashSet<Concept>();
 	}
 
@@ -43,14 +43,14 @@ public class InstanceTripleSet {
 		String predicate = triple.getPredicate();
 //		String object = triple.getObject();
 		
-		Set<Concept> relationValueMap;
-		if(instance2ConceptMap.containsKey(predicate)){
-			relationValueMap = instance2ConceptMap.get(predicate);
+		Set<Concept> conceptualSet;
+		if(instance2ConceptualSetMap.containsKey(predicate)){
+			conceptualSet = instance2ConceptualSetMap.get(predicate);
 		} else {
-			relationValueMap = new HashSet<Concept>();
-			instance2ConceptMap.put(predicate, relationValueMap);
+			conceptualSet = new HashSet<Concept>();
+			instance2ConceptualSetMap.put(predicate, conceptualSet);
 		}
-		relationValueMap.add(concept);
+		conceptualSet.add(concept);
 		
 		instance2ConceptSetTriples.add(triple);
 	}
@@ -96,9 +96,9 @@ public class InstanceTripleSet {
 				System.out.println("                  <" + object + ">");
 			}
 		}
-		for (String predicate : instance2ConceptMap.keySet()) {
+		for (String predicate : instance2ConceptualSetMap.keySet()) {
 			System.out.println("   <" + predicate + ">");
-			Collection<Concept> concepts = instance2ConceptMap.get(predicate);
+			Collection<Concept> concepts = instance2ConceptualSetMap.get(predicate);
 			for (Concept concept : concepts) {
 				System.out.println("              <" + concept.getConceptName() + ">  <" + concept.getScore() + ">");
 			}
@@ -133,7 +133,7 @@ public class InstanceTripleSet {
 		return taxonomicRelationValueMap.get("SubConcept");
 	}
 
-	public Map<String, Set<String>> getCustomRelation2ValueMap(){
+	public Map<String, Set<String>> getRelation2ValueMap(){
 		return this.customRelation2ValueMap;
 	}
 	
@@ -141,8 +141,8 @@ public class InstanceTripleSet {
 		return this.taxonomicRelationValueMap;
 	}
 	
-	public Map<String, Set<Concept>> getInstance2ConceptSetMap(){
-		return this.instance2ConceptMap;
+	public Map<String, Set<Concept>> getInstance2ConceptualSetMap(){
+		return this.instance2ConceptualSetMap;
 	}
 	
 	@Override

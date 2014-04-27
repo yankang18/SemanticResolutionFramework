@@ -22,6 +22,8 @@ public interface IInstanceLexicalFeatureExtractor {
 
 	Map<LexicalFeature, Integer> getLexicalFeatureWithOntClassCount();
 
-	double getInstanceRateOfOntClass(String className); 
+	double getInstanceRateOfOntClass(String className);
+
+	int getNumberOfInstancesOfOntClass(String className);  
 
 }

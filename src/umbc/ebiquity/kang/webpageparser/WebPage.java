@@ -13,7 +13,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.EntityPath;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityGraph;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityNode;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityPath;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityPathExtractor;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityValidator;
 import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
 import umbc.ebiquity.kang.webpageparser.WebTagNode.WebTagNodeType;
 
@@ -461,45 +465,38 @@ public class WebPage {
 	}
 	
 	public static void main(String[] arg){
-		String href = "http://astromfg.thomasnet.com/category/all-categories";
-		String hostName = "www.astromfg.com";
-		String trimedHref = href.replace("http://", "").replace("http://", "");
-		String domainName = trimedHref.split("/")[0];
-		String trimedDomainName = domainName.replace("www.", "").replace(".com", "");
-		System.out.println("trimedDomainName: " + trimedDomainName);
-		String trimedHostName = hostName.replace("www.", "").replace(".com", "");
-		System.out.println("trimedHostName: " + trimedHostName);
-		List<String> domainWordList = new ArrayList<String>(Arrays.asList(trimedDomainName.split("\\.")));
-		List<String> hostWordList = new ArrayList<String>(Arrays.asList(trimedHostName.split("\\.")));
-		System.out.println("domainWordList: " + domainWordList);
-		System.out.println("hostWordList: " + hostWordList);
-		domainWordList.retainAll(hostWordList);
-		if (domainWordList.size() > 0) {
-			System.out.println("true ");
-		} else {
-			System.out.println("false ");
-		}
-
-//		String[] tokens = href.split("/");
-//		String lastToken = tokens[tokens.length -1];
-//		System.out.println("lastToken: " + lastToken);
-//		String[] tokens2 = lastToken.split("_|-|\\.");
-////		lastToken = lastToken.replaceAll("_|-|\\.", " ");
-//
-//		Set<String> XXX = new HashSet<String>();
-//		XXX.add("blog");
-//		XXX.add("blogs");
-//		XXX.add("faq");
-//		XXX.add("faqs");
-//		XXX.add("carreer");
-//		XXX.add("carreers");
-//		for (String token : tokens2) {
-//			System.out.println("Token: " + token);
-//			if (XXX.contains(token)) {
-//				System.out.println("false ");
+		
+//		EntityValidator validator = new EntityValidator();
+//		boolean xx = TextProcessingUtils.containsOnlyDefaultStopwords("stimulation");
+//		System.out.println(xx);
+		
+//		String webURL = "http://navitekgroup.com/services/contract-engineering/";
+//		CrawlerUrl url = new CrawlerUrl(webURL, 1);
+//		EntityPathExtractor entityPathExtractor = new EntityPathExtractor();
+//		EntityGraph entityGraph = new EntityGraph();
+//		try {
+//			WebPage page = new WebPage(url);
+//			page.analyzeWebPage();
+//			List<WebTagPath> xxx = page.listWebTagPathsWithTextContent();
+//			for(WebTagPath path : xxx){
+////				System.out.println(path.getPathPattern());
+//				System.out.println(path.getPathID());
 //			}
+//			System.out.println();
+//			System.out.println();
+//			Collection<EntityPath> entityPaths  = entityPathExtractor.constructEntityPaths(page, 1);
+//			for(EntityPath entityPath : entityPaths){
+//				System.out.println(entityPath.printPathTopDown());
+//			}
+//			
+//			entityGraph.initializeEntityGraph(entityPaths);
+//			entityGraph.printForwardTermGraphNodesAfterAnalyzing();
+//			
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
 //		}
-//		System.out.println("true ");
+		
 	}
 
 	private boolean validateURL(String URL) {

@@ -5,10 +5,10 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Concept;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Entity;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.EntityNode;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.EntityPath;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Entity;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityNode;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityPath;
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.impl.InstanceConceptSetExtractionAlgorithm;
 import umbc.ebiquity.kang.webpageparser.LeafNode;
 
@@ -32,10 +32,12 @@ public interface IReadOnlyEntityGraph {
 
 	Collection<EntityNode> getEntityNodes();
 
-	EntityNode getGeneralizedRelationNode(EntityNode specificRelationNode); 
+	EntityNode getGenericRelationNode(EntityNode specificRelationNode); 
 	
 	Collection<EntityNode> getCandidateInstances(); 
 	
-    void analyzeEntityGraph(IRelationExtractionAlgorithm relationExtractorAlgorithm, InstanceConceptSetExtractionAlgorithm instanceConceptSetExtractionAlgorithm);
+    void labelEntityGraph(IRelationExtractionAlgorithm relationExtractorAlgorithm, InstanceConceptSetExtractionAlgorithm instanceConceptSetExtractionAlgorithm);
+
+	Set<EntityNode> getGenericRelationNodeSet();
 
 }

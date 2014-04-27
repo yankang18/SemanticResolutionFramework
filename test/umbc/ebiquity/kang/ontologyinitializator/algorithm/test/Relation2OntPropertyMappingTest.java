@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import umbc.csee.ebiquity.ontologymatcher.algorithm.component.MSMResult;
@@ -30,16 +31,17 @@ public class Relation2OntPropertyMappingTest {
 	
 	@Before
 	public void Init() throws IOException{ 
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/kangyan2003/Desktop/";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/kangyan2003/Desktop/Ontology/MSDL-Fullv1.owl";
+		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
+		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv1.owl";
 		ontologyRepository = OntologyRepositoryFactory.createOntologyRepository();
 		
-		String webSiteURLString = "http://www.accutrex.com";
+		String webSiteURLString = "http://www.numericalconcepts.com";
 		URL webSiteURL = new URL(webSiteURLString);
 		extractedTripleStore = TripleRepositoryFactory.createTripleRepository(webSiteURL, true);
 	}
 	
 	@Test
+	@Ignore
 	public void mapRelation2PropertyWithFakeDataTest(){
 		IRelation2PropertyMapper relation2PropertyMapper = new Relation2PropertyMapper();
 		MSMResult result = relation2PropertyMapper.matchRelations2OntProperties(this.createRelations(), ontologyRepository.getAllOntProperties());
@@ -56,6 +58,7 @@ public class Relation2OntPropertyMappingTest {
 	}
 	
 	@Test
+//	@Ignore
 	public void mapRelation2PropertyWithRealDataTest() {
 		IRelation2PropertyMappingAlgorithm relation2PropertyMappingAlgorithm = new Relation2PropertyMappingAlgorithm(extractedTripleStore,
 				ontologyRepository, new Relation2PropertyMapper());

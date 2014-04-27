@@ -5,11 +5,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.EntityNode;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.EntityValidator;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityNode;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityValidator;
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.interfaces.IEntityGraphRelationExtractor;
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.interfaces.IRelationExtractionAlgorithm;
-import umbc.ebiquity.kang.ontologyinitializator.mappingframework.RelationCluster;
 
 public class RelationExtractionAlgorithm implements IRelationExtractionAlgorithm {
 

@@ -6,27 +6,35 @@ import java.util.Set;
 
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ClassifiedInstanceDetailRecord;
 
-public interface IClassificationCorrectionRepository {
+public interface IClassificationCorrectionRepository extends IClassificationCorrectionRecordRepository {
 
-	Collection<IClassificationCorrection> getClassificationCorrections();
-	
 	boolean saveRepository();
 
 	boolean loadRepository();
 
 	void showRepositoryDetail();
 
-	Collection<IClassificationCorrection> extractCorrection(IUpdatedInstanceRecord updatedInstance, IClassifiedInstanceDetailRecord originalInstance); 
+	Collection<IClassificationCorrection> extractCorrection(IInstanceRecord updatedInstance, IClassifiedInstanceDetailRecord originalInstance); 
+	
+	Collection<IClassificationCorrection> getClassificationCorrections();
 	
 	int getAllConcept2OntClassMappingCount(); 
 
-//	void addPositiveConcept2OntClassMapping(Set<IConcept2OntClassMapping> mappingSet,  String sourceClassName, String targetClassName);
+	Collection<IInstanceClassificationEvidence> getAllInstanceMembershipInferenceFacts();
 
-//	void addConcept2OntClassMapping(Set<IConcept2OntClassMapping> mappingSet, String sourceClassName, String targetClassName);
+	Collection<IInstanceClassificationEvidence> getHiddenInstanceMembershipInferenceFacts();
 
-	Collection<IInstanceMembershipInfereceFact> getAllInstanceMembershipInferenceFacts();
+	Collection<IInstanceClassificationEvidence> getExplicitInstanceMembershipInferenceFacts();
 
-	Collection<IInstanceMembershipInfereceFact> getHiddenInstanceMembershipInferenceFacts();
+//	Collection<IInstanceClassificationEvidence> getAllInstanceMembershipInferenceFacts(IConcept2OntClassMapping c2cMapping);
 
-	Collection<IInstanceMembershipInfereceFact> getExplicitInstanceMembershipInferenceFacts();      
+	Collection<String> getTargetClasses(IConcept2OntClassMapping c2cMapping);
+
+	double getC2CMappingRateInOntClass(IConcept2OntClassMapping mapping, String ontClassName);
+
+	void showMappingInfo();
+
+	Map<IConcept2OntClassMapping, Double> getC2CMapping(String ontClassName);
+
+	int getNumberOfC2CMappings(String ontClassName);         
 }

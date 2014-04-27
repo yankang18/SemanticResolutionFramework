@@ -10,7 +10,7 @@ import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Entity;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Entity;
 import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
 
 public class WebTagNode {

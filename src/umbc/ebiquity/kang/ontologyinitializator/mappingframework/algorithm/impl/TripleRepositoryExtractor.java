@@ -8,15 +8,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Concept;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Entity;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.EntityNode;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.EntityPath;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.EntityPathSorterByLeafNodeText;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.EntityValidator;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Entity;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityNode;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityPath;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityPathSorterByLeafNodeText;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityValidator;
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.interfaces.IReadOnlyEntityGraph;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.ITripleRepositoryExtractor;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.Triple;
+import umbc.ebiquity.kang.ontologyinitializator.ontology.Triple.BuiltinType;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.Triple.PredicateType;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.TripleRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.ITripleRepository;
@@ -87,7 +88,7 @@ public class TripleRepositoryExtractor implements ITripleRepositoryExtractor {
 						EntityNode subjectNode = new EntityNode(entity);
 						for (EntityNode objectNode : objectNodes) {
 							
-							EntityNode generalRelationNode = entityGraph.getGeneralizedRelationNode(relationNode);
+							EntityNode generalRelationNode = entityGraph.getGenericRelationNode(relationNode);
 							Triple triple = new Triple(subjectNode.getLabel(), subjectNode.getProcessedTermLabel(),
 									generalRelationNode.getLabel(), objectNode.getLabel(), objectNode.getProcessedTermLabel());
 							triple.setPredicateType(PredicateType.Custom);
@@ -114,6 +115,14 @@ public class TripleRepositoryExtractor implements ITripleRepositoryExtractor {
 				triple.setPredicateType(PredicateType.Builtin);
 				tripleSet.add(triple);
 			}
+		}
+		
+		
+		Set<EntityNode> genericRelationNodes = entityGraph.getGenericRelationNodeSet();
+		for (EntityNode genericRelationNode : genericRelationNodes) {
+			Triple triple = new Triple(genericRelationNode, BuiltinType.Property);
+			triple.setPredicateType(PredicateType.Builtin);
+			tripleSet.add(triple);
 		}
 		return new TripleRepository(tripleSet, this.entityGraph.getWebSiteURL());
 	}

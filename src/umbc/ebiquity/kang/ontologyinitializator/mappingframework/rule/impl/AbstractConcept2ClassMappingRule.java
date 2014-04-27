@@ -2,6 +2,7 @@ package umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.impl;
 
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.interfaces.IConcept2ClassMappingRule;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMapping;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRecordsAccessor;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
 
@@ -17,9 +18,9 @@ public abstract class AbstractConcept2ClassMappingRule implements IConcept2Class
 	private IConcept2OntClassMapping _verifiedMap;
 	private IConcept2OntClassMapping _oldMap;
 	private IOntologyRepository _ontologyRepository;
-	private IManufacturingLexicalMappingRepository _MLRepository;
+	private IManufacturingLexicalMappingRecordsAccessor _MLRepository;
 
-	protected AbstractConcept2ClassMappingRule(IOntologyRepository ontologyRepository, IManufacturingLexicalMappingRepository MLRepository) {
+	protected AbstractConcept2ClassMappingRule(IOntologyRepository ontologyRepository, IManufacturingLexicalMappingRecordsAccessor MLRepository) {
 		this._ontologyRepository = ontologyRepository;
 		this._MLRepository = MLRepository;
 	}
@@ -47,7 +48,7 @@ public abstract class AbstractConcept2ClassMappingRule implements IConcept2Class
 		return this._ontologyRepository;
 	}
 	
-	protected IManufacturingLexicalMappingRepository getManfacturingLexiconRepository(){
+	protected IManufacturingLexicalMappingRecordsAccessor getManfacturingLexiconRepository(){
 		return this._MLRepository;
 	}
 }

@@ -3,14 +3,18 @@ package umbc.ebiquity.kang.ontologyinitializator.ontology;
 import java.util.HashSet;
 import java.util.Set;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Concept;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.EntityNode;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityNode;
 
 
 public class Triple {
 	
 	public enum BuiltinPredicate {
-		SubClass, SubProperty, Type, /* temporary */SubConcept, /* temporary */SubRole, isAspectOf
+		SubClass, SubProperty, Type, /* temporary */SubConcept, /* temporary */SubRole, hasConcept, isTypeOf
+	}
+	
+	public enum BuiltinType {
+		ObjectProperty, DatatypeProperty, Property
 	}
 
 	public enum PredicateType {
@@ -24,6 +28,7 @@ public class Triple {
 	private String predicate;
 	private PredicateType predicateType;
 	private BuiltinPredicate builtinPredicate;
+	private BuiltinType builtinType;
 	private Concept concept;
 	private boolean inferred = false;
 	
@@ -35,7 +40,8 @@ public class Triple {
 		BuiltinPredicateSet.add(BuiltinPredicate.Type.toString());
 		BuiltinPredicateSet.add(BuiltinPredicate.SubConcept.toString());
 		BuiltinPredicateSet.add(BuiltinPredicate.SubRole.toString());
-		BuiltinPredicateSet.add(BuiltinPredicate.isAspectOf.toString());
+		BuiltinPredicateSet.add(BuiltinPredicate.hasConcept.toString());
+		BuiltinPredicateSet.add(BuiltinPredicate.isTypeOf.toString());
 	}
 	
 	public Triple(String subject, String predicate, String object) {
@@ -54,16 +60,28 @@ public class Triple {
     }
     
     public Triple(EntityNode instanceNode, Concept concept) {
-    	this.builtinPredicate = BuiltinPredicate.isAspectOf;
+    	this.builtinPredicate = BuiltinPredicate.hasConcept;
     	this.concept = concept;
     	this.init(instanceNode.getLabel(), instanceNode.getProcessedTermLabel(), builtinPredicate.toString(), concept.getConceptName(), concept.getConceptName());
 	}
     
-    public Triple(String instanceStr, Concept concept) {
-    	this.builtinPredicate = BuiltinPredicate.isAspectOf;
+    public Triple(String instanceLabel, Concept concept) {
+    	this.builtinPredicate = BuiltinPredicate.hasConcept;
     	this.concept = concept;
-    	this.init(instanceStr, instanceStr, builtinPredicate.toString(), concept.getConceptName(), concept.getConceptName());
+    	this.init(instanceLabel, instanceLabel, builtinPredicate.toString(), concept.getConceptName(), concept.getConceptName());
 	}
+    
+    public Triple(EntityNode relationNode, BuiltinType type){
+    	this.builtinPredicate = BuiltinPredicate.isTypeOf;
+    	this.builtinType = type;
+    	this.init(relationNode.getLabel(), relationNode.getProcessedTermLabel(), builtinPredicate.toString(), builtinType.toString(), builtinType.toString());
+    }
+    
+    public Triple(String relationLabel, BuiltinType type){
+    	this.builtinPredicate = BuiltinPredicate.isTypeOf;
+    	this.builtinType = type;
+    	this.init(relationLabel, relationLabel, builtinPredicate.toString(), builtinType.toString(), builtinType.toString());
+    }
 
 	private void init(String subject, String processedSubjectLabel, String predicate, String object, String processedObjectLabel){
     	this.subject = subject;

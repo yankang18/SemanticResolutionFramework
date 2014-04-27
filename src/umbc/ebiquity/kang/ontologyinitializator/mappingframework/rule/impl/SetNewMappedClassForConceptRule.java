@@ -1,12 +1,13 @@
 package umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.impl;
 
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRecordsAccessor;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
 
 public class SetNewMappedClassForConceptRule extends AbstractConcept2ClassMappingRule {
 
-	public SetNewMappedClassForConceptRule(IOntologyRepository ontologyRepository, IManufacturingLexicalMappingRepository MLRepository) {
+	public SetNewMappedClassForConceptRule(IOntologyRepository ontologyRepository, IManufacturingLexicalMappingRecordsAccessor MLRepository) {
 		super(ontologyRepository, MLRepository);
 	}
 	

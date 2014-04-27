@@ -1,51 +1,124 @@
 package umbc.ebiquity.kang.ontologyinitializator.repository.test;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.ibm.icu.impl.Assert;
+
 import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ClassificationCorrectionRepositoryFactory;
+import umbc.ebiquity.kang.ontologyinitializator.repository.factories.InterpretationCorrectionRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ClassificationCorrectionRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrection;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrectionRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstanceDetailRecord;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceMembershipInfereceFact;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceClassificationEvidence;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IUpdatedInstanceRecord;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceRecord;
 import umbc.ebiquity.kang.ontologyinitializator.testdata.FakeDataCreator;
 
 public class ClassificationCorrectionRepositoryText {
 
-	private static IClassificationCorrectionRepository _correctionRepository;
+	private static IClassificationCorrectionRepository _proprietaryIntergretationCorrectionRepository1;
+	private static IClassificationCorrectionRepository _proprietaryInterpretationCorrectionRepository2;
+	private static IClassificationCorrectionRepository _aggregatedInterpretationCorrectionRepository;
 	private static IOntologyRepository _ontologyRepository;
 
+	
 	@BeforeClass
 	public static void init() throws IOException {
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/kangyan2003/Desktop/";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/kangyan2003/Desktop/Ontology/MSDL-Fullv2.owl";
+		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/Test";
+		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
 		
 //		_ontologyRepository = OntologyRepositoryFactory.createOntologyRepository();
 //		_correctionRepository = new ClassificationCorrectionRepository(_ontologyRepository);
 	}
 	
 	@Test
+	public void getAggregatedClassificationCorrectoinRepository() throws IOException{
+		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
+		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
+		RepositoryParameterConfiguration.CLASSIFIED_INSTANCE_HOST_DIRECTORY = "/Users/yankang/Desktop/Test_Rule_Naive";
+		RepositoryParameterConfiguration.MANUFACTUIRNG_LEXICON_HOST_DIRECTORY = "/Users/yankang/Desktop/Test_Rule_Naive";
+		RepositoryParameterConfiguration.CLASSIFICATION_CORRECTION_HOST_DIRECTORY = "/Users/yankang/Desktop/Test_Rule_Naive";
+		IClassificationCorrectionRepository _aggregatedInterpretationCorrectionRepository = InterpretationCorrectionRepositoryFactory.createAggregratedClassificationCorrectionRepository();
+//		_aggregatedInterpretationCorrectionRepository.showRepositoryDetail();
+		_aggregatedInterpretationCorrectionRepository.showMappingInfo();
+	}
+	
+	@Ignore
+	@Test
 	public void createClassificationCorrectionRepositoryTest() throws IOException{
 		// TODO: should first delete all the related correction repositories
-		_correctionRepository = ClassificationCorrectionRepositoryFactory.createRepository();
 		FakeDataCreator fakeDataCreator = new FakeDataCreator();
-		Map<IUpdatedInstanceRecord, IClassifiedInstanceDetailRecord> XXX = fakeDataCreator.createUpdatedInstanceRecordsAndClassifiedInstanceRecords();
-		for (IUpdatedInstanceRecord updatedInstanceRecord : XXX.keySet()) {
-			IClassifiedInstanceDetailRecord originalClassifiedInstance = XXX.get(updatedInstanceRecord);
-			_correctionRepository.extractCorrection(updatedInstanceRecord, originalClassifiedInstance);
+		String repositoryName1 = "repositoryOne";
+		_proprietaryIntergretationCorrectionRepository1 = InterpretationCorrectionRepositoryFactory.createProprietaryClassificationCorrectionRepository(repositoryName1);
+		Map<IInstanceRecord, IClassifiedInstanceDetailRecord> XXX1 = fakeDataCreator.createUpdatedInstanceRecordsAndClassifiedInstanceRecords1();
+		for (IInstanceRecord updatedInstanceRecord : XXX1.keySet()) {
+			IClassifiedInstanceDetailRecord originalClassifiedInstance = XXX1.get(updatedInstanceRecord);
+			_proprietaryIntergretationCorrectionRepository1.extractCorrection(updatedInstanceRecord, originalClassifiedInstance);
 		}
-		_correctionRepository.saveRepository();
+		
+		String repositoryName2 = "repositoryTwo";
+		_proprietaryInterpretationCorrectionRepository2 = InterpretationCorrectionRepositoryFactory.createProprietaryClassificationCorrectionRepository(repositoryName2);
+		Map<IInstanceRecord, IClassifiedInstanceDetailRecord> XXX2 = fakeDataCreator.createUpdatedInstanceRecordsAndClassifiedInstanceRecords2();
+		for (IInstanceRecord updatedInstanceRecord : XXX2.keySet()) {
+			IClassifiedInstanceDetailRecord originalClassifiedInstance = XXX2.get(updatedInstanceRecord);
+			_proprietaryInterpretationCorrectionRepository2.extractCorrection(updatedInstanceRecord, originalClassifiedInstance);
+		}
+		
+		Set<IInstanceClassificationEvidence> evidences = new HashSet<IInstanceClassificationEvidence>();
+		for (IInstanceClassificationEvidence evidence : _proprietaryIntergretationCorrectionRepository1
+				.getAllInstanceMembershipInferenceFacts()) {
+			evidences.add(evidence);
+		}
+
+		for (IInstanceClassificationEvidence evidence : _proprietaryInterpretationCorrectionRepository2
+				.getAllInstanceMembershipInferenceFacts()) {
+			evidences.add(evidence);
+		}
+		
+
+		_proprietaryIntergretationCorrectionRepository1.saveRepository();
+		_proprietaryInterpretationCorrectionRepository2.saveRepository();
+		
+		_aggregatedInterpretationCorrectionRepository = InterpretationCorrectionRepositoryFactory.createAggregratedClassificationCorrectionRepository();
+//		_aggregatedInterpretationCorrectionRepository.loadRepository();
+		
+		Set<IInstanceClassificationEvidence> evidences2 = new HashSet<IInstanceClassificationEvidence>();
+		for (IInstanceClassificationEvidence evidence : _aggregatedInterpretationCorrectionRepository
+				.getAllInstanceMembershipInferenceFacts()) {
+			evidences2.add(evidence);
+		}
+		
+		boolean equal = true;
+		System.out.println("--------------------------------------------------");
+		for(IInstanceClassificationEvidence evidence: evidences){
+			System.out.println(evidence.getEvidenceCode());
+			if(!evidences2.contains(evidence)){
+				equal = false;
+			}
+		}
+		
+		System.out.println("--------------------------------------------------");
+		for (IInstanceClassificationEvidence evidence : evidences2) {
+			System.out.println(evidence.getEvidenceCode());
+			if (!evidences.contains(evidence)) {
+				equal = false;
+			}
+		}
+		assertEquals(true, equal);
 	}
 
 	@Ignore
@@ -53,40 +126,40 @@ public class ClassificationCorrectionRepositoryText {
 	public void ExtractCorrectionTest() throws IOException { 
 		FakeDataCreator fakeDataCreator = new FakeDataCreator();
 		Collection<IClassificationCorrection> corrections = new ArrayList<IClassificationCorrection>();
-		Map<IUpdatedInstanceRecord, IClassifiedInstanceDetailRecord> XXX = fakeDataCreator.createUpdatedInstanceRecordsAndClassifiedInstanceRecords();
-		for (IUpdatedInstanceRecord updatedInstanceRecord : XXX.keySet()) {
+		Map<IInstanceRecord, IClassifiedInstanceDetailRecord> XXX = fakeDataCreator.createUpdatedInstanceRecordsAndClassifiedInstanceRecords();
+		for (IInstanceRecord updatedInstanceRecord : XXX.keySet()) {
 			IClassifiedInstanceDetailRecord originalClassifiedInstance = XXX.get(updatedInstanceRecord);
-			corrections.addAll(_correctionRepository.extractCorrection(updatedInstanceRecord, originalClassifiedInstance));
+			corrections.addAll(_proprietaryIntergretationCorrectionRepository1.extractCorrection(updatedInstanceRecord, originalClassifiedInstance));
 		}
 	}
 
 //	@Ignore
-	@Test
+//	@Test
 	public void GetAllConcept2OntClassMappings() {
-		Collection<IInstanceMembershipInfereceFact> allc2cMappingSets = _correctionRepository.getAllInstanceMembershipInferenceFacts();
+		Collection<IInstanceClassificationEvidence> allc2cMappingSets = _proprietaryIntergretationCorrectionRepository1.getAllInstanceMembershipInferenceFacts();
 		print(allc2cMappingSets, "Mapping: ");
 		System.out.println();
 	}
 
 //	@Ignore
-	@Test
+//	@Test
 	public void GetNegativeConcept2OntClassMappings() {
-		Collection<IInstanceMembershipInfereceFact> negativeC2CMappingSets = _correctionRepository.getHiddenInstanceMembershipInferenceFacts();
+		Collection<IInstanceClassificationEvidence> negativeC2CMappingSets = _proprietaryIntergretationCorrectionRepository1.getHiddenInstanceMembershipInferenceFacts();
 		print(negativeC2CMappingSets, "Negative Mapping: ");
 		System.out.println();
 	}
 
 //	@Ignore
-	@Test
+//	@Test
 	public void GetPositiveConcept2OntClassMappings() {
-		Collection<IInstanceMembershipInfereceFact> positiveC2CMappingSets = _correctionRepository.getExplicitInstanceMembershipInferenceFacts();
+		Collection<IInstanceClassificationEvidence> positiveC2CMappingSets = _proprietaryIntergretationCorrectionRepository1.getExplicitInstanceMembershipInferenceFacts();
 		print(positiveC2CMappingSets, "Positive Mapping: ");
 		System.out.println();
 	}
 	
-	private void print(Collection<IInstanceMembershipInfereceFact> mappingSets, String string) {
-		for (IInstanceMembershipInfereceFact mappingSet : mappingSets) {
-			System.out.println(string + mappingSet.getMembershipInferenceFactCode() + " " + mappingSet.getCorrectionTargetClass().getOntClassName());
+	private void print(Collection<IInstanceClassificationEvidence> mappingSets, String string) {
+		for (IInstanceClassificationEvidence mappingSet : mappingSets) {
+			System.out.println(string + mappingSet.getEvidenceCode() + " " + mappingSet.getCorrectionTargetClass().getOntClassName());
 		}
 	}
 	

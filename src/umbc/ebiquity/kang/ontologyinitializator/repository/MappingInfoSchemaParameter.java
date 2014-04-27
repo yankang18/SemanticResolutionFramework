@@ -12,10 +12,13 @@ public class MappingInfoSchemaParameter {
 	 */
 	public static String TRIPLE_RECORD_TYPE =  "Record_Type"; // It has three following types
 	public static String TRIPLE_RECORD_TYPE_META_DATA = "Meta_Data";
-	public static String TRIPLE_RECORD_TYPE_PROPERTY_MAPPING = "Property_Mapping";
+	public static String TRIPLE_RECORD_TYPE_RELATION_VALUE = "Relation_Value";
+	public static String TRIPLE_RECORD_TYPE_RELATION_DEFINITION = "Relation__Definition";
 	public static String TRIPLE_RECORD_TYPE_CONCEPT_OF_INSTANCE = "Concept_Of_Instance";
 	public static String TRIPLE_STORE_URI = "Triple_Store_URI";
 	public static String TRIPLE_STORE_NAME = "Triple_Store_Name";
+	public static String TRIPLE_STORE_NUMBER_OF_TRIPLES = "Triple_Store_Number_Of_Triples";
+	public static String TRIPLE_STORE_NUMBER_OF_RELATIONS= "Triple_Store_Number_of_Relations";
 	
 	public static String TRIPLE_SUBJECT = "Subject";
 	public static String TRIPLE_OBJECT = "Object";
@@ -71,6 +74,11 @@ public class MappingInfoSchemaParameter {
     /**
      * 
      */
+	public static String CORRECTION_RECORD_TYPE = "Correction_Record_Type";
+	public static String CORRECTION_RECORD_TYPE_METADATA = "Meta_Data";
+	public static String CORRECTION_RECORD_TYPE_CORRECTION = "Correction";
+	public static String CORRECTION_RECORD_TYPE_EXPLICIT_EVIDENCE = "Explicit_Evidence";
+	public static String CORRECTION_RECORD_TYPE_HIDDEN_EVIDENCE = "Hidden_Evidence";
 	public static String INSTANCE_SOURCE = "Instance_Source";
 	public static String CORRECTION_SOURCE = "Correction_Source";
 	public static String CORRECTION_TARGET = "Correction_Target";
@@ -86,7 +94,26 @@ public class MappingInfoSchemaParameter {
 	public static String CORRECTION_TARGET_CLASS_INFO = "Correction_Target_Class";
 	public static String TRIPLE_OBJECT_AS_CONCEPT_SCORE = "Triple_Object_As_Concept_Score";
 	public static String CONCEPT_CLASS_MAPPING = "Concept_Class_Mapping";
-	public static String MAPPING_SCORE = "Mapping_Score"; 
+	public static String MAPPING_SCORE = "Mapping_Score";
+	
+	public static String NUMBER_OF_INSTANCE = "Number_Of_Instance";
+	public static String NUMBER_OF_CORRECTION = "Number_Of_Correction";
+
+	/*
+	 * 
+	 */
+	public static String EVALUATION_RECORD_TYPE = "Evaluation_Record_Type";
+	public static String EVALUATION_RECORD_TYPE_INSTANCE_CLASSIFICATION = "Classification";
+	public static String EVALUATION_RECORD_TYPE_RELATION_PROPERTY_MAP = "Relation_Property_Map";
+	public static String EVALUATION_RECORD_INSTANCE = "Instance";
+	public static String EVALUATION_RECORD_CLASS="Class";
+	public static String EVALUATOIN_RECORD_CONCEPT_CLASS_MAP ="Concept_Class_Map";
+	public static String EVALUATION_RECORD_RELATION = "Relation";
+	public static String EVALUATION_RECORD_PROPERTY = "Property";
+	public static String EVALUATION_RECORD_DOMAIN_OF_RELATION = "Domain_Of_Relation";
+	public static String EVALUATION_RECORD_DOMAIN_OF_PROPERTY = "Domain_Of_Property";
+	public static String EVALUATION_RECORD_RANGE_OF_RELATION = "Range_Of_Relation";
+	public static String EVALUATION_RECORD_RANGE_OF_PROPERTY = "Range_Of_Property";
     
 	public enum MappingRelationType {
 		relatedTo, narrower, broader

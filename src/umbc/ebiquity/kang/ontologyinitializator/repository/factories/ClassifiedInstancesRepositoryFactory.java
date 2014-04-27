@@ -3,131 +3,182 @@ package umbc.ebiquity.kang.ontologyinitializator.repository.factories;
 import java.io.IOException;
 import java.net.URL;
 
+import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMapper;
+import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMappingPairLookUpper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.CorrectionClusterCodeGenerator;
+import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.InstanceClassificationAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.InstanceConcept2OntClassMappingFeatureExtractor;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.InstanceLexicalFeatureExtractor;
+import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Relation2PropertyMapper;
+import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Relation2PropertyMappingAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.SimpleLexicalFeatureExtractor;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.TS2OntoMappingAlgorithm;
+import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.TS2OntoMappingAlgorithm2;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.ICorrectionClusterCodeGenerator;
+import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IInstanceClassificationAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IInstanceConcept2OntClassMappingFeatureExtractor;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IInstanceLexicalFeatureExtractor;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IMappingAlgorithm;
+import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IRelation2PropertyMappingAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.ClassificationCorrectionRuleGenerator;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.interfaces.ICorrectionRule;
 import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
-import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ClassifiedInstancesAccessor;
+import umbc.ebiquity.kang.ontologyinitializator.repository.impl.AggregratedClassifiedInstanceRepository;
+import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ProprietoryClassifiedInstancesRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ProprietoryClassifiedInstancesRepository.ClassifiedInstancesRepositoryType;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrectionRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstanceBasicRecord;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstanceDetailRecord;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstancesAccessor;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRecordsReader;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IProprietoryClassifiedInstancesRepository;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstancesRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.ITripleRepository;
 import umbc.ebiquity.kang.ontologyinitializator.utilities.FileUtility;
 import umbc.ebiquity.kang.textprocessing.impl.SequenceInReversedOrderPhraseExtractor;
 
 public class ClassifiedInstancesRepositoryFactory {
-	
-	public static IClassifiedInstancesAccessor createClassifiedInstancesRepository(IOntologyRepository ontologyRepository) {
-		return new ClassifiedInstancesAccessor(ontologyRepository);
+
+	public static IClassifiedInstancesAccessor createAggregatedClassifiedInstancesRepository(IOntologyRepository ontologyRepository) {
+		return new AggregratedClassifiedInstanceRepository(ontologyRepository);
 	}
 
-	public static IProprietoryClassifiedInstancesRepository createProprietoryClassifiedInstancesRepository(URL webSiteURL, 
-			                                                         IOntologyRepository ontologyRepository, 
-			                                                         IClassificationCorrectionRepository classificationCorrectionRepository, 
-			                                                         IManufacturingLexicalMappingRepository manufacturingLexicalMappingRepository, 
-			                                                         boolean loadLocal) throws IOException{
-		
-		String mappingInfoRepositoryName = FileUtility.convertURL2FileName(webSiteURL);
+	public static IClassifiedInstancesRepository createProprietoryClassifiedInstancesRepository(URL webSiteURL,
+																								IOntologyRepository ontologyRepository, 
+																								boolean loadLocal,boolean applyMappingRule,
+																								boolean applyCorrection) throws IOException {
+
+		String repositoryName = FileUtility.convertURL2FileName(webSiteURL);
 		String basicInfoDirectory = RepositoryParameterConfiguration.getMappingBasicInfoDirectoryFullPath();
 		String detailInfoDirectory = RepositoryParameterConfiguration.getMappingDetailinfoDirectoryFullPath();
-		String basicInfoFileFullName = basicInfoDirectory + mappingInfoRepositoryName;
-		String detailInfoFileFullName = detailInfoDirectory + mappingInfoRepositoryName;
+		String basicInfoFileFullName = basicInfoDirectory + repositoryName;
+		String detailInfoFileFullName = detailInfoDirectory + repositoryName;
 		boolean basicInfoFileExists = FileUtility.exists(basicInfoFileFullName);
 		boolean detailInfoFileExists = FileUtility.exists(detailInfoFileFullName);
-		
+
+        IManufacturingLexicalMappingRepository proprietaryManufacturingLexicalMappingRepository = ManufacturingLexicalMappingRepositoryFactory
+                .createProprietaryManufacturingLexiconRepository(repositoryName);
 		if (basicInfoFileExists && detailInfoFileExists && loadLocal) {
-			return new umbc.ebiquity.kang.ontologyinitializator.repository.impl.ProprietoryClassifiedInstancesRepository
-			       (
-			        mappingInfoRepositoryName, 
-					ClassifiedInstancesRepositoryType.All, 
-                    ontologyRepository, 
-                    manufacturingLexicalMappingRepository
-                    );
+			return new ProprietoryClassifiedInstancesRepository(repositoryName, ClassifiedInstancesRepositoryType.All,
+					ontologyRepository, proprietaryManufacturingLexicalMappingRepository);
 		} else {
 
 			boolean succeed1 = false;
 			if (!basicInfoFileExists) {
 				succeed1 = FileUtility.createDirectories(basicInfoDirectory);
 			}
-			
-			
+
 			boolean succeed2 = false;
 			if (!detailInfoFileExists) {
 				succeed2 = FileUtility.createDirectories(detailInfoDirectory);
 			}
 
 			if (succeed1 && succeed2) {
-				ITripleRepository tripleStore = TripleRepositoryFactory.createTripleRepository(webSiteURL, loadLocal);
-				IMappingAlgorithm alg = new TS2OntoMappingAlgorithm(tripleStore, ontologyRepository, manufacturingLexicalMappingRepository);
-				alg.mapping();
-				IProprietoryClassifiedInstancesRepository proprietoryClassifiedInstancesRepository = alg.getProprietoryClassifiedInstancesRepository();
 				
-				////// TODO: do we need to apply the classification correction algorithm here!!!
-				ICorrectionClusterCodeGenerator _correctionClusterCodeGenerator = new CorrectionClusterCodeGenerator();
-				IInstanceConcept2OntClassMappingFeatureExtractor _instanceC2CMappingFeatureExtractor = new InstanceConcept2OntClassMappingFeatureExtractor(_correctionClusterCodeGenerator, classificationCorrectionRepository);
-				IInstanceLexicalFeatureExtractor _instanceLexicalFeatureExtractor = new InstanceLexicalFeatureExtractor(
-						ClassifiedInstancesRepositoryFactory.createClassifiedInstancesRepository(ontologyRepository), new SimpleLexicalFeatureExtractor(
-								new SequenceInReversedOrderPhraseExtractor()));
-				ClassificationCorrectionRuleGenerator _ruleGenerator = new ClassificationCorrectionRuleGenerator
-				(
-						classificationCorrectionRepository,
-						ontologyRepository,
-						_correctionClusterCodeGenerator,
-						_instanceC2CMappingFeatureExtractor, 
-						_instanceLexicalFeatureExtractor
-				);
+				IClassificationCorrectionRepository aggregatedClassificationCorrectionRepository = InterpretationCorrectionRepositoryFactory
+						.createAggregratedClassificationCorrectionRepository();
 
-				for (String instanceName : proprietoryClassifiedInstancesRepository.getInstanceSet()) {
-					IClassifiedInstanceDetailRecord detailInstance = proprietoryClassifiedInstancesRepository.getClassifiedInstanceDetailRecordByInstanceName(instanceName);
-					ICorrectionRule rule = _ruleGenerator.getClassificationCorrectionRule(detailInstance);
-					String originalClass = detailInstance.getOntoClassName();
-					String targetClass = rule.getTargetClass(detailInstance, originalClass);
-					if (!targetClass.equals(originalClass)) {
-//						detailInstance.getMatchedOntoClass().setLabel(targetClass);
-						proprietoryClassifiedInstancesRepository.updateInstanceClass(instanceName, targetClass);
-					} else {
-						System.out.println("NO CLASS CHANGE");
+				IManufacturingLexicalMappingRecordsReader aggregratedManufacturingLexicalMappingRepository = ManufacturingLexicalMappingRepositoryFactory
+		                .createAggregratedManufacturingLexicalMappingRepository(ontologyRepository);
+				
+				ITripleRepository tripleStore = TripleRepositoryFactory.createTripleRepository(webSiteURL, true);
+				
+				// Create Relation-Property Mapping Algorithm Object
+				IRelation2PropertyMappingAlgorithm relation2PropertymMappingAlgorithm = new Relation2PropertyMappingAlgorithm(
+						tripleStore, ontologyRepository, new Relation2PropertyMapper());
+				
+				// Create Instance Classification Algorithm Object
+				IInstanceClassificationAlgorithm instanceClassificationAlgorithm = new InstanceClassificationAlgorithm(tripleStore,
+						ontologyRepository, 
+						new Concept2OntClassMapper(new Concept2OntClassMappingPairLookUpper(aggregratedManufacturingLexicalMappingRepository, 
+																							ontologyRepository), 
+																							applyMappingRule), aggregatedClassificationCorrectionRepository);
+				// Create the Annotation (Mapping) Algorithm Object
+				IMappingAlgorithm mappingAlgorithm = new TS2OntoMappingAlgorithm2(relation2PropertymMappingAlgorithm, instanceClassificationAlgorithm);
+				mappingAlgorithm.mapping();
+				
+				IClassifiedInstancesRepository proprietoryClassifiedInstancesRepository = new ProprietoryClassifiedInstancesRepository(tripleStore.getRepositoryName(), 
+						  ontologyRepository, 
+						  proprietaryManufacturingLexicalMappingRepository, 
+						  mappingAlgorithm.getRelation2PropertyMap(), 
+						  mappingAlgorithm.getClassifiedInstances());
+				
+				// apply the classification correction algorithm here!!!
+				if (applyCorrection) {
+					
+			        IClassifiedInstancesAccessor aggregratedClassifiedInstanceRepository = ClassifiedInstancesRepositoryFactory.createAggregatedClassifiedInstancesRepository(ontologyRepository);
+					
+					
+					System.out.println("### " + "Correction Applied ...");
+					ICorrectionClusterCodeGenerator _correctionClusterCodeGenerator = new CorrectionClusterCodeGenerator();
+					
+					// Create Annotation (Interpretation, Classification) evidences Extractor
+					IInstanceConcept2OntClassMappingFeatureExtractor _instanceC2CMappingFeatureExtractor = new InstanceConcept2OntClassMappingFeatureExtractor(
+																																	_correctionClusterCodeGenerator, 
+																																	aggregatedClassificationCorrectionRepository,
+																																	ontologyRepository);
+					
+					// Create lexical Features Extractor
+					IInstanceLexicalFeatureExtractor _instanceLexicalFeatureExtractor = new InstanceLexicalFeatureExtractor(
+																				aggregratedClassifiedInstanceRepository,
+																				new SimpleLexicalFeatureExtractor(new SequenceInReversedOrderPhraseExtractor())
+																				);
+					
+					// Create Rule Generator
+					ClassificationCorrectionRuleGenerator _ruleGenerator = new ClassificationCorrectionRuleGenerator(aggregatedClassificationCorrectionRepository, 
+																													 ontologyRepository, 
+																													 _correctionClusterCodeGenerator,
+																													 _instanceC2CMappingFeatureExtractor, 
+																													 _instanceLexicalFeatureExtractor
+																													 );
+
+					/*
+					 * Iterate all classified instances and check it
+					 * correctness. Using naive bayes algorithm to correction
+					 * possibly misclassified instances
+					 */
+					for (String instanceName : proprietoryClassifiedInstancesRepository.getInstanceSet()) {
+						IClassifiedInstanceDetailRecord detailInstance = proprietoryClassifiedInstancesRepository.getClassifiedInstanceDetailRecordByInstanceName(instanceName);
+						ICorrectionRule rule = _ruleGenerator.getClassificationCorrectionRule(detailInstance);
+						String originalClass = detailInstance.getOntoClassName();
+						String targetClass = rule.obtainCorrectedClassLabel(detailInstance, originalClass);
+						if (!targetClass.equals(originalClass)) {
+							// detailInstance.getMatchedOntoClass().setLabel(targetClass);
+							proprietoryClassifiedInstancesRepository.updateInstanceClass(instanceName, targetClass);
+						} else {
+							System.out.println("### NO CLASS CHANGEs");
+						}
+
+						String className1 = proprietoryClassifiedInstancesRepository.getClassifiedInstanceDetailRecordByInstanceName(instanceName).getOntoClassName();
+						String className2 = proprietoryClassifiedInstancesRepository.getClassifiedInstanceDetailRecordByInstanceName(instanceName).getMatchedOntoClass().getOntClassName();
+						String className3 = proprietoryClassifiedInstancesRepository.getClassifiedInstanceBasicRecordByInstanceName(instanceName).getMatchedOntoClass().getOntClassName();
+						System.out.println("###1 " + instanceName);
+						System.out.println("###2 " + className1 + "  " + className2 + " " + className3);
 					}
-
-					String className1 = proprietoryClassifiedInstancesRepository.getClassifiedInstanceDetailRecordByInstanceName(instanceName).getOntoClassName();
-					String className2 = proprietoryClassifiedInstancesRepository.getClassifiedInstanceDetailRecordByInstanceName(instanceName).getMatchedOntoClass().getOntClassName();
-					String className3 = proprietoryClassifiedInstancesRepository.getClassifiedInstanceBasicRecordByInstanceName(instanceName).getMatchedOntoClass().getOntClassName();
-					System.out.println("###1 " + instanceName);
-					System.out.println("###2 " + className1 + "  " + className2 + " " + className3);
+					// ////
+					// proprietoryClassifiedInstancesRepository.showRepositoryDetail();
+					// String className1 =
+					// proprietoryClassifiedInstancesRepository.getClassifiedInstanceDetailRecordByInstanceName("CNC Machining").getOntoClassName();
+					// String className2 =
+					// proprietoryClassifiedInstancesRepository.getClassifiedInstanceDetailRecordByInstanceName("CNC Machining").getMatchedOntoClass().getOntClassName();
+					// System.out.println("######1 " + "CNC Machining");
+					// System.out.println("######2 " + className1 + "  " +
+					// className2);
 				}
-				//////
-//				proprietoryClassifiedInstancesRepository.showRepositoryDetail();
-//				String className1 = proprietoryClassifiedInstancesRepository.getClassifiedInstanceDetailRecordByInstanceName("CNC Machining").getOntoClassName();
-//				String className2 = proprietoryClassifiedInstancesRepository.getClassifiedInstanceDetailRecordByInstanceName("CNC Machining").getMatchedOntoClass().getOntClassName();
-//				System.out.println("######1 " + "CNC Machining");
-//				System.out.println("######2 " + className1 + "  " + className2);
-				
-				manufacturingLexicalMappingRepository.addNewConcept2OntoClassMappings(proprietoryClassifiedInstancesRepository.getAllClassifiedInstanceDetailRecords());
-				boolean succeed11 = manufacturingLexicalMappingRepository.saveRepository();
+
+				proprietaryManufacturingLexicalMappingRepository.addNewConcept2OntoClassMappings(proprietoryClassifiedInstancesRepository.getAllClassifiedInstanceDetailRecords());
+				boolean succeed11 = proprietaryManufacturingLexicalMappingRepository.saveRepository();
 				boolean succeed22 = proprietoryClassifiedInstancesRepository.saveRepository();
 				if (succeed11 && succeed22) {
 					return proprietoryClassifiedInstancesRepository;
-					
+
 				} else {
 					throw new IOException("Create Proprietory Classified Instances Repository Failed");
 				}
 			} else {
 				throw new IOException("Create Proprietory Classified Instances Repository Failed");
 			}
-			
 		}
 	}
 }

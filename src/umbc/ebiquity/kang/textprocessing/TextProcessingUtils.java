@@ -45,17 +45,14 @@ public class TextProcessingUtils {
 
 	public static boolean containsOnlyDefaultStopwords(String t) {
 		t = t.replaceAll("[();:\"'.,]", "").toLowerCase().trim();
-
-		for (String stopword : defaultStopwords.getStopwords()) {
-			t = t.replaceAll(stopword, "");
+		String[] tokens = t.trim().split(" ");
+		boolean containsOnlyDefaultStopwords = true;
+		for(String token: tokens){
+			if(!defaultStopwords.getStopwords().contains(token)){
+				containsOnlyDefaultStopwords = false;
+			}
 		}
-		
-		for(char ch : t.toCharArray()){
-			if(Character.isLetter(ch));
-			return false;
-		}
-
-		return true;
+		return containsOnlyDefaultStopwords;
 	}
 	
 	public static boolean containsWebPageStopwords(String t) {
@@ -117,7 +114,7 @@ public class TextProcessingUtils {
 		String[] tokens = TextProcessingUtils.tokenizeLabel(label);
 		StringBuilder processedTermLabelSB = new StringBuilder();
 		for (String token : tokens) {
-			processedTermLabelSB.append(pluralStemmer.stem(token) + delimer); 
+			processedTermLabelSB.append(pluralStemmer.stem(token.toLowerCase()) + delimer); 
 		}
 		return processedTermLabelSB.toString().trim();
 	}
@@ -161,9 +158,13 @@ public class TextProcessingUtils {
 			}
 		}
 		return newTokens;
-	
 	}
 
+	
+	public static String pluralStem(String s){
+		return pluralStemmer.stem(s);
+	}
+	
 	public static String[] tokenizeLabel2PhrasesWithParallelledSemantic(String label) {
 		Collection<String> phrases = new HashSet<String>();
 		int preIndex = label.indexOf('(');
@@ -172,7 +173,7 @@ public class TextProcessingUtils {
 			String before = label.substring(0, preIndex);
 			String after = label.substring(afterIndex + 1);
 			String between = label.substring(preIndex + 1, afterIndex);
-			phrases.add(between);
+			phrases.add(pluralStemmer.stem(between));
 			label = before + after;
 			preIndex = label.indexOf('(');
 			afterIndex = label.indexOf(')');
@@ -181,7 +182,7 @@ public class TextProcessingUtils {
 		for (String token : tokens) {
 			String value = token.trim();
 			if (!value.equals("")) {
-				phrases.add(value);
+				phrases.add(pluralStemmer.stem(value));
 			}
 		}
 		return phrases.toArray(new String[0]);
@@ -440,11 +441,15 @@ public class TextProcessingUtils {
 //			System.out.println("--"+token.trim());
 //		}
 		
-		String kk = "cnn machining (machining1) / mahcining2/machining3";
-		for(String phrase : TextProcessingUtils.tokenizeLabel2PhrasesWithParallelledSemantic(kk)){
-			System.out.println(phrase);
+//		String kk = "cnn machining (machining1) / mahcining2/machining3";
+//		for(String phrase : TextProcessingUtils.tokenizeLabel2PhrasesWithParallelledSemantic(kk)){
+//			System.out.println(phrase);
+//		}
+
+		String[] tokens = TextProcessingUtils.tokenizeLabel("WaterjetCuttings");
+		for(String token : tokens){
+		System.out.println("--" + token);
 		}
-		
 //		String t= "* * #; ) fd";
 		
 		

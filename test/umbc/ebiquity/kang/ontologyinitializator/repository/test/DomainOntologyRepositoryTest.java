@@ -1,5 +1,6 @@
 package umbc.ebiquity.kang.ontologyinitializator.repository.test;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,6 +13,7 @@ import java.util.Set;
 import junit.framework.Assert;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
@@ -25,13 +27,24 @@ public class DomainOntologyRepositoryTest {
 	private static IOntologyRepository _repo;
 
 	@BeforeClass
+//	@Test
 	public static void init() throws IOException {
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/kangyan2003/Desktop/";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/kangyan2003/Desktop/Ontology/MSDL-Fullv2.owl";
+		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop";
+		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
 		_repo = OntologyRepositoryFactory.createOntologyRepository();
+		
+//		File dir = new File("/Users/yangkang/Desktop/");
+//		if(dir.exists()){
+//			System.out.println("here1");
+//		} else{
+//		 boolean success = dir.mkdirs();
+//			System.out.println("here2 " + success);
+//		}
+		
 	}
 
 	@Test
+//	@Ignore
 	public void IsInTheSameClassHierarchyTest() {
 		String firstClassName = "DeformationProcess";
 		String secondClassName = "SolidificationProcess";
@@ -47,8 +60,14 @@ public class DomainOntologyRepositoryTest {
 		secondClassName = "PackagingDesign";
 		isInTheSameClassHierarchy = _repo.isInTheSameClassHierarchy(firstClassName, secondClassName);
 		Assert.assertEquals(isInTheSameClassHierarchy, false);
+		
+		firstClassName = "Service";
+		secondClassName = "ReverseEngineeringService";
+		isInTheSameClassHierarchy = _repo.isInTheSameClassHierarchy(firstClassName, secondClassName);
+		Assert.assertEquals(isInTheSameClassHierarchy, true);
 	}
 	
+	@Ignore
 	@Test
 	public void isSubClassOfTest() {
 		
@@ -73,6 +92,7 @@ public class DomainOntologyRepositoryTest {
 		Assert.assertEquals(isSubClassOf, true);
 	}
 	
+	@Ignore
 	@Test
 	public void isSuperClassOfTest() {
 		
@@ -97,6 +117,7 @@ public class DomainOntologyRepositoryTest {
 		Assert.assertEquals(isSubClassOf, true);
 	}
 
+	@Ignore
     @Test
 	public void ComputeHighestBranchedClassGlobalPathCodeTest() {
 		String pathCode1 = "1-2-1-1";
@@ -126,6 +147,7 @@ public class DomainOntologyRepositoryTest {
 		Assert.assertEquals(1-1-1, 1-1-1);
 	}
 
+	@Ignore
     @Test
 	public void GetHighestBranchedOntClassTest() {
 		String class1 = "ManufacturingProcess";
@@ -175,6 +197,7 @@ public class DomainOntologyRepositoryTest {
 		Assert.assertEquals(pivotClass3.getOntClassName(), "WaterjetCuttingService");
 	}
 
+	@Ignore
     @Test
 	public void GetSuperClassNamesInClassPath() {
     	String class1 = "Grinding";
@@ -209,7 +232,7 @@ public class DomainOntologyRepositoryTest {
 		Assert.assertEquals(0, superClasses.size());
 	}
     
-    
+	@Ignore
     @Test
 	public void GetNamesOfSubTributaryClasses() {
 		
@@ -246,6 +269,7 @@ public class DomainOntologyRepositoryTest {
 		}
 	}
 
+	@Ignore
 	@Test
 	public void IsCrossOverAtTest() {
 		
@@ -275,6 +299,7 @@ public class DomainOntologyRepositoryTest {
 		Assert.assertEquals(false, isCrossOver);
 	}
 
+	@Ignore
 	@Test
 	public void ExtractTributaryClasssetsTest() {
 		String class0 = "ManufacturingProcess";

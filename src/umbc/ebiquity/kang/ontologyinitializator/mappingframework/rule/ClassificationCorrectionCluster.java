@@ -16,7 +16,7 @@ import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.interfaces
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.interfaces.IFeatureMatcher;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrection;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMapping;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceMembershipInfereceFact;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceClassificationEvidence;
 import umbc.ebiquity.kang.ontologyinitializator.utilities.Debugger;
 
 public class ClassificationCorrectionCluster {
@@ -25,6 +25,10 @@ public class ClassificationCorrectionCluster {
 	private Set<String> _correctionSourceClassSet;
 	private String _correctionTargetClass;
 	private double _instanceRateOfTargetClass;
+	private int _instanceNumberOfTargetClass;
+	private int _negativeEvidenceNumberOfTargetClass;
+	private int _positiveEvidenceNumberOfTargetClass;
+	private int _numberOfC2CMappingsOfTargetClass;
 	
 	private List<String> _correctInstances;
 	private Collection<IConcept2OntClassMapping> _allMappings;
@@ -40,13 +44,14 @@ public class ClassificationCorrectionCluster {
 	private Collection<LexicalFeature> _correctedInstanceLabelFeatures;
 	private Map<LexicalFeature, Double> _lexicalFeaturesWithRepresentativenessOfTargetClass;
 	private Map<LexicalFeature, Double> _lexicalFeaturesWithRepresentativenessOfSourceClass;
-	private Map<IInstanceMembershipInfereceFact, Double> _negativeMappingsInThisCorrectionCluster;
-	private Map<IInstanceMembershipInfereceFact, Double> _positiveMappingSetsWithLocalRateToCorrectionTargetClass;
-	private Map<IInstanceMembershipInfereceFact, Double> _negativeMappingSetsWithLocalRateToCorrectionSourceClass;
-	private Map<IInstanceMembershipInfereceFact, Double> _negativeMappingSetsWithLocalRateToCorrectionTargetClass;
+	private Map<IInstanceClassificationEvidence, Double> _negativeMappingsInThisCorrectionCluster;
+	private Map<IInstanceClassificationEvidence, Double> _positiveMappingSetsWithLocalRateToCorrectionTargetClass;
+	private Map<IInstanceClassificationEvidence, Double> _negativeMappingSetsWithLocalRateToCorrectionSourceClass;
+	private Map<IInstanceClassificationEvidence, Double> _negativeMappingSetsWithLocalRateToCorrectionTargetClass;
 	
     private IInstanceLexicalFeatureExtractor _instanceLexicalFeatureExtractor;
 	private IInstanceConcept2OntClassMappingFeatureExtractor _instanceConcept2OntClassMappingFeatureExtractor;
+	private Map<IConcept2OntClassMapping, Double> _c2cMappingWithLocalRateToCorrectionTargetClass; 
 
     public ClassificationCorrectionCluster(String clusterCode,
     									   CorrectionDirection correctionDirection, 
@@ -74,10 +79,11 @@ public class ClassificationCorrectionCluster {
 		_corrections = new HashSet<IClassificationCorrection>();
 		_hierarchyCloseness = new HashMap<String, String>();
 
-		_negativeMappingsInThisCorrectionCluster = new HashMap<IInstanceMembershipInfereceFact, Double>();
-		_positiveMappingSetsWithLocalRateToCorrectionTargetClass = new HashMap<IInstanceMembershipInfereceFact, Double>();
-		_negativeMappingSetsWithLocalRateToCorrectionSourceClass = new HashMap<IInstanceMembershipInfereceFact, Double>();
-		_negativeMappingSetsWithLocalRateToCorrectionTargetClass = new HashMap<IInstanceMembershipInfereceFact, Double>();
+		_negativeMappingsInThisCorrectionCluster = new HashMap<IInstanceClassificationEvidence, Double>();
+		_positiveMappingSetsWithLocalRateToCorrectionTargetClass = new HashMap<IInstanceClassificationEvidence, Double>();
+		_negativeMappingSetsWithLocalRateToCorrectionSourceClass = new HashMap<IInstanceClassificationEvidence, Double>();
+		_negativeMappingSetsWithLocalRateToCorrectionTargetClass = new HashMap<IInstanceClassificationEvidence, Double>();
+		_c2cMappingWithLocalRateToCorrectionTargetClass = new HashMap<IConcept2OntClassMapping, Double>();
 
 		_negativeConcepts = new ArrayList<String>();
 		_positiveConcepts = new ArrayList<String>();
@@ -108,10 +114,27 @@ public class ClassificationCorrectionCluster {
 		// get negative mapping in this correction cluster from Classification Correction Repository
 		int allMappingCount = _instanceConcept2OntClassMappingFeatureExtractor.getAllConcept2OntClassMappingCount();
 		
+		Collection<IInstanceClassificationEvidence> pe = _instanceConcept2OntClassMappingFeatureExtractor.getPositiveConcept2OntClassMappingSetsOfOntClass(_correctionTargetClass);
+		Collection<IInstanceClassificationEvidence> ne = _instanceConcept2OntClassMappingFeatureExtractor.getNegativeConcept2OntClassMappingSetsOfOntClass(_correctionTargetClass);
+		if(pe !=null){
+			_positiveEvidenceNumberOfTargetClass = pe.size();
+		} else {
+			_positiveEvidenceNumberOfTargetClass = 0;
+		}
+		
+		if(ne !=null){
+			_negativeEvidenceNumberOfTargetClass = ne.size();
+		} else {
+			_negativeEvidenceNumberOfTargetClass = 0;
+		}
+		
+		_numberOfC2CMappingsOfTargetClass = _instanceConcept2OntClassMappingFeatureExtractor.getNumberOfC2CMapping(_correctionTargetClass);
+
 		_instanceRateOfTargetClass = _instanceLexicalFeatureExtractor.getInstanceRateOfOntClass(_correctionTargetClass);
+		_instanceNumberOfTargetClass = _instanceLexicalFeatureExtractor.getNumberOfInstancesOfOntClass(_correctionTargetClass);
 		
 		double defaultCount = (double) 1 / (double) allMappingCount;
-		Map<IInstanceMembershipInfereceFact, Double> tempNegativeMappingsInThisCorrectionCluster = _instanceConcept2OntClassMappingFeatureExtractor.getNegativeConcept2OntClassMappingSetsWithRateOfCorrectionCluster(_clusterCode);
+		Map<IInstanceClassificationEvidence, Double> tempNegativeMappingsInThisCorrectionCluster = _instanceConcept2OntClassMappingFeatureExtractor.getNegativeConcept2OntClassMappingSetsWithRateOfCorrectionCluster(_clusterCode);
 		if (tempNegativeMappingsInThisCorrectionCluster != null) {
 			_negativeMappingsInThisCorrectionCluster.clear();
 			_negativeMappingsInThisCorrectionCluster.putAll(tempNegativeMappingsInThisCorrectionCluster);
@@ -120,7 +143,7 @@ public class ClassificationCorrectionCluster {
 		
 		// get negative mapping from Classification Correction Repository
 		for (String _correctionSourceClass : _correctionSourceClassSet) {
-			Map<IInstanceMembershipInfereceFact, Double> tempNegativeMappings = _instanceConcept2OntClassMappingFeatureExtractor.getNegativeConcept2OntClassMappingSetsWithLocalRateOfOntClass(_correctionSourceClass);
+			Map<IInstanceClassificationEvidence, Double> tempNegativeMappings = _instanceConcept2OntClassMappingFeatureExtractor.getNegativeConcept2OntClassMappingSetsWithLocalRateOfOntClass(_correctionSourceClass);
 			if (tempNegativeMappings != null) {
 				_negativeMappingSetsWithLocalRateToCorrectionSourceClass.clear();
 				_negativeMappingSetsWithLocalRateToCorrectionSourceClass.putAll(tempNegativeMappings);
@@ -128,7 +151,7 @@ public class ClassificationCorrectionCluster {
 			}
 		}
 		
-		Map<IInstanceMembershipInfereceFact, Double> tempNegativeMappings = _instanceConcept2OntClassMappingFeatureExtractor.getNegativeConcept2OntClassMappingSetsWithLocalRateOfOntClass(_correctionTargetClass);
+		Map<IInstanceClassificationEvidence, Double> tempNegativeMappings = _instanceConcept2OntClassMappingFeatureExtractor.getNegativeConcept2OntClassMappingSetsWithLocalRateOfOntClass(_correctionTargetClass);
 		if (tempNegativeMappings != null) {
 			_negativeMappingSetsWithLocalRateToCorrectionTargetClass.clear();
 			_negativeMappingSetsWithLocalRateToCorrectionTargetClass.putAll(tempNegativeMappings);
@@ -136,13 +159,19 @@ public class ClassificationCorrectionCluster {
 		}
 		
 		// get positive mapping from Classification Correction Repository
-		Map<IInstanceMembershipInfereceFact, Double> tempPositiveMapping = _instanceConcept2OntClassMappingFeatureExtractor.getPositiveConcept2OntClassMappingSetsWithLocalRateOfOntClass(_correctionTargetClass);
+		Map<IInstanceClassificationEvidence, Double> tempPositiveMapping = _instanceConcept2OntClassMappingFeatureExtractor.getPositiveConcept2OntClassMappingSetsWithLocalRateOfOntClass(_correctionTargetClass);
 		if (tempPositiveMapping != null) {
 			_positiveMappingSetsWithLocalRateToCorrectionTargetClass.clear();
 			_positiveMappingSetsWithLocalRateToCorrectionTargetClass.putAll(tempPositiveMapping);
 			_positiveMappingSetsWithLocalRateToCorrectionTargetClass.put(null, defaultCount);
 		}
 		
+		Map<IConcept2OntClassMapping, Double> c2c_mapping = _instanceConcept2OntClassMappingFeatureExtractor.getC2CMapping(_correctionTargetClass);
+		if (c2c_mapping != null) {
+			_c2cMappingWithLocalRateToCorrectionTargetClass.clear();
+			_c2cMappingWithLocalRateToCorrectionTargetClass.putAll(c2c_mapping);
+			_c2cMappingWithLocalRateToCorrectionTargetClass.put(null, defaultCount);
+		}
 		for (IClassificationCorrection correction : _corrections) {
 			String instanceName = correction.getInstance();
 			_correctInstances.add(instanceName);
@@ -288,34 +317,20 @@ public class ClassificationCorrectionCluster {
 				   _correctionSourceClassSet,
 				   _correctionTargetClass,
 				   _instanceRateOfTargetClass,
-				   _correctedInstanceLabelFeatures,
-				   _lexicalFeaturesWithRepresentativenessOfSourceClass,
-				   _lexicalFeaturesWithRepresentativenessOfTargetClass,
-				   _negativeMappingsInThisCorrectionCluster,
-				   _negativeMappingSetsWithLocalRateToCorrectionSourceClass,
-				   _negativeMappingSetsWithLocalRateToCorrectionTargetClass,
-				   _positiveMappingSetsWithLocalRateToCorrectionTargetClass
-	    );
-	}
-	
-//	public IClassificationCorrectionRule toCorrectionRule() {
-//		IFeatureMatcher featureMatcher = new FeatureBasedFeatureMatcher(
+				   _instanceNumberOfTargetClass,
 //				   _correctedInstanceLabelFeatures,
 //				   _lexicalFeaturesWithRepresentativenessOfSourceClass,
-//				   _lexicalFeaturesWithRepresentativenessOfTargetClass,
+				   _lexicalFeaturesWithRepresentativenessOfTargetClass,
 //				   _negativeMappingsInThisCorrectionCluster,
 //				   _negativeMappingSetsWithLocalRateToCorrectionSourceClass,
-//				   _negativeMappingSetsWithLocalRateToCorrectionTargetClass,
-//				   _positiveMappingSetsWithLocalRateToCorrectionTargetClass
-//				   );
-//		
-//		ClassificationCorrectionRule correctionRule = new ClassificationCorrectionRule(
-//																					   _correctionSourceClassSet,
-//																					   _correctionTargetClass,
-//																					   featureMatcher
-//																					   );
-//		return correctionRule;
-//	}
+				   _negativeMappingSetsWithLocalRateToCorrectionTargetClass,
+				   _positiveMappingSetsWithLocalRateToCorrectionTargetClass,
+				   _c2cMappingWithLocalRateToCorrectionTargetClass,
+				   _positiveEvidenceNumberOfTargetClass,
+				   _negativeEvidenceNumberOfTargetClass,
+				   _numberOfC2CMappingsOfTargetClass
+	    );
+	}
 	
 	public String getClusterCode(){
 		return this._clusterCode;
