@@ -1,6 +1,8 @@
 package umbc.ebiquity.kang.ontologyinitializator.mappingframework.evaluation;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.evaluation.AbstractWebUrlLoader.PopulationType;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.evaluation.EvaluationRecord.EvaluationRecordType;
@@ -34,48 +36,58 @@ public class InterpretationEvaluator {
 									 IEvaluationCorpusRecordsReader evaluationCorpusRecordsReader,
 									 IClassifiedInstancesRepository proprietoryClassifiedInstancesRepository
 									 ){
+		double numberOfAllInstances = (double) evaluationCorpusRecordsReader.getInstanceSet().size();
 		EvaluationResult evaluationResult = new EvaluationResult();
-		int countOfRecall = 0;
+		double numberOfClassifiedInstances = 0.0;
 		int countOfCorrections = 0;
 		double totalScore = 0.0;
 		double totalError = 0.0;
+		
+		Set<String> classifiedInstances = new HashSet<String>();
 		for(String instanceName : proprietoryClassifiedInstancesRepository.getInstanceSet()){
 			IClassifiedInstanceDetailRecord classifiedInstanceInfo = proprietoryClassifiedInstancesRepository.getClassifiedInstanceDetailRecordByInstanceName(instanceName);
 			OntoClassInfo ontClassInfo = classifiedInstanceInfo.getMatchedOntoClass();
 			String expected_className = ontClassInfo.getOntClassName();
 			String real_className = evaluationCorpusRecordsReader.getClassLabelforInstance(instanceName);
 			
-			if(real_className == null) {
+			if (real_className == null) {
 				continue;
 			}
-			double score = this.computeClassMatchScore(expected_className, real_className);
-			if (score != 1.0) {
-				countOfCorrections++;
-				totalError += (1 - score);
+
+			if (!expected_className.equalsIgnoreCase("Any")) {
+				classifiedInstances.add(instanceName);
+				double score = this.computeClassMatchScore(expected_className, real_className);
+				if (score != 1.0) {
+					countOfCorrections++;
+					totalError += (1 - score);
+				}
+				totalScore += score;
+				numberOfClassifiedInstances++;
+
+				EvaluationRecord evaluationRecord = new EvaluationRecord(EvaluationRecordType.CLASSIFICATION, instanceName,
+						expected_className, real_className, score);
+				evaluationResult.addEvaluationRecord(evaluationRecord);
 			}
-			totalScore += score;
-			countOfRecall++;
-			
-			EvaluationRecord evaluationRecord = new EvaluationRecord(EvaluationRecordType.CLASSIFICATION, instanceName, expected_className, real_className, score);
-			evaluationResult.addEvaluationRecord(evaluationRecord);
 		}
 		
-//		for(String relationName : proprietoryClassifiedInstancesRepository.getRelationSet()){
-//			MatchedOntProperty property = proprietoryClassifiedInstancesRepository.getMatchedOntProperty(relationName);
-//			String expected_propertyName = property.getOntPropertyName();
-//			String real_propertyName = evaluationCorpusRecordsReader.getPropertyLabelforRelation(relationName);
-//			double score = computePropertyMatchScore(expected_propertyName, real_propertyName);
-//			totalScore += score;
-//			count++;
-//			EvaluationRecord evaluationRecord = new EvaluationRecord(EvaluationRecordType.RELATION_PROPERTY_MAPPING, relationName, expected_propertyName, real_propertyName, score);
-//			evaluationResult.addEvaluationRecord(evaluationRecord);
-//		}
+		Set<String> allInstances = new HashSet<String>(evaluationCorpusRecordsReader.getInstanceSet());
+		allInstances.removeAll(classifiedInstances);
 		
-		double overallScore = totalScore / countOfRecall;
-		evaluationResult.setOverallScore(overallScore);
+		totalError += numberOfAllInstances - numberOfClassifiedInstances;
+		countOfCorrections += numberOfAllInstances - numberOfClassifiedInstances;
+		double precision = totalScore / numberOfClassifiedInstances;
+		double recall = totalScore / numberOfAllInstances;
+		double correctionRate = totalError/numberOfAllInstances;
+		evaluationResult.setNumberOfAllInstances(numberOfAllInstances);
+		evaluationResult.setNumberOfClassifiedInstances(numberOfClassifiedInstances);
+		evaluationResult.setTotalScore(totalScore);
 		evaluationResult.setTotalError(totalError);
+		evaluationResult.setPrecision(precision);
+		evaluationResult.setRecall(recall);
+		evaluationResult.setFmeasure(this.computeFmeasure(precision, recall));
 		evaluationResult.setNumberOfCorrections(countOfCorrections);
-		evaluationResult.setNumberOfRecall(countOfRecall);
+		evaluationResult.setCorrectionRate(correctionRate);
+		evaluationResult.setUnclassifiedInstances(allInstances);
 		return evaluationResult;
 	}
 
@@ -119,6 +131,10 @@ public class InterpretationEvaluator {
 		if (expected_propertyName.equals(real_propertyName))
 			score = 1.0;
 		return score;
+	}
+	
+	private double computeFmeasure(double score1, double score2){
+		return 2 * score1 * score2 / (score1 + score2);
 	}
 
 }

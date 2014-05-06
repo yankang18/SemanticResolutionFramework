@@ -48,7 +48,7 @@ public class Concept {
 		this.computingLabel = computeLabel;
 	}
 	public String getConceptName(){
-		return this.label;
+		return this.label.toLowerCase();
 	}
 	
 	public String getComputingLabel(){

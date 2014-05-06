@@ -39,7 +39,7 @@ import com.ibm.icu.util.StringTokenizer;
  * @author Yan Kang 
  *
  */
-public class DomainOntologyRepository implements IOntologyRepository {
+public class OntologyModel implements IOntologyRepository {
 	
 	private enum FileType {
 		OntoClass, OntoProperty, GlobalCode
@@ -118,12 +118,12 @@ public class DomainOntologyRepository implements IOntologyRepository {
 	 */
     private OntModel _ontModel;
     
-	public DomainOntologyRepository(OntModel ontModel) {
+	public OntologyModel(OntModel ontModel) {
 		this._ontModel = ontModel;
 		this.populate();
 	}
 
-	public DomainOntologyRepository(){}
+	public OntologyModel(){}
 	
 	private void populate() {
 		this.recordOntProperties();
@@ -142,6 +142,7 @@ public class DomainOntologyRepository implements IOntologyRepository {
 	
 	@Override
 	public OntoClassInfo getLightWeightOntClassByName(String className) {
+//		System.out.println("HERE&&& " + className.trim());
 		OntoClassInfo ontClassInfo = className2OntoClassObjectMap.get(className.trim());
 		if(ontClassInfo == null) return null;
 		OntoClassInfo ontClass = new OntoClassInfo(ontClassInfo.getURI(), 
@@ -274,41 +275,7 @@ public class DomainOntologyRepository implements IOntologyRepository {
 		}
 		return superOntClassesInPath;
 	}
-	
-//	@Override
-//	public Collection<String> getNamesOfSubClasses(OntoClassInfo ontoClassInfo){
-//		Collection<String> subClassNames = new HashSet<String>();
-//		String globalPathCode = this.getGlobalPathCode(ontoClassInfo);
-//		// GPC stands for Global Path Code
-//		for (String GPC : globalPathCode2OntClassMap.keySet()) {
-//			if (GPC.startsWith(globalPathCode)) {
-//				subClassNames.add(globalPathCode2OntClassMap.get(GPC).getOntClassName());
-//			}
-//		}
-//		return subClassNames;
-//	}
 
-//	@Override
-//	public Collection<String> getSemanticCotopy(OntoClassInfo ontoClassInfo) {
-//		Collection<String> maximalTributaryClassSet = new HashSet<String>();
-//		maximalTributaryClassSet.addAll(this.getUpwardCotopy(ontoClassInfo));
-//		maximalTributaryClassSet.addAll(this.getDownwardCotopy(ontoClassInfo));
-//		return maximalTributaryClassSet;
-//	}
-	
-//	@Override
-//	public Collection<String> getUpwardCotopy(OntoClassInfo ontoClassInfo){
-//		Collection<String> superClassNames = new HashSet<String>();
-//		String globalPathCode = this.getGlobalPathCode(ontoClassInfo);
-//		// GPC stands for Global Path Code
-//		for (String GPC : globalPathCode2OntClassMap.keySet()) {
-//			if (globalPathCode.startsWith(GPC)) {
-//				superClassNames.add(globalPathCode2OntClassMap.get(GPC).getOntClassName());
-//			}
-//		}
-//		return superClassNames;
-//	}
-	
 	@Override
 	public Collection<String> getDownwardCotopy(String className){
 		Collection<String> subTributaryClasses = new HashSet<String>();
@@ -335,6 +302,17 @@ public class DomainOntologyRepository implements IOntologyRepository {
 	public int getDepth(String className){
 		String globalPathCode = this.getGlobalPathCode(this.getLightWeightOntClassByName(className));
 		return this.tokenizePathCodeString(globalPathCode).length;
+	}
+	
+	@Override
+	public boolean isInTheSamePath(String firstClassName, String secondClassName){
+		if(firstClassName.equals(secondClassName)) return true;
+		
+		if(this.isSubClassOf(firstClassName, secondClassName, true) || this.isSuperClassOf(firstClassName, secondClassName, true)){
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	@Override
@@ -403,6 +381,40 @@ public class DomainOntologyRepository implements IOntologyRepository {
 		}
 		return true;
 	}
+	
+	@Override
+	public String getLowestCommonAncestor(String firstClassName, String secondClassName){
+		if (firstClassName.equals(secondClassName))
+			return firstClassName;
+		
+		OntoClassInfo firstClass = this.getLightWeightOntClassByName(firstClassName);
+		OntoClassInfo secondClass = this.getLightWeightOntClassByName(secondClassName);
+		
+		String firstGPC = this.getGlobalPathCode(firstClass);
+		String secondGPC = this.getGlobalPathCode(secondClass);
+		
+		String[] subjectTokens = this.tokenizePathCodeString(firstGPC);
+		String[] objectTokens = this.tokenizePathCodeString(secondGPC);
+		int sizeOfSubject = subjectTokens.length;
+		int sizeOfObject = objectTokens.length;
+		int size = sizeOfObject <= sizeOfSubject ? sizeOfObject : sizeOfSubject;
+		StringBuilder globalClassPath = new StringBuilder();
+		for (int i = 0; i < size; i++) {
+			if (subjectTokens[i].equals(objectTokens[i])) {
+				globalClassPath.append(subjectTokens[i] + "-");
+			} else {
+				break;
+			}
+		}
+		
+		String globalPathString = globalClassPath.toString();
+//		System.out.println("$" + globalPathString +" "+ " "+globalPathString.length());
+		globalPathString = globalPathString.substring(0, globalPathString.length() - 1);
+		return this.getOntClassByGlobalCode(globalPathString).getOntClassName();
+		
+	}
+	
+	
 
 //	@Override
 //	public Collection<Set<String>> retainOntClassesInSemanticCotopyOfOntClass(Collection<String> mappedOntClasses, String pivotOntClass){

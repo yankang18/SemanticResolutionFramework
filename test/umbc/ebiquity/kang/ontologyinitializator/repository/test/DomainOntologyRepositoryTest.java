@@ -65,6 +65,12 @@ public class DomainOntologyRepositoryTest {
 		secondClassName = "ReverseEngineeringService";
 		isInTheSameClassHierarchy = _repo.isInTheSameClassHierarchy(firstClassName, secondClassName);
 		Assert.assertEquals(isInTheSameClassHierarchy, true);
+		OntoClassInfo classInfo = _repo.getLightWeightOntClassByName("SheetMetalProcess");
+		if(classInfo != null){
+			System.out.println(classInfo.getOntClassName());
+		} else {
+			System.out.println("No sheet metal process");
+		}
 	}
 	
 	@Ignore

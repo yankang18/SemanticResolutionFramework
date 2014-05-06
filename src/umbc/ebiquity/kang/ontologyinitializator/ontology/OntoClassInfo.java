@@ -28,8 +28,6 @@ public class OntoClassInfo {
 	 */
 	private Collection<OntPropertyInfo> properties;
 	
-	
-	
 	private double similarityToConcept;
 	private OntoClassInfo bestMatchedSuperOntoClassInfo;
 	

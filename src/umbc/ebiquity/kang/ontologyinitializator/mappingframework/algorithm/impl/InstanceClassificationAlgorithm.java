@@ -78,6 +78,7 @@ public class InstanceClassificationAlgorithm implements IInstanceClassificationA
 	private void classifyInstances(Collection<InstanceTripleSet> instanceTripleSets, Collection<OntoClassInfo> ontClasses) {
 		List<ClassifiedInstanceDetailRecord> classifiedInstanceInfoes = new ArrayList<ClassifiedInstanceDetailRecord>();
 		for (InstanceTripleSet instanceTripleSet : instanceTripleSets) {
+			if(!instanceTripleSet.containsConcept()) continue;
 			
 			System.out.println();
 			System.out.println("Identifying class for: <" + instanceTripleSet.getSubjectLabel() + ">");

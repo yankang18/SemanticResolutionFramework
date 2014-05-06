@@ -15,7 +15,7 @@ public class TripleRepositoryExtractionTest {
 	
 	@Test
 	public void ExtractTriplesFromWebSite() throws IOException{ 
-		this.createTripleRepository(false).showTriples();
+		this.createTripleRepository(true).showTriples();
 	}
 	
 	@Test
@@ -26,7 +26,7 @@ public class TripleRepositoryExtractionTest {
 	
 	private ITripleRepository createTripleRepository(boolean local) throws IOException{
 		
-		String webSiteURLString = "http://www.bassettinc.com";
+		String webSiteURLString = "http://www.aerostarmfg.com";
 //		String webSiteURLString = "http://www.accutrex.com";
 		URL webSiteURL = new URL(webSiteURLString);
 		

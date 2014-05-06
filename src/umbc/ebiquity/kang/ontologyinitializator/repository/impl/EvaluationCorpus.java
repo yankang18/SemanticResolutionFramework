@@ -69,7 +69,7 @@ public class EvaluationCorpus implements IEvaluationCorpusRecordsReader {
 			String instance = "";
 			while ((line = reader.readLine()) != null) {
 				// this.loadRecord(line);
-				if (this.isBlank(line)) {
+				if (this.isBlank(line) || line.contains("==")) {
 					preRecordType = "Blank";
 					continue;
 				}
@@ -136,9 +136,9 @@ public class EvaluationCorpus implements IEvaluationCorpusRecordsReader {
 		return original.substring(1, original.length() - 1);
 	}
 	
-	private void loadRecord(String line) {
-		_evaluationCorpus.parseRecord(line);
-	}
+//	private void loadRecord(String line) {
+//		_evaluationCorpus.parseRecord(line);
+//	}
 	
 	@Override
 	public String getClassLabelforInstance(String instanceLabel){
@@ -163,6 +163,16 @@ public class EvaluationCorpus implements IEvaluationCorpusRecordsReader {
 	@Override
 	public String getOntClassForConcept(String conceptLabel) {
 		return _evaluationCorpus.getOntClassForConcept(conceptLabel);
+	}
+
+	@Override
+	public boolean containsInstance(String instanceLabel) {
+		return _evaluationCorpus.containsInstance(instanceLabel);
+	}
+
+	@Override
+	public Set<String> getInstanceSet() {
+		return _evaluationCorpus.getInstanceSet();
 	}
 
 	

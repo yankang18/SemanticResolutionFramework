@@ -46,7 +46,8 @@ public class ClassifiedInstancesRepositoryFactory {
 
 	public static IClassifiedInstancesRepository createProprietoryClassifiedInstancesRepository(URL webSiteURL,
 																								IOntologyRepository ontologyRepository, 
-																								boolean loadLocal,boolean applyMappingRule,
+																								boolean loadLocal,
+																								boolean applyMappingRule,
 																								boolean applyCorrection) throws IOException {
 
 		String repositoryName = FileUtility.convertURL2FileName(webSiteURL);

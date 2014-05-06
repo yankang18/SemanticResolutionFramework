@@ -46,7 +46,7 @@ public class ManufacturingLexiconRepositoryTest {
 	
 	@BeforeClass
 	public static void init() throws IOException {
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/Test";
+		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
 		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
 		System.out.println("@@@1 " + RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH);
 		fakeDataCreator = new FakeDataCreator();
@@ -66,7 +66,7 @@ public class ManufacturingLexiconRepositoryTest {
 	@Test
 	public void xxxx() throws IOException{ 
 		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop";
-		RepositoryParameterConfiguration.MANUFACTUIRNG_LEXICON_HOST_DIRECTORY = "/Users/yankang/Desktop/Test_Rule_Naive";
+		RepositoryParameterConfiguration.MANUFACTUIRNG_LEXICON_HOST_DIRECTORY = "/Users/yankang/Desktop";
 		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
 		IManufacturingLexicalMappingRecordsReader aggregratedManufacturingLexicalMappingRepository = ManufacturingLexicalMappingRepositoryFactory
 				.createAggregratedManufacturingLexicalMappingRepository(OntologyRepositoryFactory.createOntologyRepository());

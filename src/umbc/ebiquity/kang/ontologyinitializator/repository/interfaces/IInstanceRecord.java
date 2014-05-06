@@ -55,6 +55,10 @@ public interface IInstanceRecord extends IConcept2OntClassMappingPairSet{
 	void addConcept2OntClassMappingPair(Concept concept, MappingRelationType relation, OntoClassInfo ontClass, boolean isDirectMapping,
 			boolean isManualMapping, double similarity);
 
-	public boolean isLabelChanged();  
+	public boolean isLabelChanged();
+
+	void setDeletedInstance(boolean isDeletedInstance);
+
+	boolean isDeletedInstance();   
 	
 }

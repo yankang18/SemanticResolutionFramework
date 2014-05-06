@@ -8,7 +8,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.util.FileManager;
 import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
-import umbc.ebiquity.kang.ontologyinitializator.repository.impl.DomainOntologyRepository;
+import umbc.ebiquity.kang.ontologyinitializator.repository.impl.OntologyModel;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
 import umbc.ebiquity.kang.ontologyinitializator.utilities.FileUtility;
 
@@ -27,7 +27,7 @@ public class OntologyRepositoryFactory {
 
 		if (exists1 && exists2 && exists3) {
 
-			IOntologyRepository ontologyRepository = new DomainOntologyRepository();
+			IOntologyRepository ontologyRepository = new OntologyModel();
 			boolean succeed = ontologyRepository.loadRepository();
 			if (succeed) {
 				return ontologyRepository;
@@ -87,7 +87,7 @@ public class OntologyRepositoryFactory {
 		Model model = ModelFactory.createDefaultModel();
 		model.read(instream, "");
 		OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM, model);
-		IOntologyRepository ontologyRepository = new DomainOntologyRepository(ontModel);
+		IOntologyRepository ontologyRepository = new OntologyModel(ontModel);
 		boolean succeed = ontologyRepository.saveRepository();
 		if (succeed) {
 			return ontologyRepository;
