@@ -16,8 +16,8 @@ import uk.ac.shef.wit.simmetrics.tokenisers.TokeniserQGram2Extended;
 import uk.ac.shef.wit.simmetrics.tokenisers.TokeniserQGram3Extended;
 import umbc.csee.ebiquity.ontologymatcher.algorithm.component.MSMLabelSimilarity;
 import umbc.csee.ebiquity.ontologymatcher.config.AlgorithmMode.MAP_CARDINALITY;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Concept;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.EntityNode;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityNode;
 import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
 
 public class SimilarityAlgorithm {

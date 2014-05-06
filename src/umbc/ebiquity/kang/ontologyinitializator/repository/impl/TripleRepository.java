@@ -24,10 +24,11 @@ import java.util.StringTokenizer;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Concept;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.EntityNode;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityNode;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.InstanceTripleSet;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.Triple;
+import umbc.ebiquity.kang.ontologyinitializator.ontology.Triple.BuiltinType;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.TripleSorterBySubject;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.Triple.BuiltinPredicate;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.Triple.PredicateType;
@@ -49,11 +50,15 @@ public class TripleRepository implements ITripleRepository {
 //	private String projectDir;
 	private String tripleStoreURI;
 	private String tripleStoreName;
+	private int numberOfRelations;
+	private int numberOfTriples;
 //	private String storeDirectory = "/TripleStorage/";
 	/**
 	 * This Set stores all the triples
 	 */
 	private Set<Triple> theWholeTripleSet;
+	
+	private Set<Triple> relationTypeTriple;
 	
 	/**
 	 * This Map maps subjects to their group
@@ -122,13 +127,13 @@ public class TripleRepository implements ITripleRepository {
 	 * 
 	 * @param knowledgeBaseURI
 	 * @param knowledgeBaseName
-	 * @param tripleCollection
+	 * @param tripleSet
 	 */
-	public TripleRepository(Collection<Triple> tripleCollection, URL webSiteURL) {
+	public TripleRepository(Collection<Triple> tripleSet, URL webSiteURL) {
 		this.init();
 		this.tripleStoreURI = webSiteURL.toString();
-		this.theWholeTripleSet.addAll(tripleCollection);
-		this.tripleAssignment(tripleCollection);
+		this.theWholeTripleSet.addAll(tripleSet);
+		this.tripleAssignment(tripleSet);
 		this.constructHierarchy(classNodeDescendantMap, classNodePrecedentMap, triplesWithClassSubsumptionPredicate);
 		this.constructHierarchy(propertyNodeDescendantMap, propertyNodePrecedentMap, triplesWithPropertySubsumptionPredicate);
 	}
@@ -140,6 +145,8 @@ public class TripleRepository implements ITripleRepository {
 //		this.projectDir = System.getProperty("user.dir");
 		this.theWholeTripleSet = new LinkedHashSet<Triple>();
 		this.subject2TripleSetMap = new LinkedHashMap<String, InstanceTripleSet>();
+		this.relationTypeTriple = new HashSet<Triple>();
+	
 		this.triplesWithCustomRelation = new LinkedHashSet<Triple>();
 		this.triplesWithPropertySubsumptionPredicate = new LinkedHashSet<Triple>();
 		this.triplesWithClassSubsumptionPredicate = new LinkedHashSet<Triple>();
@@ -157,9 +164,9 @@ public class TripleRepository implements ITripleRepository {
 	 * This method does the groundwork including group triples based on their
 	 * subjects, types of predicate and predicates themselves
 	 */
-	private void tripleAssignment(Collection<Triple> tripleCollection) {
+	private void tripleAssignment(Collection<Triple> tripleSet) {
 
-		for (Triple triple : tripleCollection) {
+		for (Triple triple : tripleSet) {
 			PredicateType predicateType = triple.getPredicateType();
 			String subject = triple.getSubject().trim();
 			
@@ -209,19 +216,26 @@ public class TripleRepository implements ITripleRepository {
 					customRelation2ObjectMap.put(customRelation, relationObjects);
 				}
 				relationObjects.add(object);
-				
+				numberOfTriples++;
 				
 			} else if (PredicateType.Builtin == predicateType) {
 				if (BuiltinPredicate.SubRole.toString().equals(triple.getPredicate())) {
 					triplesWithPropertySubsumptionPredicate.add(triple);
 					instanceTripleSet.addTaxonomicTriple(triple);
+					numberOfTriples++;
 				} else if (BuiltinPredicate.SubConcept.toString().equals(triple.getPredicate())) {
 					triplesWithClassSubsumptionPredicate.add(triple);
 					instanceTripleSet.addTaxonomicTriple(triple);
-				} else if (BuiltinPredicate.isAspectOf.toString().equals(triple.getPredicate())) {
+					numberOfTriples++;
+				} else if (BuiltinPredicate.hasConcept.toString().equals(triple.getPredicate())) {
 					triplesOfInstance2ConceptsRelation.add(triple);
 					instanceTripleSet.addInstance2ConceptTriple(triple);
-				} 
+					numberOfTriples++;
+				} else if (BuiltinPredicate.isTypeOf.toString().equals(triple.getPredicate())){
+					relationTypeTriple.add(triple);
+					numberOfRelations++;
+					numberOfTriples++;
+				}
 			}
 		}
 	}
@@ -301,21 +315,23 @@ public class TripleRepository implements ITripleRepository {
 		Map<String, String> metaDataRecord = new LinkedHashMap<String, String>();
 		metaDataRecord.put(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE, MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE_META_DATA);
 		metaDataRecord.put(MappingInfoSchemaParameter.TRIPLE_STORE_URI, this.tripleStoreURI);
+		metaDataRecord.put(MappingInfoSchemaParameter.TRIPLE_STORE_NUMBER_OF_TRIPLES, String.valueOf(this.numberOfTriples));
+		metaDataRecord.put(MappingInfoSchemaParameter.TRIPLE_STORE_NUMBER_OF_RELATIONS, String.valueOf(this.numberOfRelations));
 		triplesStringBuilder.append(JSONValue.toJSONString(metaDataRecord));
 		triplesStringBuilder.append(MappingInfoSchemaParameter.LINE_SEPARATOR);
 		
 		for (InstanceTripleSet instanceTripleSet : this.subject2TripleSetMap.values()) {
 			hasTriples = true;
 			String subjectLabel = instanceTripleSet.getSubjectLabel();
-			Map<String, Set<String>> customRelation2ValueMap = instanceTripleSet.getCustomRelation2ValueMap();
-			Map<String, Set<Concept>> instance2ConceptSetMap = instanceTripleSet.getInstance2ConceptSetMap();
-			for (String relationLabel : customRelation2ValueMap.keySet()) {
+			Map<String, Set<String>> relation2ValueMap = instanceTripleSet.getRelation2ValueMap();
+			Map<String, Set<Concept>> instance2ConceptSetMap = instanceTripleSet.getInstance2ConceptualSetMap();
+			for (String relationLabel : relation2ValueMap.keySet()) {
 				/*
-				 * create data records for relation-to-property mappings
+				 * create data records for relation-values mappings
 				 */
 				Map<String, String> tripleRecord = new LinkedHashMap<String, String>();
-				for (String valueLabel : customRelation2ValueMap.get(relationLabel)) {
-					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE, MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE_PROPERTY_MAPPING);
+				for (String valueLabel : relation2ValueMap.get(relationLabel)) {
+					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE, MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE_RELATION_VALUE);
 					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_SUBJECT, subjectLabel);
 					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_PREDICATE, relationLabel);
 					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_OBJECT, valueLabel);
@@ -332,8 +348,10 @@ public class TripleRepository implements ITripleRepository {
 					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_PREDICATE_TYPE, predicateTypeStr);
 					triplesStringBuilder.append(JSONValue.toJSONString(tripleRecord));
 					triplesStringBuilder.append(MappingInfoSchemaParameter.LINE_SEPARATOR);
+					numberOfTriples++;
 				}
 			}
+			
 			for (String relationLabel : instance2ConceptSetMap.keySet()) {
 				/*
 				 * create data records for class-concept mappings
@@ -345,7 +363,7 @@ public class TripleRepository implements ITripleRepository {
 					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_PREDICATE, relationLabel);
 					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_OBJECT, concept.getConceptName());
 					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_OBJECT_AS_CONCEPT_SCORE, String.valueOf(concept.getScore()));
-					
+
 					/*
 					 * 
 					 */
@@ -355,7 +373,7 @@ public class TripleRepository implements ITripleRepository {
 					} else {
 						predicateTypeStr = PredicateType.Custom.toString();
 					}
-					
+
 					tripleRecord.put(MappingInfoSchemaParameter.NORMALIZED_TRIPLE_OBJECT, "");
 					tripleRecord.put(MappingInfoSchemaParameter.NORMALIZED_TRIPLE_SUBJECT, "");
 					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_PREDICATE_TYPE, predicateTypeStr);
@@ -366,8 +384,35 @@ public class TripleRepository implements ITripleRepository {
 					tripleRecord.put(MappingInfoSchemaParameter.IS_FROM_INSTANCE, isFromInstance);
 					triplesStringBuilder.append(JSONValue.toJSONString(tripleRecord));
 					triplesStringBuilder.append(MappingInfoSchemaParameter.LINE_SEPARATOR);
+					numberOfTriples++;
 				}
 			}
+		}
+		
+		for (Triple triple : relationTypeTriple) {
+			/*
+			 * create data records for relation-to-property mappings
+			 */
+			Map<String, String> tripleRecord = new LinkedHashMap<String, String>();
+			tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE, MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE_RELATION_DEFINITION);
+			tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_SUBJECT, triple.getSubject());
+			tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_PREDICATE, triple.getPredicate());
+			tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_OBJECT, triple.getObject());
+
+			String predicateTypeStr = "";
+			if (Triple.BuiltinPredicateSet.contains(triple.getPredicate())) {
+				predicateTypeStr = PredicateType.Builtin.toString();
+			} else {
+				predicateTypeStr = PredicateType.Custom.toString();
+			}
+
+			tripleRecord.put(MappingInfoSchemaParameter.NORMALIZED_TRIPLE_OBJECT, "");
+			tripleRecord.put(MappingInfoSchemaParameter.NORMALIZED_TRIPLE_SUBJECT, "");
+			tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_PREDICATE_TYPE, predicateTypeStr);
+			triplesStringBuilder.append(JSONValue.toJSONString(tripleRecord));
+			triplesStringBuilder.append(MappingInfoSchemaParameter.LINE_SEPARATOR);
+			numberOfTriples++;
+			numberOfRelations++;
 		}
 		
 		if (hasTriples) {
@@ -480,9 +525,11 @@ public class TripleRepository implements ITripleRepository {
 	 */
 	private void getMetaData(JSONObject record) {
 		String triple_store_URI = (String) record.get(MappingInfoSchemaParameter.TRIPLE_STORE_URI);
-//		String triple_store_Name = (String) record.get(MappingInfoSchemaParameter.TRIPLE_STORE_NAME);
+		String triple_store_Relations = (String) record.get(MappingInfoSchemaParameter.TRIPLE_STORE_NUMBER_OF_RELATIONS);
+		String triple_store_Triples = (String) record.get(MappingInfoSchemaParameter.TRIPLE_STORE_NUMBER_OF_TRIPLES);
 		this.tripleStoreURI = triple_store_URI;
-//		this.tripleStoreName = triple_store_Name;
+		this.numberOfRelations = Integer.valueOf(triple_store_Relations);
+		this.numberOfTriples = Integer.valueOf(triple_store_Triples);
 	}
 
 	private void createTriple(JSONObject record) {
@@ -503,8 +550,10 @@ public class TripleRepository implements ITripleRepository {
 			Concept concept = new Concept(object, isFromInstance);
 			concept.setScore(score);
 			triple = new Triple(subject, concept);
-		} else if (triple_record_type.equals(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE_PROPERTY_MAPPING)) {
+		} else if (triple_record_type.equals(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE_RELATION_VALUE)) {
 			triple = new Triple(subject, n_subject, predicate, object, n_object);
+		} else if (triple_record_type.equals(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE_RELATION_DEFINITION)) {
+			triple = new Triple(subject, BuiltinType.Property);
 		}
 
 		String predicateType = predicate_Type.trim();
@@ -530,6 +579,7 @@ public class TripleRepository implements ITripleRepository {
 		return tripleList;
 	}
 	
+	@Override
 	public Map<String, Collection<Triple>> getInstanceName2CustomRelationTripleMap() {
 		List<Triple> tripleList = new ArrayList<Triple>(this.triplesWithCustomRelation);
 		Collections.sort(tripleList, new TripleSorterBySubject());
@@ -542,10 +592,16 @@ public class TripleRepository implements ITripleRepository {
 		return tripleList;
 	}
 	
+	@Override
 	public Map<String, Collection<Triple>> getInstanceName2ConceptRelationTripleMap(){
 		List<Triple> tripleList = new ArrayList<Triple>(this.triplesOfInstance2ConceptsRelation);
 		Collections.sort(tripleList, new TripleSorterBySubject());
 		return this.groupTriplesByInstanceName(tripleList);
+	}
+	
+	@Override
+	public Set<Triple> getRelationTypeTriple(){
+		return relationTypeTriple;
 	}
 	
 	private Map<String, Collection<Triple>> groupTriplesByInstanceName(List<Triple> tripleList){

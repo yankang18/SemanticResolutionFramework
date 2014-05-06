@@ -3,12 +3,13 @@ package umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.impl;
 import java.util.Collection;
 
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRecordsAccessor;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
 
 public class RestrictedConcept2ClassMappingPenalizeRule extends AbstractConcept2ClassMappingPenalizeRule {
 
-	public RestrictedConcept2ClassMappingPenalizeRule(IOntologyRepository ontologyRepository, IManufacturingLexicalMappingRepository MLRepository) {
+	public RestrictedConcept2ClassMappingPenalizeRule(IOntologyRepository ontologyRepository, IManufacturingLexicalMappingRecordsAccessor MLRepository) {
 		super(ontologyRepository, MLRepository);
 	}
 

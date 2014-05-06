@@ -20,7 +20,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import umbc.csee.ebiquity.ontologymatcher.algorithm.component.OntPropertyInfo;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Concept;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.InstanceTripleSet;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.MatchedOntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
@@ -33,13 +33,15 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterCo
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstanceBasicRecord;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstanceDetailRecord;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMapping;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRecordsReader;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IMatchedOntProperty;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IProprietoryClassifiedInstancesRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IUpdatedInstanceRecord;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstancesRepository;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceRecord;
+import umbc.ebiquity.kang.ontologyinitializator.utilities.FileUtility;
 
-public class ProprietoryClassifiedInstancesRepository implements IProprietoryClassifiedInstancesRepository {
+public class ProprietoryClassifiedInstancesRepository implements IClassifiedInstancesRepository {
 
 	public enum ClassifiedInstancesRepositoryType {
 		Basic, Detail, All
@@ -55,6 +57,7 @@ public class ProprietoryClassifiedInstancesRepository implements IProprietoryCla
 
 	private StringBuilder _basicRecords;
 	private StringBuilder _detailRecords;
+	private StringBuilder _textRecords;
 	
 	/***
 	 * This Constructor is called when the mapping information is loaded from
@@ -302,6 +305,49 @@ public class ProprietoryClassifiedInstancesRepository implements IProprietoryCla
 //		return new UpdatedInstanceRecord();
 //	}
 	
+	private void createTextRecordOfMappingInfo(){
+		System.out.println("### createTextRecordOfMappingInfo ");
+		this._textRecords = new StringBuilder();
+		for(String instanceName : _instanceURI2DetailedInstanceRecordMap.keySet()){
+
+			IClassifiedInstanceDetailRecord classifiedInstanceInfo = _instanceURI2DetailedInstanceRecordMap.get(instanceName);
+			OntoClassInfo ontoClassInfo = classifiedInstanceInfo.getMatchedOntoClass();
+			String instance2OntClass = "<"+instanceName + ">	<" + ontoClassInfo.getOntClassName() + ">";
+			System.out.println("I2C: " + instance2OntClass);
+			_textRecords.append("C	" + instance2OntClass);
+			_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+			for (IConcept2OntClassMapping concept2OntClassMappingPair : classifiedInstanceInfo.getConcept2OntClassMappingPairs()) {
+				
+				if (concept2OntClassMappingPair.isMappedConcept()) {
+					/*
+					 * if the concept has mapped to certain onto-class, record
+					 * the basic information of this onto-class
+					 */
+					Concept concept = new Concept(concept2OntClassMappingPair.getConceptName());
+					OntoClassInfo ontoClassInfo2 = concept2OntClassMappingPair.getMappedOntoClass();
+					System.out.println("C2C: " + concept.getConceptName() + " " + ontoClassInfo2.getOntClassName());
+					String concept2OntClass = "               <" + concept.getConceptName() + ">	<" + ontoClassInfo2.getOntClassName() + ">";
+					_textRecords.append(concept2OntClass);
+					_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+				}
+			}
+			_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		}
+		
+		_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		
+		for (IMatchedOntProperty mappedRelationInfo : _relationName2RPMappingPairMap.values()) {
+
+			String relationName = mappedRelationInfo.getRelationName();
+			String propertyName = mappedRelationInfo.getOntPropertyName();
+			String relation2Property = "R	<" + relationName + ">	<" + propertyName + ">";
+			_textRecords.append(relation2Property);
+			_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		}
+	}
+	
 	private void createJSONRecordOfBasicMappingInfo() {
 
 		this._basicRecords = new StringBuilder();
@@ -310,6 +356,7 @@ public class ProprietoryClassifiedInstancesRepository implements IProprietoryCla
 			IClassifiedInstanceBasicRecord basicInstanceInfo =	_instanceURI2BasicInstanceRecordMap.get(instanceName);
 			OntoClassInfo ontoClassInfo = basicInstanceInfo.getMatchedOntoClass();
 			String similarity = String.valueOf(basicInstanceInfo.getSimilarity());
+			
 			/*
              * 
              */
@@ -461,6 +508,25 @@ public class ProprietoryClassifiedInstancesRepository implements IProprietoryCla
 		} else {
 			// TODO: to do some clean up work
 			return false;
+		}
+	}
+	
+	public boolean saveHumanReadableFile(String goldenStandardsFullPath){
+		
+		this.createTextRecordOfMappingInfo();
+//		String dirFullPath = RepositoryParameterConfiguration.getMappingHumanReadableDirectoryFullPath();
+		String dirFullPath = goldenStandardsFullPath;
+		boolean dirExists = FileUtility.exists(dirFullPath);
+		String fileFullName = dirFullPath + _repositoryName;;
+		if(dirExists){
+		 return FileAccessor.saveTripleString(fileFullName, _textRecords.toString());
+		} else {
+			boolean succeed = FileUtility.createDirectories(dirFullPath);
+			if(succeed){
+				return FileAccessor.saveTripleString(fileFullName, _textRecords.toString());
+			} else {
+				return false;
+			}
 		}
 	}
 	
@@ -734,16 +800,25 @@ public class ProprietoryClassifiedInstancesRepository implements IProprietoryCla
 	}
 	
 	@Override
-	public void updateInstance(IUpdatedInstanceRecord updatedInstance){
+	public MatchedOntProperty getMatchedOntProperty(String relationLabel){
+		return _relationName2RPMappingPairMap.get(relationLabel);
+	}
+	
+	@Override
+	public void updateInstance(IInstanceRecord updatedInstance){
 		this.updateInstanceClass(updatedInstance);
 		this.updateInstanceLabel(updatedInstance);
 		
 	}
 	
-	private void updateInstanceLabel(IUpdatedInstanceRecord updatedInstance) {
+	private void updateInstanceLabel(IInstanceRecord updatedInstance) {
+		String originalLabel = updatedInstance.getOriginalInstanceName();
+		IClassifiedInstanceDetailRecord originalDetailedInstanceRecord1 = this._instanceURI2DetailedInstanceRecordMap.get(originalLabel);
+		originalDetailedInstanceRecord1.setConcept2OntClassMappingPairs(updatedInstance.getConcept2OntClassMappingPairs());
+		
 		if (updatedInstance.isLabelChanged()) {
-			System.out.println("   INSTANCE LABEL CHANGED");
-			String originalLabel = updatedInstance.getOriginalInstanceName();
+			System.out.println("###   INSTANCE LABEL CHANGED");
+//			String originalLabel = updatedInstance.getOriginalInstanceName();
 			String newLabel = updatedInstance.getUpdatedInstance();
 			IClassifiedInstanceBasicRecord originalBasicInstanceRecord = this._instanceURI2BasicInstanceRecordMap.get(originalLabel);
 			IClassifiedInstanceDetailRecord originalDetailedInstanceRecord = this._instanceURI2DetailedInstanceRecordMap.get(originalLabel);
@@ -765,29 +840,12 @@ public class ProprietoryClassifiedInstancesRepository implements IProprietoryCla
 		}
 	}
 	
-	private void updateInstanceClass(IUpdatedInstanceRecord updatedInstance) {
+	private void updateInstanceClass(IInstanceRecord updatedInstance) {
 		if (updatedInstance.isOntClassChanged()) {
 			System.out.println("   INSTANCE CLASS CHANGED");
 			String instanceLabel = updatedInstance.getOriginalInstanceName();
 			String classLabel = updatedInstance.getUpdatedClassName();
 			this.updateInstanceClass(instanceLabel, classLabel);
-			
-//			IClassifiedInstanceBasicRecord originalBasicInstanceRecord = this._instanceURI2BasicInstanceRecordMap.get(instanceLabel);
-//			IClassifiedInstanceDetailRecord originalDetailedInstanceRecord = this._instanceURI2DetailedInstanceRecordMap.get(instanceLabel);
-//
-//			OntoClassInfo ontoClassInfo2 = originalBasicInstanceRecord.getMatchedOntoClass();
-//			ontoClassInfo2.setLabel(classLabel);
-//			ontoClassInfo2.setURI(ontoClassInfo2.getNameSpace() + classLabel);
-//
-//			OntoClassInfo ontoClassInfo = originalDetailedInstanceRecord.getMatchedOntoClass();
-//			ontoClassInfo.setLabel(classLabel);
-//			ontoClassInfo.setURI(ontoClassInfo.getNameSpace() + classLabel);
-//			
-//			IClassifiedInstanceBasicRecord originalBasicInstanceRecord2 = this._instanceURI2BasicInstanceRecordMap.get(instanceLabel);
-//			IClassifiedInstanceDetailRecord originalDetailedInstanceRecord2 = this._instanceURI2DetailedInstanceRecordMap.get(instanceLabel);
-//			String changedClassLabel1 = originalBasicInstanceRecord2.getOntoClassName();
-//			String changedClassLabel2 = originalDetailedInstanceRecord2.getOntoClassName();
-//			System.out.println(changedClassLabel1 + " " + changedClassLabel2);
 		}
 	}
 
@@ -799,9 +857,11 @@ public class ProprietoryClassifiedInstancesRepository implements IProprietoryCla
 		OntoClassInfo ontoClassForBasicInstanceRecord = originalBasicInstanceRecord.getMatchedOntoClass();
 		ontoClassForBasicInstanceRecord.setLabel(classLabel);
 		ontoClassForBasicInstanceRecord.setURI(ontoClassForBasicInstanceRecord.getNameSpace() + classLabel);
-
+		System.out.println("### Update Instance Class Label to: " + classLabel);
 		OntoClassInfo ontoClassForDetailInstanceRecord = this._ontologyRepository.getHeavyWeightOntClassByName(classLabel);
 		
+		
+		System.out.println(ontoClassForDetailInstanceRecord.getHierarchyNumber());
 //		ontoClassForDetailInstanceRecord.addProperties(_ontologyRepository.getDeclaredOntProperties(ontoClassForDetailInstanceRecord));
 //		ontoClassForDetailInstanceRecord.addSuperOntClassesInHierarchy(_ontologyRepository.getSuperOntoClassesInClassPath(ontoClassForDetailInstanceRecord));
 //		ontoClassForDetailInstanceRecord.setHierarchyNumber(_ontologyRepository.getOntClassHierarchyNumber(ontoClassForDetailInstanceRecord)); 
@@ -824,10 +884,14 @@ public class ProprietoryClassifiedInstancesRepository implements IProprietoryCla
 
 	@Override
 	public Set<String> getInstanceSet(){
-//		return _instanceSet;
 		return _instanceURI2DetailedInstanceRecordMap.keySet();
 	}
 
+	@Override
+	public Set<String> getRelationSet(){
+		return _relationName2RPMappingPairMap.keySet();
+	}
+	
 	@Override
 	public void showRepositoryDetail() {
 		System.out.println("SHOW REPOSITORY DETAIL");
@@ -884,6 +948,10 @@ public class ProprietoryClassifiedInstancesRepository implements IProprietoryCla
 	@Override
 	public String getRepositoryName(){
 		return this._repositoryName;
+	}
+	
+	public IManufacturingLexicalMappingRepository getManufacturingLexicalMappingRepository(){
+		return this._manufacturingLexiconRepository;
 	}
 
 }

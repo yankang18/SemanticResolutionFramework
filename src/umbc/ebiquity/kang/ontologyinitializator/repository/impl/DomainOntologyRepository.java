@@ -234,6 +234,7 @@ public class DomainOntologyRepository implements IOntologyRepository {
 	@Override
 	public Collection<OntoClassInfo> getUpwardCotopy(OntoClassInfo ontClass) {
 		Collection<OntoClassInfo> superOntClassesInPath = new ArrayList<OntoClassInfo>();
+//		System.out.println("@@ " + ontClass.getOntClassName());
 		int classHierarchyNumber = this.getOntClassHierarchyNumber(ontClass);
 		String localPathCodeString = this.getLocalPathCode(ontClass);
 		String[] localPathCodeArray = tokenizePathCodeString(localPathCodeString);
@@ -328,6 +329,12 @@ public class DomainOntologyRepository implements IOntologyRepository {
 //			subTributaryClasses.addAll(subClasses);
 //		} 
 		return subTributaryClasses;
+	}
+	
+	@Override
+	public int getDepth(String className){
+		String globalPathCode = this.getGlobalPathCode(this.getLightWeightOntClassByName(className));
+		return this.tokenizePathCodeString(globalPathCode).length;
 	}
 	
 	@Override
@@ -1140,6 +1147,7 @@ public class DomainOntologyRepository implements IOntologyRepository {
 	/**
 	 * for test and dubug
 	 */
+	@Override
 	public void printOntologyInfo(){
 		this.printTopLevelOntoClass();
 		this.printAllOntoClasses();

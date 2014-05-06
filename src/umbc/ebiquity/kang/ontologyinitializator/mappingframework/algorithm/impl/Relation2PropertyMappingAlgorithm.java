@@ -20,7 +20,7 @@ import umbc.csee.ebiquity.ontologymatcher.algorithm.component.SimilarityMatrixLa
 import umbc.csee.ebiquity.ontologymatcher.algorithm.component.MSMResult.SubMapping;
 import umbc.csee.ebiquity.ontologymatcher.algorithm.component.OntPropertyInfo.OntPropertyType;
 import umbc.csee.ebiquity.ontologymatcher.config.AlgorithmMode;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.EntityValidator;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityValidator;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.SimilarityAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.SimilarityAlgorithm.SimilarityType;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IMappingAlgorithmComponent;
@@ -81,6 +81,10 @@ public class Relation2PropertyMappingAlgorithm implements IRelation2PropertyMapp
 	@Override
 	public void mapRelations2OntProperties(){
 		Collection<OntPropertyInfo> ontRelationCollection = this.extractRelationsFromTripleRepository();
+		System.out.println("kk:");
+		for(OntPropertyInfo info : ontRelationCollection){
+			System.out.println("kk: " + info.getLocalName());;
+		}
 		MSMResult result = this.relation2PropertyMapper.matchRelations2OntProperties(ontRelationCollection, domaindOntology.getAllOntProperties());
 		this.hashMatchedRelation2PropertyPairs(result);
 	}
@@ -130,17 +134,36 @@ public class Relation2PropertyMappingAlgorithm implements IRelation2PropertyMapp
 				String ontPropertyName = subMapping.t.getLocalName();
 				String ontPropertyURI = subMapping.t.getURI();
 				String ontPropertyNS = subMapping.t.getNameSpace();
+//				System.out.println(" having: " + relationName + " --> " + ontPropertyName);
 				double sim = subMapping.getSimilarity();
-				MatchedOntProperty pair = new MatchedOntProperty(relationName, ontPropertyURI, ontPropertyNS, ontPropertyName, sim);
-				if(!relation2PropertyMap.containsKey(relationName) && sim >= this.thresholdForRelation2Property){
-					relation2PropertyMap.put(relationName, pair);
-					double sim1 = labelSimilarity.computeLabelSimilarity(ontPropertyName, relationName);
-					double sim2 = similarityAlg.getSimilarity(SimilarityType.Ngram, ontPropertyName, relationName);
-					if(Math.max(sim1, sim2) < thresholdForDifference){
-					    relationName = TextProcessingUtils.tokenizeLabel2String(relationName, true, true, 1);
-					    ontPropertyName = TextProcessingUtils.tokenizeLabel2String(ontPropertyName, true, true, 1);
-						informativeRelation2PropertyMap.put(relationName, ontPropertyName);
+				if(sim >= this.thresholdForRelation2Property){
+					
+					if(relation2PropertyMap.containsKey(relationName)){
+						MatchedOntProperty origMappedProperty = relation2PropertyMap.get(relationName);
+						String origPropertyName = origMappedProperty.getOntPropertyName();
+						double origSim = origMappedProperty.getSimilarity();
+						if (sim > origSim
+								&& (ontPropertyName.length() < origPropertyName.length() || ontPropertyName.compareTo(origPropertyName) > 0)) {
+							MatchedOntProperty pair = new MatchedOntProperty(relationName, ontPropertyURI, ontPropertyNS, ontPropertyName, sim);
+//							System.out.println(" replaced: " + relationName + " --> " + pair.getOntPropertyName());
+							relation2PropertyMap.put(relationName, pair);
+						}
+					} else {
+						MatchedOntProperty pair = new MatchedOntProperty(relationName, ontPropertyURI, ontPropertyNS, ontPropertyName, sim);
+//						System.out.println(" added: " + relationName + " --> " + pair.getOntPropertyName());
+						relation2PropertyMap.put(relationName, pair);
 					}
+				}
+			}
+			
+			for(String relationName : relation2PropertyMap.keySet()){
+				String ontPropertyName = relation2PropertyMap.get(relationName).getOntPropertyName();
+				double sim1 = labelSimilarity.computeLabelSimilarity(ontPropertyName, relationName);
+				double sim2 = similarityAlg.getSimilarity(SimilarityType.Ngram, ontPropertyName, relationName);
+				if (Math.max(sim1, sim2) < thresholdForDifference) {
+					relationName = TextProcessingUtils.tokenizeLabel2String(relationName, true, true, 1);
+					ontPropertyName = TextProcessingUtils.tokenizeLabel2String(ontPropertyName, true, true, 1);
+					informativeRelation2PropertyMap.put(relationName, ontPropertyName);
 				}
 			}
 		}

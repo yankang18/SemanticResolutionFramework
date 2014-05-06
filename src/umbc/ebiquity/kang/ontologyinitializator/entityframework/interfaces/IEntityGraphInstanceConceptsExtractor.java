@@ -3,8 +3,8 @@ package umbc.ebiquity.kang.ontologyinitializator.entityframework.interfaces;
 import java.util.Collection;
 import java.util.Set;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Concept;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.EntityNode;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityNode;
 
 public interface IEntityGraphInstanceConceptsExtractor extends IReadOnlyEntityGraph {
 	

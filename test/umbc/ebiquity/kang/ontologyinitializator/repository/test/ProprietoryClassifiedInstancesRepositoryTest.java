@@ -2,44 +2,36 @@ package umbc.ebiquity.kang.ontologyinitializator.repository.test;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-
-import junit.framework.Assert;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
-import umbc.ebiquity.kang.ontologyinitializator.repository.MappingBasicInfo;
-import umbc.ebiquity.kang.ontologyinitializator.repository.MappingDetailInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
-import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ClassificationCorrectionRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ClassifiedInstancesRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ManufacturingLexicalMappingRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ProprietoryClassifiedInstancesRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ProprietoryClassifiedInstancesRepository.ClassifiedInstancesRepositoryType;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstanceBasicRecord;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstanceDetailRecord;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstancesRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMapping;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRecordsReader;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IProprietoryClassifiedInstancesRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IUpdatedInstanceRecord;
-import umbc.ebiquity.kang.ontologyinitializator.testdata.FakeDataCreator;
-import umbc.ebiquity.kang.ontologyinitializator.utilities.FileUtility;
 
 public class ProprietoryClassifiedInstancesRepositoryTest {
 	
 	private static IManufacturingLexicalMappingRepository _MLReposiory;
+	private static IManufacturingLexicalMappingRecordsReader _aggregratedManufacturingLexicalMappingRepository;
 	private static IOntologyRepository _ontologyRepository;
-    private static IProprietoryClassifiedInstancesRepository _ProperietoryClassifiedInstancesRepository;
+    private static IClassifiedInstancesRepository _ProperietoryClassifiedInstancesRepository;
     
 	@BeforeClass
 	public static void LoadDataFromFile() throws IOException {
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/kangyan2003/Desktop/";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/kangyan2003/Desktop/Ontology/MSDL-Fullv2.owl";
+		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
+		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontology/MSDL-Fullv2.owl";
 		
 		// String homeURL = "http://www.accutrex.com/";
 		// String homeURL = "http://www.weaverandsons.com/";
@@ -50,22 +42,23 @@ public class ProprietoryClassifiedInstancesRepositoryTest {
 		// String homeURL = "http://www.navitekgroup.com/";
 		// String homeURL = "http://www.cmc-usa.com/";
 		URL webURL = new URL(homeURL);
-		
-		_MLReposiory = ManufacturingLexicalMappingRepositoryFactory.createManufacturingLexiconRepository();
 		_ontologyRepository = OntologyRepositoryFactory.createOntologyRepository();
-//		_ProperietoryClassifiedInstancesRepository = new ProprietoryClassifiedInstancesRepository(FileUtility.convertURL2FileName(webURL),
-//				ClassifiedInstancesRepositoryType.All, _ontologyRepository, _MLReposiory);
+		_aggregratedManufacturingLexicalMappingRepository = ManufacturingLexicalMappingRepositoryFactory.createAggregratedManufacturingLexicalMappingRepository(_ontologyRepository);
+		_MLReposiory= ManufacturingLexicalMappingRepositoryFactory.createProprietaryManufacturingLexiconRepository("numericalconcepts");
 
 		_ProperietoryClassifiedInstancesRepository = ClassifiedInstancesRepositoryFactory.createProprietoryClassifiedInstancesRepository
 		(
 				webURL, 
 				_ontologyRepository, 
-				ClassificationCorrectionRepositoryFactory.createRepository(), 
-				_MLReposiory, 
+				true,
+				true,
 				true
 		);
+		
+		((ProprietoryClassifiedInstancesRepository)_ProperietoryClassifiedInstancesRepository).saveHumanReadableFile(RepositoryParameterConfiguration.getMappingHumanReadableDirectoryFullPath());
 	}
 
+	@Ignore
 	@Test
 	public void GetClassifiedInstanceBasicRecordByInstanceNameTest() {
 		System.out.println("GetClassifiedInstanceBasicRecordByInstanceNameTest");
@@ -75,6 +68,7 @@ public class ProprietoryClassifiedInstancesRepositoryTest {
 		}
 	}
 	
+	@Ignore
 	@Test
 	public void GetClassifiedInstanceDetailRecordByInstanceNameTest() {
 		for (String instance : _ProperietoryClassifiedInstancesRepository.getInstanceSet()) {

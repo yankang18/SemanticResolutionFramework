@@ -2,6 +2,7 @@ package umbc.ebiquity.kang.ontologyinitializator.ontology;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.Concept2OntClassMapping;
@@ -20,7 +21,7 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.impl.Concept2OntClass
  * @author kangyan2003
  * 
  */
-public class OntoClassHierarchy {
+public class OntoClassHierarchy implements Comparable<OntoClassHierarchy> {
 
 	private int classHierarchyNumber;
 	private double similarity;
@@ -38,6 +39,17 @@ public class OntoClassHierarchy {
 		this.MatchedConcept2OntoClassPairs = new ArrayList<Concept2OntClassMapping>();
 	}
 
+	public void addMatchedOntoClass2ConceptPair(Concept2OntClassMapping matchedConcept2OntClassPair, OntoClassInfo targetClass, double annotationScore) {
+		MatchedConcept2OntoClassPairs.add(matchedConcept2OntClassPair);
+		this.classMembers.add(targetClass);
+		this.classMemberScores.add(matchedConcept2OntClassPair.getMappingScore() * annotationScore);
+		
+		double score = Math.log(matchedConcept2OntClassPair.getConcept().getScore());
+		score = score > 1 ? score : 1;
+		this.classMemberWeights.add(score);
+		weightSum += score;
+	}
+	
 	public void addMatchedOntoClass2ConceptPair(Concept2OntClassMapping matchedConcept2OntClassPair) {
 		MatchedConcept2OntoClassPairs.add(matchedConcept2OntClassPair);
 		this.classMembers.add(matchedConcept2OntClassPair.getMappedOntoClass());
@@ -83,6 +95,19 @@ public class OntoClassHierarchy {
 
 	public double getSimilarity() {
 		return similarity;
+	}
+
+	@Override
+	public int compareTo(OntoClassHierarchy h2) {
+		int h1N = this.getClassHierarchyNumber();
+		int h2N = h2.getClassHierarchyNumber();
+		if (h1N > h2N) {
+			return 1;
+		} else if (h1N < h2N) {
+			return -1;
+		} else {
+			return 0;
+		}
 	}
 
 }

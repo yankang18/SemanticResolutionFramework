@@ -19,7 +19,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Concept;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.FileAccessor;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter;
@@ -29,10 +29,11 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassific
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrectionRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstanceDetailRecord;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMapping;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceMembershipInfereceFact;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceClassificationEvidence;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IUpdatedInstanceRecord;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceRecord;
 
+@Deprecated
 public class ClassificationCorrectionRepository implements IClassificationCorrectionRepository {
 
 	private static final String CLASSIFICATION_CORRECTION_DIRECTROY_FULL_PATH = RepositoryParameterConfiguration.getClassificationCorrectionDirectoryFullPath();
@@ -47,16 +48,16 @@ public class ClassificationCorrectionRepository implements IClassificationCorrec
 
 	private IOntologyRepository _ontologyRepository;
 	private Set<IClassificationCorrection> _classificationCorrectionCollection;
-	private List<IInstanceMembershipInfereceFact> _allInstanceMembershipInferenceFacts;
-	private List<IInstanceMembershipInfereceFact> _explicitInstanceMembershipInferenceFacts;
-	private List<IInstanceMembershipInfereceFact> _hiddenInstanceMembershipInferenceFacts;
+	private List<IInstanceClassificationEvidence> _allInstanceMembershipInferenceFacts;
+	private List<IInstanceClassificationEvidence> _explicitInstanceMembershipInferenceFacts;
+	private List<IInstanceClassificationEvidence> _hiddenInstanceMembershipInferenceFacts;
 
 	public ClassificationCorrectionRepository(IOntologyRepository domainOntologyRepository) {
 		_ontologyRepository = domainOntologyRepository;
 		_classificationCorrectionCollection = new LinkedHashSet<IClassificationCorrection>();
-		_allInstanceMembershipInferenceFacts = new ArrayList<IInstanceMembershipInfereceFact>();
-		_explicitInstanceMembershipInferenceFacts = new ArrayList<IInstanceMembershipInfereceFact>();
-		_hiddenInstanceMembershipInferenceFacts = new ArrayList<IInstanceMembershipInfereceFact>();
+		_allInstanceMembershipInferenceFacts = new ArrayList<IInstanceClassificationEvidence>();
+		_explicitInstanceMembershipInferenceFacts = new ArrayList<IInstanceClassificationEvidence>();
+		_hiddenInstanceMembershipInferenceFacts = new ArrayList<IInstanceClassificationEvidence>();
 	}
 	
 	@Override
@@ -65,48 +66,46 @@ public class ClassificationCorrectionRepository implements IClassificationCorrec
 	}
 
 	@Override
-	public Collection<IClassificationCorrection> extractCorrection(IUpdatedInstanceRecord correctedInstance, IClassifiedInstanceDetailRecord originalInstance) {
-		System.out.println("   EXTRACTION CORRECTIONS and MEMBERSHIP-INFERENCE FACTS");
+	public Collection<IClassificationCorrection> extractCorrection(IInstanceRecord correctedInstance, IClassifiedInstanceDetailRecord originalInstance) {
+		System.out.println(" ");
+		System.out.println("###   EXTRACTION CORRECTIONS and INTERPRETATION EVIDENCE for instance: " + correctedInstance.getUpdatedInstance());
+		
 		String sourceClassName = correctedInstance.getOriginalClassName();
 		String targetClassName = correctedInstance.getUpdatedClassName();
 		Collection<String> mappedOntClassesBeforeUpdated = new HashSet<String>();
 
-		// record all the mapped classes from the original the instance. That
+		// record all the mapped classes from the original instance. That
 		// is, the mapped classes before modified by human.
 		for (IConcept2OntClassMapping mappingPair : originalInstance.getConcept2OntClassMappingPairs()) {
-			mappingPair.setProvenance(correctedInstance.getPrevenanceOfInstance());
-			// mappingPair.setSatelliteInstance(correctedInstance.getOriginalInstanceName());
-			mappingPair.setSatelliteInstance(correctedInstance.getUpdatedInstance());
+			mappingPair.setProvenantHostInstance(correctedInstance.getPrevenantInstance());
+			mappingPair.setHostInstance(correctedInstance.getUpdatedInstance());
 			if (mappingPair.isMappedConcept()) {
 				mappedOntClassesBeforeUpdated.add(mappingPair.getMappedOntoClassName());
 			}
 		}
-		System.out.println("Original Instance Mapped Classes: " + mappedOntClassesBeforeUpdated);
 		
-		Set<String> allPositiveC2CMappingSets = new HashSet<String>();
+		Set<String> addedExplicitEvidences = new HashSet<String>();
 
 		// extract all the class-sets that contributed to the classification of
-		// the target class. NOTE that, each set can contain maximum of two
-		// classes. In other words, these class-sets can be either 1-class-set or
-		// 2-class-set
+		// the target class.
+		
+		//TODO: Should wrap the following two methods in class
 		Collection<String> convergeClassSetBeforeUpdated = _ontologyRepository.computeMaximalConvergenceSet(mappedOntClassesBeforeUpdated, targetClassName);
-
-		Collection<Set<IConcept2OntClassMapping>> positiveC2CMappingSetsBeforeUpdated = this.getConcept2ClassMappingSets(convergeClassSetBeforeUpdated, originalInstance.getConcept2OntClassMappingPairs());
-		for (Set<IConcept2OntClassMapping> positiveC2CMappingSet : positiveC2CMappingSetsBeforeUpdated) {
-			System.out.println("Positive Mapping Set from original Instance: " + positiveC2CMappingSet);
-			IInstanceMembershipInfereceFact CCM = this.createInstanceMembershipInferenceFact(positiveC2CMappingSet, sourceClassName, targetClassName);
-			String key = CCM.getMembershipInferenceFactCode();
-//			String key = this.createKey(positiveC2CMappingSet, targetClassName);
-			allPositiveC2CMappingSets.add(key);
-			this.addInstanceMembershipInferenceFact(CCM);
-			this.addExplicitInstanceMembershipInferenceFact(CCM);
+		Collection<Set<IConcept2OntClassMapping>> c2cMappingSets = this.getConcept2ClassMappingSets(convergeClassSetBeforeUpdated, originalInstance.getConcept2OntClassMappingPairs());
+		for (Set<IConcept2OntClassMapping> c2cMappingSet : c2cMappingSets) {
+			IInstanceClassificationEvidence CCM = this.createInstanceClassificationCorrectionEvidence(c2cMappingSet, sourceClassName, targetClassName);
+			String key = CCM.getEvidenceCode();
+			addedExplicitEvidences.add(key);
+			this.addInstanceClassificationEvidence(CCM);
+			this.addExplicitInstanceClassificationEvidence(CCM);
+			
+			System.out.println("Explicit Instance Classification Evidence: " + CCM);
 		}
 		
 		Collection<String> mappedOntClassesAfterUpdated = new HashSet<String>();
 		for (IConcept2OntClassMapping mappingPair : correctedInstance.getConcept2OntClassMappingPairs()) {
-			mappingPair.setProvenance(correctedInstance.getPrevenanceOfInstance());
-//			mappingPair.setSatelliteInstance(correctedInstance.getOriginalInstanceName());
-			mappingPair.setSatelliteInstance(correctedInstance.getUpdatedInstance());
+			mappingPair.setProvenantHostInstance(correctedInstance.getPrevenantInstance());
+			mappingPair.setHostInstance(correctedInstance.getUpdatedInstance());
 			if (mappingPair.isMappedConcept()) {
 				mappedOntClassesAfterUpdated.add(mappingPair.getMappedOntoClassName());
 			}
@@ -116,23 +115,23 @@ public class ClassificationCorrectionRepository implements IClassificationCorrec
 			
 			System.out.println("Corrected Instance Mapped Classes: " + mappedOntClassesAfterUpdated);
 			Collection<String> convergeClassSetAfterUpdated = _ontologyRepository.computeMaximalConvergenceSet(mappedOntClassesAfterUpdated, targetClassName);
-			Collection<Set<IConcept2OntClassMapping>> positiveC2CMappingSetsAfterUpdated = this.getConcept2ClassMappingSets(convergeClassSetAfterUpdated, correctedInstance.getConcept2OntClassMappingPairs());
-			for (Set<IConcept2OntClassMapping> positiveC2CMappingSet : positiveC2CMappingSetsAfterUpdated) { 
-				System.out.println("Positive Mapping Set from Corrected Instance: " + positiveC2CMappingSet);
-				String key = this.createKey(positiveC2CMappingSet, targetClassName);
-				if (!allPositiveC2CMappingSets.contains(key)) { // if the positive C2CMappingSet has already been added, we will not add it again.
+			Collection<Set<IConcept2OntClassMapping>> c2cMappingSets2 = this.getConcept2ClassMappingSets(convergeClassSetAfterUpdated, correctedInstance.getConcept2OntClassMappingPairs());
+			for (Set<IConcept2OntClassMapping> c2cMappingSet : c2cMappingSets2) { 
+				System.out.println("Explicit Mapping Set from Corrected Instance: " + c2cMappingSet);
+				String key = this.createKey(c2cMappingSet, targetClassName);
+				if (!addedExplicitEvidences.contains(key)) { // if the positive C2CMappingSet has already been added, we will not add it again.
 					
-					IInstanceMembershipInfereceFact CCM = this.createInstanceMembershipInferenceFact(positiveC2CMappingSet, sourceClassName, targetClassName);
-					this.addInstanceMembershipInferenceFact(CCM);
-					this.addExplicitInstanceMembershipInferenceFact(CCM);
+					IInstanceClassificationEvidence CCM = this.createInstanceClassificationCorrectionEvidence(c2cMappingSet, sourceClassName, targetClassName);
+					this.addInstanceClassificationEvidence(CCM);
+					this.addExplicitInstanceClassificationEvidence(CCM);
+					
+					System.out.println("Explicit Instance Classification Evidence: " + CCM);
 				}
 			}
 		}
 		
-		int numOfClassChangedInstance = 0;
 		Collection<IClassificationCorrection> corrections = new ArrayList<IClassificationCorrection>();
-		if (correctedInstance.isOntClassChanged()) { // if the mapping has been corrected
-			numOfClassChangedInstance++;
+		if (correctedInstance.isOntClassChanged()) { // if the classification has been corrected
 			IClassificationCorrection correction = this.createCorrection(correctedInstance);
 
 			System.out.println("### CORRECTED INSTANCE " + correctedInstance.getUpdatedInstance() + " was corrected from <"
@@ -140,18 +139,19 @@ public class ClassificationCorrectionRepository implements IClassificationCorrec
 
 
 			Collection<String> tributaryClasssetsToSourceClass = _ontologyRepository.computeMaximalConvergenceSet(mappedOntClassesBeforeUpdated, sourceClassName);
-			Collection<Set<IConcept2OntClassMapping>> negativeC2CMappingSets = this.getConcept2ClassMappingSets(tributaryClasssetsToSourceClass, originalInstance.getConcept2OntClassMappingPairs());
+			Collection<Set<IConcept2OntClassMapping>> c2cMappingSet3 = this.getConcept2ClassMappingSets(tributaryClasssetsToSourceClass, originalInstance.getConcept2OntClassMappingPairs());
 			
 			
 			// IMPORTANT: remove mappings that contribute to correct
 			// classification (positive mapping)
-			negativeC2CMappingSets.removeAll(positiveC2CMappingSetsBeforeUpdated);
+			c2cMappingSet3.removeAll(c2cMappingSets);
 			
-			for (Set<IConcept2OntClassMapping> negativeC2CMappingSet : negativeC2CMappingSets) {
-				System.out.println("Negative Mapping Set from Corrected Instance2: " + negativeC2CMappingSet);
-				IInstanceMembershipInfereceFact CCM = this.createInstanceMembershipInferenceFact(negativeC2CMappingSet, sourceClassName, targetClassName);
-				this.addInstanceMembershipInferenceFact(CCM);
-				this.addHiddenInstanceMembershipInferenceFact(CCM);
+			for (Set<IConcept2OntClassMapping> negativeC2CMappingSet : c2cMappingSet3) {
+				IInstanceClassificationEvidence CCM = this.createInstanceClassificationCorrectionEvidence(negativeC2CMappingSet, sourceClassName, targetClassName);
+				this.addInstanceClassificationEvidence(CCM);
+				this.addHiddenInstanceClassificationEvidence(CCM);
+				
+				System.out.println("Hidden Instance Classification Evidence: " + CCM);
 			}
 
 			for (IConcept2OntClassMapping mapping: originalInstance.getConcept2OntClassMappingPairs()){
@@ -164,12 +164,12 @@ public class ClassificationCorrectionRepository implements IClassificationCorrec
 			}
 			this._classificationCorrectionCollection.add(correction);
 			corrections.add(correction);
-		} 
+		}
 		return corrections;
 	} 
 
 	private String createKey(Set<IConcept2OntClassMapping> mappingSet, String targetClassName) {
-		return InstanceMembershipInferenceFact.createMemberInferenceFactCode(mappingSet, targetClassName);
+		return InstanceClassificationEvidence.createMemberInferenceFactCode(mappingSet, targetClassName);
 	}
 	
 	private Collection<Set<IConcept2OntClassMapping>> getConcept2ClassMappingSets(Collection<String> tributaryClasssets,
@@ -201,29 +201,37 @@ public class ClassificationCorrectionRepository implements IClassificationCorrec
 		return mappingSets;
 	}
 	
-
+	@Override
+	public void addClassificationCorrection(IClassificationCorrection correction) {
+		// TODO Auto-generated method stub
+		
+	}
 	
-	public void addInstanceMembershipInferenceFact(IInstanceMembershipInfereceFact concept2OntClassMappingSet) {
+	public void addInstanceClassificationEvidence(IInstanceClassificationEvidence concept2OntClassMappingSet) {
 		_allInstanceMembershipInferenceFacts.add(concept2OntClassMappingSet);
 	}
 
-	public void addHiddenInstanceMembershipInferenceFact(IInstanceMembershipInfereceFact concept2OntClassMappingSet) {
+	@Override
+	public void addHiddenInstanceClassificationEvidence(IInstanceClassificationEvidence concept2OntClassMappingSet) {
 		_hiddenInstanceMembershipInferenceFacts.add(concept2OntClassMappingSet);
+//		_allInstanceMembershipInferenceFacts.add(concept2OntClassMappingSet);
 	}
 
-	public void addExplicitInstanceMembershipInferenceFact(IInstanceMembershipInfereceFact concept2OntClassMappingSet) {
+	@Override
+	public void addExplicitInstanceClassificationEvidence(IInstanceClassificationEvidence concept2OntClassMappingSet) {
 		_explicitInstanceMembershipInferenceFacts.add(concept2OntClassMappingSet);
+//		_allInstanceMembershipInferenceFacts.add(concept2OntClassMappingSet);
 	}
 	
-	private IInstanceMembershipInfereceFact createInstanceMembershipInferenceFact(Set<IConcept2OntClassMapping> mappingSet, String sourceClassName, String targetClassName){
+	private IInstanceClassificationEvidence createInstanceClassificationCorrectionEvidence(Set<IConcept2OntClassMapping> mappingSet, String sourceClassName, String targetClassName){
 		OntoClassInfo correctionSourceClass = _ontologyRepository.getLightWeightOntClassByName(sourceClassName);
 		OntoClassInfo correctionTagetClass = _ontologyRepository.getLightWeightOntClassByName(targetClassName);
-		return InstanceMembershipInferenceFact.createInstance(mappingSet, correctionSourceClass, correctionTagetClass);
+		return InstanceClassificationEvidence.createInstance(mappingSet, correctionSourceClass, correctionTagetClass);
 	}
 	
-	private IClassificationCorrection createCorrection(IUpdatedInstanceRecord correctedInstance){
+	private IClassificationCorrection createCorrection(IInstanceRecord correctedInstance){
 		IClassificationCorrection correction = ClassificationCorrection.createInstance();
-		correction.setInstancePrevenance(correctedInstance.getPrevenanceOfInstance());
+		correction.setInstancePrevenance(correctedInstance.getPrevenantInstance());
 		correction.setInstance(correctedInstance.getUpdatedInstance());
 		correction.setCorrectionSource(_ontologyRepository.getLightWeightOntClassByName(correctedInstance.getOriginalClassName()));
 		correction.setCorrectionTarget(_ontologyRepository.getLightWeightOntClassByName(correctedInstance.getUpdatedClassName()));
@@ -239,19 +247,19 @@ public class ClassificationCorrectionRepository implements IClassificationCorrec
 		}
 		
 		StringBuilder negativeMappingRecord = new StringBuilder();
-		for (IInstanceMembershipInfereceFact negativeMappingSet : _hiddenInstanceMembershipInferenceFacts) {
+		for (IInstanceClassificationEvidence negativeMappingSet : _hiddenInstanceMembershipInferenceFacts) {
 			negativeMappingRecord.append(this.createJSONRecordForMapping(negativeMappingSet));
 			negativeMappingRecord.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
 		}
 		
 		StringBuilder positiveMappingRecord = new StringBuilder();
-		for (IInstanceMembershipInfereceFact positiveMappingSet : _explicitInstanceMembershipInferenceFacts) {
+		for (IInstanceClassificationEvidence positiveMappingSet : _explicitInstanceMembershipInferenceFacts) {
 			positiveMappingRecord.append(this.createJSONRecordForMapping(positiveMappingSet));
 			positiveMappingRecord.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
 		}
 		
 		StringBuilder allMappingRecord = new StringBuilder();
-		for (IInstanceMembershipInfereceFact mappingSet : _allInstanceMembershipInferenceFacts) {
+		for (IInstanceClassificationEvidence mappingSet : _allInstanceMembershipInferenceFacts) {
 			allMappingRecord.append(this.createJSONRecordForMapping(mappingSet));
 			allMappingRecord.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
 		}
@@ -290,7 +298,7 @@ public class ClassificationCorrectionRepository implements IClassificationCorrec
 		return !string.trim().equals("");	
 	}
 
-	private String createJSONRecordForMapping(IInstanceMembershipInfereceFact mappingSet) {
+	private String createJSONRecordForMapping(IInstanceClassificationEvidence mappingSet) {
 		Map<String, Object> mappingRecord = new LinkedHashMap<String, Object>();
 		OntoClassInfo sourceOntClass = mappingSet.getCorrectionSourceClass();
 		OntoClassInfo targetOntClass = mappingSet.getCorrectionTargetClass();
@@ -313,8 +321,8 @@ public class ClassificationCorrectionRepository implements IClassificationCorrec
 		for (IConcept2OntClassMapping mapping : mappingSet.getConcept2OntClassMappingMembers()) {
 			if (flag == false) {
 				flag = true;
-				String prevenance = mapping.getProvenance();
-				String satellite = mapping.getSatelliteInstance();
+				String prevenance = mapping.getProvenantHostInstance();
+				String satellite = mapping.getHostInstance();
 				mappingRecord.put(MappingInfoSchemaParameter.PREVENANCE_OF_INSTANCE, prevenance);
 				mappingRecord.put(MappingInfoSchemaParameter.INSTANCE_NAME, satellite);
 			}
@@ -445,7 +453,7 @@ public class ClassificationCorrectionRepository implements IClassificationCorrec
 		_explicitInstanceMembershipInferenceFacts.add(this.loadMappingRecord(line));
 	}
 	
-	private IInstanceMembershipInfereceFact loadMappingRecord(String line) {
+	private IInstanceClassificationEvidence loadMappingRecord(String line) {
 		JSONObject map = (JSONObject) JSONValue.parse(line);
 		String prevenance = (String) map.get(MappingInfoSchemaParameter.PREVENANCE_OF_INSTANCE);
 		String satellite = (String) map.get(MappingInfoSchemaParameter.INSTANCE_NAME);
@@ -476,11 +484,11 @@ public class ClassificationCorrectionRepository implements IClassificationCorrec
 			String classURI = mappingMap.get(MappingInfoSchemaParameter.CLASS_URI);	
 			double score = Double.valueOf(mappingMap.get(MappingInfoSchemaParameter.MAPPING_SCORE));
 			IConcept2OntClassMapping mapping = new Concept2OntClassMapping(new Concept(conceptName), new OntoClassInfo(classURI, classNS, className), score); 
-			mapping.setProvenance(prevenance);
-			mapping.setSatelliteInstance(satellite);
+			mapping.setProvenantHostInstance(prevenance);
+			mapping.setHostInstance(satellite);
 			mappingSet.add(mapping);
 		}
-		return InstanceMembershipInferenceFact.createInstance(mappingSet, sourceOntClass, targetOntClass);
+		return InstanceClassificationEvidence.createInstance(mappingSet, sourceOntClass, targetOntClass);
 	}
 
 	private void loadCorrectionRecord(String line) {
@@ -544,17 +552,17 @@ public class ClassificationCorrectionRepository implements IClassificationCorrec
 	}
 	
 	@Override
-	public Collection<IInstanceMembershipInfereceFact> getAllInstanceMembershipInferenceFacts(){
+	public Collection<IInstanceClassificationEvidence> getAllInstanceMembershipInferenceFacts(){
 		return this._allInstanceMembershipInferenceFacts;
 	}
 	
 	@Override
-	public Collection<IInstanceMembershipInfereceFact> getHiddenInstanceMembershipInferenceFacts(){
+	public Collection<IInstanceClassificationEvidence> getHiddenInstanceMembershipInferenceFacts(){
 		return this._hiddenInstanceMembershipInferenceFacts;
 	}
 	
 	@Override
-	public Collection<IInstanceMembershipInfereceFact> getExplicitInstanceMembershipInferenceFacts(){
+	public Collection<IInstanceClassificationEvidence> getExplicitInstanceMembershipInferenceFacts(){
 		return this._explicitInstanceMembershipInferenceFacts;
 	}
 	
@@ -625,4 +633,42 @@ public class ClassificationCorrectionRepository implements IClassificationCorrec
 //			System.out.println(mappingClusterCode + " : " + count);
 //		}
 	}
+
+	@Override
+	public void addNumberOfInstance(int numberOfInstance) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Collection<String> getTargetClasses(IConcept2OntClassMapping c2cMapping) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double getC2CMappingRateInOntClass(IConcept2OntClassMapping mapping, String ontClassName) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void showMappingInfo() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Map<IConcept2OntClassMapping, Double> getC2CMapping(String ontClassName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getNumberOfC2CMappings(String ontClassName) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
 }

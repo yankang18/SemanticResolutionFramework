@@ -5,7 +5,7 @@ import java.util.List;
 
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 
-public interface IClassifiedInstancesAccessor extends IReadOnlyRepository {
+public interface IClassifiedInstancesAccessor {
 
 	public List<String> getInstancesOfOntClass(String className);
 
@@ -14,5 +14,7 @@ public interface IClassifiedInstancesAccessor extends IReadOnlyRepository {
 	Collection<OntoClassInfo> getAllClasses();
 
 	List<String> getInstancesOfOntClass(OntoClassInfo ontClass);  
+	
+	void showRepositoryDetail();
 
 }

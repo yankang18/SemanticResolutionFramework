@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Concept;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IConcept2OntClassMappingPairPruner;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.Concept2OntClassMapping;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMapping;
@@ -125,13 +125,9 @@ public class Concept2OntClassMappingPairPruner implements IConcept2OntClassMappi
 			double score = mappingPair.getMappingScore();
 //			if((mappingPair.isDirectMapping() && score <= this.samenessThreshold && !mappedConcept.isFromInstance()) 
 //					||!mappingPair.isDirectMapping() && !mappedConcept.isFromInstance()){
-			if((mappingPair.isDirectMapping() && !mappedConcept.isFromInstance()) 
-					||!mappingPair.isDirectMapping() && !mappedConcept.isFromInstance()){
-				/*
-				 * record the mapped concepts. NOTE when the similarity is
-				 * bigger than 9.0, We consider the concept is the same as the
-				 * onto-class. Therefore, it is no need to record the mapping.
-				 */
+//			if((mappingPair.isDirectMapping() && !mappedConcept.isFromInstance()) 
+//					||!mappingPair.isDirectMapping() && !mappedConcept.isFromInstance()){
+			if (mappingPair.isDirectMapping() || !mappingPair.isDirectMapping()) {
 				Concept concept = new Concept(mappedConcept.getConceptName());
 				Concept2OntClassMapping pair = new Concept2OntClassMapping(concept, mappingPair.getMappedOntoClass(), score);
 				pair.setHittedMapping(mappingPair.isHittedMapping());

@@ -14,7 +14,7 @@ import java.util.Map;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Concept;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.RuleEngine;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.FileAccessor;
@@ -27,17 +27,17 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2O
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMappingStatistics;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IUpdatedInstanceRecord;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceRecord;
 
 /**
  * 
  * @author kangyan2003
  *
  */
+@Deprecated
 public class ManufacturingLexicalMappingRepository implements IManufacturingLexicalMappingRepository {
 	
 	private IOntologyRepository _ontologyRepository;
-	public enum MappingVericationResult {Succeed, Failed, Unknow}
 	
 	/**
 	 * This map functions as an index of the Manufacturing Lexicon Repository.
@@ -53,11 +53,13 @@ public class ManufacturingLexicalMappingRepository implements IManufacturingLexi
 	private static final String MANUFACTURING_LEXICON_DIRECTROY_FULL_PATH = RepositoryParameterConfiguration.getManufacturingLexiconDirectoryFullPath();
 	private static final String MANUFACTURING_LEXICON_REPOSITORY_NAME = RepositoryParameterConfiguration.MANUFACTURING_LEXICON_NAME;
 	private static final String MANUFACTURING_LEXICON_REPOSITORY_FULL_PATH = MANUFACTURING_LEXICON_DIRECTROY_FULL_PATH + MANUFACTURING_LEXICON_REPOSITORY_NAME;
-
-    public ManufacturingLexicalMappingRepository(IOntologyRepository ontologyRepository){
+	private RuleEngine _ruleEngine;
+	
+    public ManufacturingLexicalMappingRepository(IOntologyRepository ontologyRepository, RuleEngine ruleEngine){
     	this.detailConcept2OntoClassMap = new LinkedHashMap<String, Map<String, Map<String, String>>>();
 		this.concept2OntoClassReferenceMap = new LinkedHashMap<String, Collection<String>>();
 		this._ontologyRepository = ontologyRepository;
+		this._ruleEngine = ruleEngine;
 //		this.loadLexiconRepository();
     }
 
@@ -208,15 +210,13 @@ public class ManufacturingLexicalMappingRepository implements IManufacturingLexi
 	}
 	
 	@Override
-	public void updateValidityOfConcept2OntClassMapping(IUpdatedInstanceRecord updatedInstance, IClassifiedInstanceDetailRecord originalInstance) {
+	public void updateValidityOfConcept2OntClassMapping(IInstanceRecord updatedInstance, IClassifiedInstanceDetailRecord originalInstance) {
 		System.out.println("   UPDATE VALIDITY Of Concept2OntClassMapping");
 		String origOntoClassName = updatedInstance.getOriginalClassName();
 		String updatedOntoClassName = updatedInstance.getUpdatedClassName();
 		boolean isClassLabelChanged = updatedInstance.isOntClassChanged();
 		String instanceClassName = isClassLabelChanged ? updatedOntoClassName : origOntoClassName;
-		RuleEngine ruleEngine = new RuleEngine();
-		ruleEngine.applyConcept2ClassMappingUpdateRules(instanceClassName, updatedInstance, originalInstance, this._ontologyRepository,
-				this);
+//		_ruleEngine.applyConcept2ClassMappingUpdateRules(instanceClassName, updatedInstance, originalInstance, this);
 	}
 	
 	@Override
@@ -271,20 +271,6 @@ public class ManufacturingLexicalMappingRepository implements IManufacturingLexi
 			return null;
 		}
 	}
-
-//	@Override
-//	public void updateConcept2OntoClassMapping(Concept concept, MappingRelationType
-//			                                   mappingRelationType, 
-//			                                   OntoClassInfo ontoClass,
-//			                                   MappingVericationResult scoreAdjustmentType) {
-//		
-//		if (this.hasConcept2OntoClassMapping(concept, ontoClass)) {
-//			/*
-//			 * 
-//			 */
-//			this.updateEntryItem(concept, mappingRelationType, ontoClass, scoreAdjustmentType);
-//		} 
-//	}
 
 	/**
 	 * Create an new Entry for a particular concept to the Manufacturing Lexicon
@@ -387,23 +373,6 @@ public class ManufacturingLexicalMappingRepository implements IManufacturingLexi
 		return similarity;
 	}
 	
-//	@Override
-//	public double getConcept2ClassMappingScore(Concept concept, OntoClassInfo ontoClass) {
-//
-//		try {
-//			IConcept2OntClassMappingStatistics statistics = this.getConcept2ClassMappingStatistics(concept, ontoClass);
-//			double sim = statistics.getSimilarity();
-//			double failed = statistics.getFailedCounts();
-//			double succeed = statistics.getSucceedCounts();
-//			double undetermined = statistics.getUndeterminedCounts();
-//
-//			return sim;
-//		} catch (NoSuchEntryItemException e) {
-//			return 0.0;
-//		}
-//
-//	}
-	
 	@Override
 	public IConcept2OntClassMappingStatistics getConcept2ClassMappingStatistics(Concept concept, OntoClassInfo ontoClass) throws NoSuchEntryItemException{
 
@@ -474,5 +443,11 @@ public class ManufacturingLexicalMappingRepository implements IManufacturingLexi
 			}
 			System.out.println();
 		}		
+	}
+
+	@Override
+	public Map<String, Map<String, String>> getMappedOntClassDetailInformation(String conceptName) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

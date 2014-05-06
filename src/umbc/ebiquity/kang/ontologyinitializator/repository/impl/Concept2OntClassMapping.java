@@ -1,10 +1,10 @@
 package umbc.ebiquity.kang.ontologyinitializator.repository.impl;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Concept;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter.MappingRelationType;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMapping;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceMembershipInfereceFact;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceClassificationEvidence;
 import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
 
 
@@ -25,8 +25,8 @@ public class Concept2OntClassMapping implements Comparable<Concept2OntClassMappi
 		this(concept, null, null, 0.0);
 	}
 	
-	public Concept2OntClassMapping(Concept concept, OntoClassInfo ontClassInfo, double similarity) {
-		this(concept, MappingRelationType.relatedTo, ontClassInfo, similarity);
+	public Concept2OntClassMapping(Concept concept, OntoClassInfo ontClassInfo, double mappingScore) {
+		this(concept, MappingRelationType.relatedTo, ontClassInfo, mappingScore);
 	}
 	
 	public Concept2OntClassMapping(Concept concept, MappingRelationType relation, OntoClassInfo ontClassInfo, double similarity) {
@@ -113,7 +113,7 @@ public class Concept2OntClassMapping implements Comparable<Concept2OntClassMappi
 	}
 	
 	@Override
-	public void setSatelliteInstance(String instance){
+	public void setHostInstance(String instance){
 		this._instance = instance;
 	}
 
@@ -172,17 +172,17 @@ public class Concept2OntClassMapping implements Comparable<Concept2OntClassMappi
 	}
 
 	@Override
-	public String getProvenance() {
+	public String getProvenantHostInstance() {
 		return _provenance;
 	}
 	
 	@Override
-	public String getSatelliteInstance(){
+	public String getHostInstance(){
 		return this._instance;
 	}
 
 	@Override
-	public void setProvenance(String provenance) {
+	public void setProvenantHostInstance(String provenance) {
 		this._provenance = provenance;
 	}
 

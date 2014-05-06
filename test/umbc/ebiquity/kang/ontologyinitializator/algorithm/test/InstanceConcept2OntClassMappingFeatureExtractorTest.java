@@ -19,9 +19,9 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ClassificationCo
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrection;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrectionRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstanceDetailRecord;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceMembershipInfereceFact;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceClassificationEvidence;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IUpdatedInstanceRecord;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceRecord;
 import umbc.ebiquity.kang.ontologyinitializator.testdata.FakeDataCreator;
 
 
@@ -40,13 +40,13 @@ public class InstanceConcept2OntClassMappingFeatureExtractorTest {
 		_correctionRepository = new ClassificationCorrectionRepository(_ontologyRepository);
 		
 		FakeDataCreator fakeDataCreator = new FakeDataCreator();
-		Map<IUpdatedInstanceRecord, IClassifiedInstanceDetailRecord> XXX = fakeDataCreator.createUpdatedInstanceRecordsAndClassifiedInstanceRecords();
-		for (IUpdatedInstanceRecord updatedInstanceRecord : XXX.keySet()) {
+		Map<IInstanceRecord, IClassifiedInstanceDetailRecord> XXX = fakeDataCreator.createUpdatedInstanceRecordsAndClassifiedInstanceRecords();
+		for (IInstanceRecord updatedInstanceRecord : XXX.keySet()) {
 			IClassifiedInstanceDetailRecord originalClassifiedInstance = XXX.get(updatedInstanceRecord);
 			_correctionRepository.extractCorrection(updatedInstanceRecord, originalClassifiedInstance);
 		}
 		
-		_instanceC2CMappingExtractor = new InstanceConcept2OntClassMappingFeatureExtractor(new CorrectionClusterCodeGenerator(), _correctionRepository);
+		_instanceC2CMappingExtractor = new InstanceConcept2OntClassMappingFeatureExtractor(new CorrectionClusterCodeGenerator(), _correctionRepository, _ontologyRepository);
 	}
 	
 	@Test
@@ -58,27 +58,27 @@ public class InstanceConcept2OntClassMappingFeatureExtractorTest {
 		String className4 = "Product";
 		String className5 = "ManufacturingService";
 		
-		Collection<IInstanceMembershipInfereceFact> negativeMappingSets =  _instanceC2CMappingExtractor.getNegativeConcept2OntClassMappingSetsOfOntClass(className1);
-		Map<IInstanceMembershipInfereceFact, Double> negativeMappingFeatures = _instanceC2CMappingExtractor.getNegativeConcept2OntClassMappingSetsWithLocalRateOfOntClass(className1);
+		Collection<IInstanceClassificationEvidence> negativeMappingSets =  _instanceC2CMappingExtractor.getNegativeConcept2OntClassMappingSetsOfOntClass(className1);
+		Map<IInstanceClassificationEvidence, Double> negativeMappingFeatures = _instanceC2CMappingExtractor.getNegativeConcept2OntClassMappingSetsWithLocalRateOfOntClass(className1);
 		print(negativeMappingSets, "Negative Mapping");
 		print(negativeMappingFeatures, "Negative");
 		
-		Collection<IInstanceMembershipInfereceFact> positiveMappingSets = _instanceC2CMappingExtractor.getPositiveConcept2OntClassMappingSetsOfOntClass(className3);
-		Map<IInstanceMembershipInfereceFact, Double> positiveMappingFeatures = _instanceC2CMappingExtractor.getPositiveConcept2OntClassMappingSetsWithLocalRateOfOntClass(className3);
+		Collection<IInstanceClassificationEvidence> positiveMappingSets = _instanceC2CMappingExtractor.getPositiveConcept2OntClassMappingSetsOfOntClass(className3);
+		Map<IInstanceClassificationEvidence, Double> positiveMappingFeatures = _instanceC2CMappingExtractor.getPositiveConcept2OntClassMappingSetsWithLocalRateOfOntClass(className3);
 		print(positiveMappingSets, "Positive Mapping");
 		print(positiveMappingFeatures, "Positive");
 	}
 	
-	private void print(Collection<IInstanceMembershipInfereceFact> mappingSets, String label){
-		for(IInstanceMembershipInfereceFact f : mappingSets){
-			System.out.println(label  + ": "+ f.getMembershipInferenceFactCode());
+	private void print(Collection<IInstanceClassificationEvidence> mappingSets, String label){
+		for(IInstanceClassificationEvidence f : mappingSets){
+			System.out.println(label  + ": "+ f.getEvidenceCode());
 		}
 	}
 	
-	private void print(Map<IInstanceMembershipInfereceFact, Double> mappingFeatures, String label){
-		for(IInstanceMembershipInfereceFact f : mappingFeatures.keySet()){
+	private void print(Map<IInstanceClassificationEvidence, Double> mappingFeatures, String label){
+		for(IInstanceClassificationEvidence f : mappingFeatures.keySet()){
 			double representativeness = mappingFeatures.get(f);
-			System.out.println(f.getMembershipInferenceFactCode() + ",   " + label  + ": "+ representativeness);
+			System.out.println(f.getEvidenceCode() + ",   " + label  + ": "+ representativeness);
 		}
 	}
 

@@ -3,6 +3,7 @@ package umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -18,6 +19,8 @@ import umbc.ebiquity.kang.ontologyinitializator.ontology.MatchedOntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassHierarchy;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.Concept2OntClassMapping;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrectionRepository;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMapping;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
 
 public class BestMatchedOntClassFinder implements IBestMatchedOntClassFinder {
@@ -34,7 +37,9 @@ public class BestMatchedOntClassFinder implements IBestMatchedOntClassFinder {
 		this.OntologyRepository = OntRepository;
 	}
 
-	public MatchedOntoClassInfo findBestMatchedOntoClass(String instanceLable, Collection<Concept2OntClassMapping> concept2OntClassMappingPairs) {
+	public MatchedOntoClassInfo findBestMatchedOntoClass(String instanceLable, 
+														 Collection<Concept2OntClassMapping> concept2OntClassMappingPairs,
+														 IClassificationCorrectionRepository aggregratedClassificationCorrectionRepository) {
 		
 		/*
 		 * TODO
@@ -98,6 +103,64 @@ public class BestMatchedOntClassFinder implements IBestMatchedOntClassFinder {
 		System.out.println("------------------------------------------");
 		return matchedOntClassInfo;
 	}
+	
+//	/**
+//	 * get class hierarchies of classes in the concept-class mappings and group
+//	 * these class hierarchies based on hierarchical number
+//	 * 
+//	 * @param concept2OntClassMappingPairs
+//	 * @param aggregratedClassificationCorrectionRepository 
+//	 * @return a collection of class hierarchies
+//	 */
+//	private Collection<OntoClassHierarchy> groupOntoClassHierarchiesForMappedOntoClasses(Collection<Concept2OntClassMapping> concept2OntClassMappingPairs,
+//			       																		 IClassificationCorrectionRepository aggregratedClassificationCorrectionRepository) {
+//		
+//		/*
+//		 * record onto-class hierarchies for candidate onto-classes
+//		 */
+//		Map<String, OntoClassHierarchy> hierarchyNumber2OntoClassHierarchyMap = new HashMap<String, OntoClassHierarchy>();
+//		for (Concept2OntClassMapping concept2OntClassMappingPair : concept2OntClassMappingPairs) {
+//				OntoClassInfo ontoClassInfo = concept2OntClassMappingPair.getMappedOntoClass();
+//				
+//			Collection<String> ontClassList = aggregratedClassificationCorrectionRepository.getTargetClasses(concept2OntClassMappingPair);
+//			if (!ontClassList.contains(ontoClassInfo.getOntClassName())) {
+//				
+//				double rate = aggregratedClassificationCorrectionRepository.getC2CMappingRateInOntClass(concept2OntClassMappingPair, ontoClassInfo.getOntClassName());
+//				ontoClassInfo.setSimilarityToConcept(concept2OntClassMappingPair.getMappingScore());
+//				int hierarchyNumber = OntologyRepository.getOntClassHierarchyNumber(ontoClassInfo);
+//				ontoClassInfo.setHierarchyNumber(hierarchyNumber);
+//				String hierarchyNumberStr = String.valueOf(hierarchyNumber);
+//				System.out.println("Onto-Class:" + ontoClassInfo.getOntClassName() + ";  Class Hierarchy Num:" + hierarchyNumber + ";  Similarity: " + String.valueOf(ontoClassInfo.getSimilarityToConcept()));
+//				if (hierarchyNumber2OntoClassHierarchyMap.containsKey(hierarchyNumberStr)) {
+//					OntoClassHierarchy hierarchy = hierarchyNumber2OntoClassHierarchyMap.get(hierarchyNumberStr);
+//					hierarchy.addMatchedOntoClass2ConceptPair(concept2OntClassMappingPair, ontoClassInfo, rate);
+//				} else {
+//					OntoClassHierarchy hierarchy = new OntoClassHierarchy(hierarchyNumber);
+//					hierarchy.addMatchedOntoClass2ConceptPair(concept2OntClassMappingPair, ontoClassInfo, rate);
+//					hierarchyNumber2OntoClassHierarchyMap.put(hierarchyNumberStr, hierarchy);
+//				}
+//			}
+//
+//			for (String ontClassName : ontClassList) {
+//				double rate = aggregratedClassificationCorrectionRepository.getC2CMappingRateInOntClass(concept2OntClassMappingPair, ontClassName);
+//				OntoClassInfo ontClass = OntologyRepository.getLightWeightOntClassByName(ontClassName);
+//				ontClass.setSimilarityToConcept(concept2OntClassMappingPair.getMappingScore());
+//				int hierarchyNumber = OntologyRepository.getOntClassHierarchyNumber(ontClass);
+//				ontClass.setHierarchyNumber(hierarchyNumber);
+//				String hierarchyNumberStr = String.valueOf(hierarchyNumber);
+//				System.out.println("Onto-Class:" + ontClass.getOntClassName() + ";  Class Hierarchy Num:" + hierarchyNumber + ";  Similarity: " + String.valueOf(ontoClassInfo.getSimilarityToConcept()));
+//				if (hierarchyNumber2OntoClassHierarchyMap.containsKey(hierarchyNumberStr)) {
+//					OntoClassHierarchy hierarchy = hierarchyNumber2OntoClassHierarchyMap.get(hierarchyNumberStr);
+//					hierarchy.addMatchedOntoClass2ConceptPair(concept2OntClassMappingPair, ontClass, rate);
+//				} else {
+//					OntoClassHierarchy hierarchy = new OntoClassHierarchy(hierarchyNumber);
+//					hierarchy.addMatchedOntoClass2ConceptPair(concept2OntClassMappingPair, ontClass, rate);
+//					hierarchyNumber2OntoClassHierarchyMap.put(hierarchyNumberStr, hierarchy);
+//				}
+//			}
+//		}
+//		return hierarchyNumber2OntoClassHierarchyMap.values();
+//	}
 	
 	/**
 	 * get class hierarchies of classes in the concept-class mappings and group
@@ -195,7 +258,13 @@ public class BestMatchedOntClassFinder implements IBestMatchedOntClassFinder {
 				maxHierarchySimilarity = overallSim;
 			}
 		}
-		return identifiedHierarchies.get(maxHierarchySimilarity);
+		List<OntoClassHierarchy> hierarchies =  identifiedHierarchies.get(maxHierarchySimilarity);
+		if (hierarchies == null) {
+			return null;
+		} else {
+			Collections.sort(hierarchies);
+			return hierarchies;
+		}
 	}
 	
 	/**
@@ -210,14 +279,31 @@ public class BestMatchedOntClassFinder implements IBestMatchedOntClassFinder {
 			return -1;
 		}
 
+		if (bestMatchedHierarchies.size() == 1) {
+			return 0;
+		}
+		
+		Collections.sort(bestMatchedHierarchies); 
 		int bestHierarchyIndex = 0;
 		double maxSim = 0.0;
 		for (int index = 0; index < bestMatchedHierarchies.size(); index++) {
-			double sim = 0.0;
-			for (OntoClassInfo ontoClassInfo : bestMatchedHierarchies.get(index).getMemebers()) {
-				sim += similarityAlg.getSimilarity(SimilarityType.Kim_Ngram, ontoClassInfo.getOntClassName(), instanceLabel);
+			double sim1 = 0.0;
+			double sim2 = 0.0;
+			int count1 = 0;
+			int count2 = 0;
+			for(IConcept2OntClassMapping map : bestMatchedHierarchies.get(index).getMatchedConcept2OntoClassPairs()){
+				String conceptName = map.getConceptName();
+				String mappedOntClassName = map.getMappedOntoClassName();
+				sim1 += similarityAlg.getSimilarity(SimilarityType.Kim_Ngram, conceptName, mappedOntClassName);
+				count1 ++;
 			}
-
+			sim1 = sim1 / count1;
+			for (OntoClassInfo ontoClassInfo : bestMatchedHierarchies.get(index).getMemebers()) {
+				sim2 += similarityAlg.getSimilarity(SimilarityType.Kim_Ngram, ontoClassInfo.getOntClassName(), instanceLabel);
+				count2 ++;
+			}
+			sim2 = sim2 / count2;
+			double sim = sim1 + sim2;
 			if (sim >= maxSim) {
 				maxSim = sim;
 				bestHierarchyIndex = index;

@@ -2,6 +2,8 @@ package umbc.ebiquity.kang.ontologyinitializator.repository.interfaces;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
+
 import umbc.ebiquity.kang.ontologyinitializator.ontology.InstanceTripleSet;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.Triple;
 
@@ -32,5 +34,7 @@ public interface ITripleRepository {
 	public String getRepositoryName();
 
 	void showTriples();
+
+	Set<Triple> getRelationTypeTriple();
 
 }

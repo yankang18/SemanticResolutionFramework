@@ -9,13 +9,13 @@ public interface IMappingInfoRepository {
 
 	public boolean saveRepository();
 	
-	public void updateMappingInfo(Collection<IUpdatedInstanceRecord> instances);
+	public void updateMappingInfo(Collection<IInstanceRecord> instances);
 	
 	public MappingBasicInfo getMappingBasicInfo();
 	
 	public MappingDetailInfo getMappingDetailInfo();
 
-	public IUpdatedInstanceRecord createInstanceClassificationRecord();
+	public IInstanceRecord createInstanceClassificationRecord();
 	
 	public IClassifiedInstanceBasicRecord getClassifiedInstanceBasicInfoByInstanceName(String instanceName);
 	

@@ -5,13 +5,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Concept;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter.MappingRelationType;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMapping;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IUpdatedInstanceRecord;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceRecord;
 
-public class UpdatedInstanceRecord implements IUpdatedInstanceRecord{
+public class UpdatedInstanceRecord implements IInstanceRecord{
 
 	private String _prevanceOfInstance;
 	private String _originalInstanceName;
@@ -108,7 +108,7 @@ public class UpdatedInstanceRecord implements IUpdatedInstanceRecord{
 	}
 
 	@Override
-	public String getPrevenanceOfInstance() {
+	public String getPrevenantInstance() {
 		return _prevanceOfInstance;
 	}
 

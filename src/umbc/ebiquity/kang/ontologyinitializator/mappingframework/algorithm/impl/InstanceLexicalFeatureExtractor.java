@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import umbc.csee.ebiquity.ontologymatcher.textprocessing.TextProcessingUtils;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.LexicalFeature;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.LexicalFeature.Position;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.Phrase;
@@ -26,7 +27,7 @@ public class InstanceLexicalFeatureExtractor implements IInstanceLexicalFeatureE
 	private Map<LexicalFeature, Double> _featureNICF_Cache;
 	private Map<LexicalFeature, Integer> _feature2ClassCount_Cache;
 	
-	
+	public InstanceLexicalFeatureExtractor(){}
 	public InstanceLexicalFeatureExtractor(
 			                               IClassifiedInstancesAccessor classifiedInstanceAccessor,
 			                               ILexicalFeatureExtractor commonPhraseExtractor
@@ -68,18 +69,19 @@ public class InstanceLexicalFeatureExtractor implements IInstanceLexicalFeatureE
 		double w1;
 		double w2;
 		if (feature instanceof Phrase) {
-			w1 = 0.3;
-			w2 = 0.7;
+			w1 = 0.4;
+			w2 = 0.6;
 		} else {
-			w1 = 0.7;
-			w2 = 0.3;
+			w1 = 0.6;
+			w2 = 0.4;
 		}
 		
 		double reduceStrengthFactor = 1.0;
 		if(withReduceFactor && feature.getFeaturePosition() == Position.BEGIN){
-			reduceStrengthFactor = 0.4;
+			reduceStrengthFactor = 0.6;
 		}
 		return reduceStrengthFactor * (w2 * feature.getSignificant() + w1 * (double) feature.getSupport() * NICF);
+//		return reduceStrengthFactor * feature.getSupport() * NICF;
 	}
 
 	@Override
@@ -200,6 +202,11 @@ public class InstanceLexicalFeatureExtractor implements IInstanceLexicalFeatureE
 	}
 	
 	@Override
+	public int getNumberOfInstancesOfOntClass(String className){
+		return _classifiedInstanceAccessor.getInstancesOfOntClass(className).size();
+	}
+	
+	@Override
 	public Map<LexicalFeature, LexicalFeature> getLexicalFeaturesOfAllInstances() {
 		if (_allInstanceFeaturesCache.isEmpty()) {
 			List<String> classifiedInstances = _classifiedInstanceAccessor.getInstances();
@@ -224,6 +231,8 @@ public class InstanceLexicalFeatureExtractor implements IInstanceLexicalFeatureE
 		}
 		List<String> classifiedInstances = new ArrayList<String>();
 		classifiedInstances.addAll(_classifiedInstanceAccessor.getInstancesOfOntClass(className));
+		classifiedInstances.add(className);
+//		classifiedInstances.addAll(this.getAllPossibleSuperClasses(className));
 		
 //		for(String instance : classifiedInstances){
 //			Debugger.print("  Instance2: %s", instance);
@@ -233,7 +242,28 @@ public class InstanceLexicalFeatureExtractor implements IInstanceLexicalFeatureE
 		_class2LexicalFeaturesCache.put(className, instanceLabelFeatures);
 		return instanceLabelFeatures;
 	}
-
+	
+//	public static void main(String[] args){
+//		InstanceLexicalFeatureExtractor xx = new InstanceLexicalFeatureExtractor();
+//		List<String> phrases = xx.getAllPossibleSuperClasses("ToolSteel");
+//		for(String phrase : phrases){
+//			System.out.println(phrase);
+//		}
+//	}
+	
+	private List<String> getAllPossibleSuperClasses(String className){
+		String[] token = TextProcessingUtils.tokenizeLabel(className);
+		List<String> superConcepts = new ArrayList<String>();
+		int length = token.length;
+		for (int i = 0; i < length - 1; i++) {
+			StringBuilder previousTokens = new StringBuilder();
+			for (int j = i + 1; j < length; j++) {
+				previousTokens.append(" " + token[j]);
+			}
+			superConcepts.add(previousTokens.toString().trim());
+		}
+		return superConcepts;
+	}
 	@Override
 	public Map<LexicalFeature, LexicalFeature> getInstancesLexicalFeatures(List<String> instances) {
 
@@ -249,12 +279,14 @@ public class InstanceLexicalFeatureExtractor implements IInstanceLexicalFeatureE
 			duplicateFeatureFilter.put(code, subString.getSupport());
 		}
 		for (Phrase phrase : _lexicalFeatureExtractor.extractCommonPhrases(instances)) {
-			// System.out.println("Phrase: " + phrase.getLabel() + ", " +
-			// phrase.getCount() + ", " + phrase.getSignificant() + ", " +
-			// phrase.getSupport());
+//			 System.out.println("Phrase: " + phrase.getLabel() + ", " +
+//			 phrase.getCount() + ", " + phrase.getSignificant() + ", " +
+//			 phrase.getSupport());
 			String code = phrase.getLabel();
 			if (duplicateFeatureFilter.containsKey(code) && duplicateFeatureFilter.get(code) < phrase.getSupport()) {
 				instanceLabelFeatures.remove(new SubString(phrase.getLabel(), phrase.getFeaturePosition()));
+				instanceLabelFeatures.put(phrase, phrase);
+			} else {
 				instanceLabelFeatures.put(phrase, phrase);
 			}
 		}

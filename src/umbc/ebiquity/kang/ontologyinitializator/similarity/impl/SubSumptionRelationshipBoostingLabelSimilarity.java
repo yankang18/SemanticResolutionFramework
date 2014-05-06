@@ -12,7 +12,7 @@ public class SubSumptionRelationshipBoostingLabelSimilarity implements ILabelSim
 	
 	private QGramsDistance ngramSimilarity = new QGramsDistance(new TokeniserQGram2Extended()); 
 	private IWordListSimilarity _wordListSimilarity;
-	private IWordListSimilarity _equalSemanticRootWordListSimilarity = new EqualSemanticRootWordListSimilarity();
+	private IWordListSimilarity _equalSemanticRootWordListSimilarity = new EqualStemWordListSimilarity();
 	private boolean _penalize = true;
 
 	private double differenceThreshold = 0.2;

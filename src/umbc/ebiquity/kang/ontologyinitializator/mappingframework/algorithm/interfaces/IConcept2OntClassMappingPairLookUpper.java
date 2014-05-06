@@ -1,8 +1,9 @@
 package umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces;
 
 import java.util.Collection;
+import java.util.List;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Concept;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.Concept2OntClassMapping;
 
 public interface IConcept2OntClassMappingPairLookUpper {
@@ -19,6 +20,8 @@ public interface IConcept2OntClassMappingPairLookUpper {
 	 * @param concept - an instance of Concept
 	 * @return a collection of concept-to-class mapping pairs
 	 */
-	Collection<Concept2OntClassMapping> lookupConcept2OntClassMappingPairs(Concept concept);
+	List<Concept2OntClassMapping> lookupConcept2OntClassMappingPairs(Concept concept);
 
+	boolean hasMappedOntClass(Concept concept);
+	
 }

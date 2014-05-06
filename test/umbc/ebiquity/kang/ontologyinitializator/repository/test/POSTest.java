@@ -1,5 +1,6 @@
 package umbc.ebiquity.kang.ontologyinitializator.repository.test;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,7 +17,6 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterCo
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
 import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
-
 import edu.stanford.nlp.ling.Sentence;
 import edu.stanford.nlp.ling.TaggedWord;
 import edu.stanford.nlp.tagger.maxent.MaxentTagger;
@@ -24,7 +24,13 @@ import edu.stanford.nlp.tagger.maxent.MaxentTagger;
 public class POSTest {
 
 	public static void main(String[] args) throws IOException {
-
+		File dir = new File("/Users/yangkang/Desktop/KKK/");
+		if(dir.exists()){
+			System.out.println("here1");
+		} else{
+		 boolean success = dir.mkdirs();
+			System.out.println("here2 " + success);
+		}
 //		// Initialize the tagger
 //		MaxentTagger tagger = new MaxentTagger(System.getProperty("user.dir") + "/taggers/english-left3words-distsim.tagger");
 //
@@ -160,7 +166,7 @@ public class POSTest {
 		
 		
 //		test();
-		testDeriveConcepts();
+//		testDeriveConcepts();
 	}
 
 	public static void testDeriveConcepts() {

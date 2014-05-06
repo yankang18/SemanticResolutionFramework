@@ -1,6 +1,6 @@
 package umbc.ebiquity.kang.ontologyinitializator.repository.interfaces;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Concept;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter.MappingRelationType;
 
@@ -16,7 +16,7 @@ public interface IConcept2OntClassMapping {
 	
 	public Concept getConcept();
 	
-	public String getProvenance();
+	public String getProvenantHostInstance();
 
 	public boolean isMappedConcept();
 
@@ -26,7 +26,7 @@ public interface IConcept2OntClassMapping {
 	
 	public void setMappedOntoClass(OntoClassInfo mappedOntoClass, MappingRelationType relation, double mappingScore);
 	
-	public void setProvenance(String provenance);
+	public void setProvenantHostInstance(String provenance);
 
 	boolean isHittedMapping();
 
@@ -34,9 +34,9 @@ public interface IConcept2OntClassMapping {
 
 	boolean isManualMapping();
 
-	String getSatelliteInstance();
+	String getHostInstance();
 
-	void setSatelliteInstance(String instance);
+	void setHostInstance(String instance);
 
 	String getMappingCode(); 
 	

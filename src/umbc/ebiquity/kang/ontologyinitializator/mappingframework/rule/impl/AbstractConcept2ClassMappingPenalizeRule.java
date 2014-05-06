@@ -1,13 +1,14 @@
 package umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.impl;
 
-import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ManufacturingLexicalMappingRepository.MappingVericationResult;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRecordsAccessor;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRepository;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRecordsUpdater.MappingVericationResult;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
 
 public abstract class AbstractConcept2ClassMappingPenalizeRule extends AbstractConcept2ClassMappingRule {
 	 
 	protected AbstractConcept2ClassMappingPenalizeRule(IOntologyRepository ontologyRepository,
-			IManufacturingLexicalMappingRepository MLRepository) {
+			IManufacturingLexicalMappingRecordsAccessor MLRepository) {
 		super(ontologyRepository, MLRepository);
 	}
 

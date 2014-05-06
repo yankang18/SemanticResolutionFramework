@@ -6,6 +6,8 @@ public interface ICorrectionRule {
 
 //	String getTargetClass(IClassifiedInstanceDetailRecord instance);
 
-	String getTargetClass(IClassifiedInstanceDetailRecord instance, String originalClass); 
+	String obtainCorrectedClassLabel(IClassifiedInstanceDetailRecord instance, String originalClass);
+
+	void showDetail();  
 
 }

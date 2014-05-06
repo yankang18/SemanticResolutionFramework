@@ -9,6 +9,7 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterCo
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ManufacturingLexicalMappingRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.TripleRepositoryFactory;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRecordsReader;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.ITripleRepository;
@@ -17,14 +18,14 @@ public class TSOntoMappingAlgorithmTest {
 	
 	private ITripleRepository extractedTripleStore;
 	private IOntologyRepository ontologyRepository;
-	private IManufacturingLexicalMappingRepository MLRepository;
+	private IManufacturingLexicalMappingRecordsReader MLRepository;
 	
 	@Before
 	public void Init() throws IOException {
 		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/kangyan2003/Desktop/";
 		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/kangyan2003/Desktop/Ontology/MSDL-Fullv2.owl";
 		ontologyRepository = OntologyRepositoryFactory.createOntologyRepository();
-		MLRepository = ManufacturingLexicalMappingRepositoryFactory.createManufacturingLexiconRepository();
+		MLRepository = ManufacturingLexicalMappingRepositoryFactory.createAggregratedManufacturingLexicalMappingRepository(ontologyRepository);
 
 //		String webSiteURLString = "http://www.accutrex.com";
 		String webSiteURLString = "http://www.princetonind.com";

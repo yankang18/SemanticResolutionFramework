@@ -62,7 +62,7 @@ public class SimpleLexicalFeatureExtractor implements ILexicalFeatureExtractor {
 		for(String token : this.normalizeLabelToArray(label)){
 			sb.append(token + " ");
 		}
-		return sb.toString().trim();
+		return sb.toString().trim().toLowerCase();
 	}
 
 	@Override
@@ -75,6 +75,9 @@ public class SimpleLexicalFeatureExtractor implements ILexicalFeatureExtractor {
 			String[] tokens = normalizeLabelToArray(wordSet);
 			Collection<Phrase> phrases = phraseExtractor.extractPhrases(tokens, tokens.length);
 			for (Phrase p : phrases) {
+				if(p.getLabel().toCharArray().length < 3){
+					continue;
+				}
 				// System.out.println("@ " + p.getLabel() + ", " +
 				// p.getSignificant() + ", " + p.getSupport());
 				if (phraseCollection.containsKey(p.getLabel())) {
@@ -120,8 +123,9 @@ public class SimpleLexicalFeatureExtractor implements ILexicalFeatureExtractor {
 	public Collection<SubString> extractCommonSubStrings(Collection<String> LabelCollections) {
 		List<String> LabelList = new ArrayList<String>(LabelCollections);
 
-		int charThreshold = 3;
-		int subStringFrequency = 2;
+		int charThreshold = 4;
+		int subStringFrequency = 3;
+		
 		Map<String, Integer> substring2CountMap = new HashMap<String, Integer>();
 		Map<String, Double> subString2ConfidenceMap = new HashMap<String, Double>();
 		Map<String, Set<String>> subString2SourcesMap = new HashMap<String, Set<String>>();

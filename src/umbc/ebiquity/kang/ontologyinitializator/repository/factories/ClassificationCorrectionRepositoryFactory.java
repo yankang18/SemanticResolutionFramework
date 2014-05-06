@@ -6,6 +6,7 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ClassificationCo
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrectionRepository;
 import umbc.ebiquity.kang.ontologyinitializator.utilities.FileUtility;
 
+@Deprecated
 public class ClassificationCorrectionRepositoryFactory {
 	
 	public static IClassificationCorrectionRepository createRepository() throws IOException { 

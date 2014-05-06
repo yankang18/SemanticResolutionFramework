@@ -23,13 +23,14 @@ import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.Correction
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.interfaces.ICorrectionRule;
 import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ClassifiedInstancesRepositoryFactory;
+import umbc.ebiquity.kang.ontologyinitializator.repository.factories.InterpretationCorrectionRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ClassificationCorrectionRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrectionRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstanceDetailRecord;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstancesAccessor;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IUpdatedInstanceRecord;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceRecord;
 import umbc.ebiquity.kang.ontologyinitializator.testdata.FakeDataCreator;
 import umbc.ebiquity.kang.textprocessing.impl.SequenceInReversedOrderPhraseExtractor;
 
@@ -45,22 +46,26 @@ private static IMappingAlgorithm _alg;
 	
 	@BeforeClass
 	public static void init() throws IOException{ 
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/kangyan2003/Desktop/";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/kangyan2003/Desktop/Ontology/MSDL-Fullv2.owl";
-
+		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
+		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
+		RepositoryParameterConfiguration.CLASSIFIED_INSTANCE_HOST_DIRECTORY = "/Users/yankang/Desktop/Test_NoRule_NoNaive";
+		RepositoryParameterConfiguration.MANUFACTUIRNG_LEXICON_HOST_DIRECTORY = "/Users/yankang/Desktop/Test_NoRule_NoNaive";
+		RepositoryParameterConfiguration.CLASSIFICATION_CORRECTION_HOST_DIRECTORY = "/Users/yankang/Desktop/Test_NoRule_NoNaive";
+		
+		
 		_ontologyRepository = OntologyRepositoryFactory.createOntologyRepository();
 		_correctionClusterCodeGenerator = new CorrectionClusterCodeGenerator();
-		_correctionRepository = new ClassificationCorrectionRepository(_ontologyRepository);
+		_correctionRepository = InterpretationCorrectionRepositoryFactory.createAggregratedClassificationCorrectionRepository();
 		
 		FakeDataCreator fakeDataCreator = new FakeDataCreator();
-		Map<IUpdatedInstanceRecord, IClassifiedInstanceDetailRecord> XXX = fakeDataCreator.createUpdatedInstanceRecordsAndClassifiedInstanceRecords();
-		for (IUpdatedInstanceRecord updatedInstanceRecord : XXX.keySet()) {
+		Map<IInstanceRecord, IClassifiedInstanceDetailRecord> XXX = fakeDataCreator.createUpdatedInstanceRecordsAndClassifiedInstanceRecords();
+		for (IInstanceRecord updatedInstanceRecord : XXX.keySet()) {
 			IClassifiedInstanceDetailRecord originalClassifiedInstance = XXX.get(updatedInstanceRecord);
 			_correctionRepository.extractCorrection(updatedInstanceRecord, originalClassifiedInstance);
 		}
 		
-		_instanceC2CMappingFeatureExtractor = new InstanceConcept2OntClassMappingFeatureExtractor(_correctionClusterCodeGenerator, _correctionRepository);
-		IClassifiedInstancesAccessor classifiedInstances = ClassifiedInstancesRepositoryFactory.createClassifiedInstancesRepository(_ontologyRepository);
+		_instanceC2CMappingFeatureExtractor = new InstanceConcept2OntClassMappingFeatureExtractor(_correctionClusterCodeGenerator, _correctionRepository, _ontologyRepository);
+		IClassifiedInstancesAccessor classifiedInstances = ClassifiedInstancesRepositoryFactory.createAggregatedClassifiedInstancesRepository(_ontologyRepository);
 //		classifiedInstances.showRepositoryDetail();
 		_instanceLexicalFeatureExtractor = new InstanceLexicalFeatureExtractor(classifiedInstances, new SimpleLexicalFeatureExtractor(new SequenceInReversedOrderPhraseExtractor()));
 		
@@ -73,6 +78,7 @@ private static IMappingAlgorithm _alg;
 				_instanceLexicalFeatureExtractor
 		);
 		
+		System.out.println("------------------------ Show Classification Correction Rules ------------------------");
 		_ruleGenerator.showClassificationCorrectionRules();
 		
 	}
@@ -86,13 +92,20 @@ private static IMappingAlgorithm _alg;
 		System.out.println(sourceClass + ", " + targetClass + ": " + code1);
 	}
 	
+//	@Ignore
 	@Test
 	public void GenerateClassificationCorrectionRules() throws IOException {
+		
+		System.out.println("------------------------ GenerateClassificationCorrectionRules------------------------");
 		for (IClassifiedInstanceDetailRecord classifiedInstance : this.createClassifiedInstanceDetailInfo()) {
 			System.out.println();
 			ICorrectionRule rule = _ruleGenerator.getClassificationCorrectionRule(classifiedInstance);
-			String targetClass = rule.getTargetClass(classifiedInstance, classifiedInstance.getOntoClassName());
+//			rule.showDetail();
+			String targetClass = rule.obtainCorrectedClassLabel(classifiedInstance, classifiedInstance.getOntoClassName());
 			System.out.println("The Correct Class: " + targetClass);
+			System.out.println();
+			System.out.println();
+			System.out.println();
 		}
 	}
 	
@@ -140,7 +153,7 @@ private static IMappingAlgorithm _alg;
 		String instanceName = "Abrasive Waterjet Cutting";
 		String className = "ManufacturingService";
 		Map<String, String> c2cMapping = new HashMap<String, String>();
-		c2cMapping.put("capabilities", "Process");
+		c2cMapping.put("process", "Process");
 		c2cMapping.put("sheet metal fabrication", "SheetMetalService");
 		c2cMapping.put("carbon steel shims", "CarbonSteel");
 		classifiedInstanceRecordList.add(fakeDataCreator.createClassifiedInstanceRecord(instanceName, className, c2cMapping));
@@ -156,7 +169,7 @@ private static IMappingAlgorithm _alg;
 		instanceName = "Abrasive Waterjet Cutting";
 		className = "Machining";
 		c2cMapping = new HashMap<String, String>();
-		c2cMapping.put("capabilities", "Process");
+		c2cMapping.put("process", "Process");
 		c2cMapping.put("mechanicalmachining", "MechanicalMachining");
 		c2cMapping.put("waterjetcutting", "WaterJetCutting");
 		classifiedInstanceRecordList.add(fakeDataCreator.createClassifiedInstanceRecord(instanceName, className, c2cMapping));

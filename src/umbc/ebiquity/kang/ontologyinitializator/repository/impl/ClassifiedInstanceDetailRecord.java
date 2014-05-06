@@ -98,8 +98,16 @@ public class ClassifiedInstanceDetailRecord extends ClassifiedInstanceBasicRecor
 		return this.matchedOntClassResult;
 	}
 	
+	@Override
 	public void setConcept2OntClassMappingPairs(Collection<IConcept2OntClassMapping> concept2OntClassMappings){
+		_concept2OntClassMappingPairs.clear();
+		_conceptName2MappingPairMap.clear();
 		for(IConcept2OntClassMapping pair : concept2OntClassMappings){
+			String mappedOntoClassName = "NULL";
+			if(pair.getMappedOntoClass() != null){
+				mappedOntoClassName = pair.getMappedOntoClassName();
+			}
+			System.out.println("HERE: " + pair.getConceptName() + " " + mappedOntoClassName + " " + pair.isMappedConcept());
 			this._concept2OntClassMappingPairs.add(pair);
 			this._conceptName2MappingPairMap.put(pair.getConceptName(), pair);
 		}

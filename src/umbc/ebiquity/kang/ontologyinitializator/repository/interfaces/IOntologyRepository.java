@@ -131,4 +131,8 @@ public interface IOntologyRepository {
 
 	Collection<String> getSemanticCotopy(String className);
 
+	int getDepth(String className);
+ 
+	void printOntologyInfo();
+
 }

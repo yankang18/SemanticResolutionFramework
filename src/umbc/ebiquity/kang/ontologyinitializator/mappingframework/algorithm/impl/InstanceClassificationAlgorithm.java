@@ -3,6 +3,7 @@ package umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import umbc.csee.ebiquity.ontologymatcher.algorithm.component.OntPropertyInfo;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Concept;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IBestMatchedOntClassFinder;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IConcept2OntClassMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IConcept2OntClassMappingPairPruner;
@@ -23,9 +24,11 @@ import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ClassifiedInstanceDetailRecord;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.Concept2OntClassMapping;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.MatchedOntProperty;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrectionRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMapping;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.ITripleRepository;
+import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
 
 public class InstanceClassificationAlgorithm implements IInstanceClassificationAlgorithm,  IMappingAlgorithmComponent {
 	
@@ -40,6 +43,7 @@ public class InstanceClassificationAlgorithm implements IInstanceClassificationA
 	private IOntologyRepository ontologyRepository;
 	private IConcept2OntClassMapper concept2OntClassMapper;
 	private IBestMatchedOntClassFinder BestMatchedOntClassFinder;
+	IClassificationCorrectionRepository _aggregratedClassificationCorrectionRepository;
 	/**
 	 * 
 	 */
@@ -47,12 +51,12 @@ public class InstanceClassificationAlgorithm implements IInstanceClassificationA
 	
 	private Map<String, MatchedOntProperty> relation2PropertyMap;
 
-	public InstanceClassificationAlgorithm(ITripleRepository tripleStore, IOntologyRepository ontologyRepository, IConcept2OntClassMapper concept2OntClassMapper){
+	public InstanceClassificationAlgorithm(ITripleRepository tripleStore, IOntologyRepository ontologyRepository, IConcept2OntClassMapper concept2OntClassMapper, IClassificationCorrectionRepository aggregratedClassificationCorrectionRepository){
 		this.tripleStore = tripleStore;
 		this.ontologyRepository = ontologyRepository;
 		this.concept2OntClassMapper = concept2OntClassMapper;
 		this.BestMatchedOntClassFinder = new BestMatchedOntClassFinder(ontologyRepository);
-		
+		this._aggregratedClassificationCorrectionRepository = aggregratedClassificationCorrectionRepository;
 		this.classifiedInstanceDetailInfoList = new ArrayList<ClassifiedInstanceDetailRecord>();
 		this.relation2PropertyMap = new LinkedHashMap<String, MatchedOntProperty>();
 	}
@@ -74,6 +78,7 @@ public class InstanceClassificationAlgorithm implements IInstanceClassificationA
 	private void classifyInstances(Collection<InstanceTripleSet> instanceTripleSets, Collection<OntoClassInfo> ontClasses) {
 		List<ClassifiedInstanceDetailRecord> classifiedInstanceInfoes = new ArrayList<ClassifiedInstanceDetailRecord>();
 		for (InstanceTripleSet instanceTripleSet : instanceTripleSets) {
+			
 			System.out.println();
 			System.out.println("Identifying class for: <" + instanceTripleSet.getSubjectLabel() + ">");
 			
@@ -82,7 +87,7 @@ public class InstanceClassificationAlgorithm implements IInstanceClassificationA
 
 			
 			Collection<Concept2OntClassMapping> concept2OntClassMappingPairs = concept2OntClassMapper.mapConcept2OntClass(fullConceptSet, ontClasses);
-			MatchedOntoClassInfo matchedOntClassResult = BestMatchedOntClassFinder.findBestMatchedOntoClass(instanceTripleSet.getSubjectLabel(), concept2OntClassMappingPairs);
+			MatchedOntoClassInfo matchedOntClassResult = BestMatchedOntClassFinder.findBestMatchedOntoClass(instanceTripleSet.getSubjectLabel(), concept2OntClassMappingPairs, _aggregratedClassificationCorrectionRepository);
 			
 			if (matchedOntClassResult != null) {
 
@@ -122,7 +127,7 @@ public class InstanceClassificationAlgorithm implements IInstanceClassificationA
 	}
 	
 	private Set<Concept> collectConcepts(InstanceTripleSet instanceTripleSet){
-		Set<Concept> fullConceptSet = new LinkedHashSet<Concept>();
+		Map<Concept, Concept> fullConcepts = new LinkedHashMap<Concept, Concept>();
 		
 		/*
 		 * 
@@ -134,7 +139,10 @@ public class InstanceClassificationAlgorithm implements IInstanceClassificationA
 				 *  record the concepts learned from the Entity Graph
 				 */
 				String value = concept.getConceptName().trim();
-				fullConceptSet.add(concept);
+				// apply stemmer here?
+				concept.updateLabel(TextProcessingUtils.tokenizeLabel2String(value, true, true, 1));
+				this.addConcept(fullConcepts, concept);
+//				fullConceptSet.add(concept);
 				double score = Math.log(concept.getScore()) > 1 ? Math.log(concept.getScore()) : 1;
 				System.out.println("   - concept: " + value + ", " + score);
 			}
@@ -153,12 +161,62 @@ public class InstanceClassificationAlgorithm implements IInstanceClassificationA
 				for(String domainStr : ontPropertyInfo.getAllDomains()){
 					System.out.println("   - concept: " + domainStr + " from property " + ontPropertyInfo.getLocalName() + ", " + 1.0);
 					Concept concept = new Concept(domainStr);
-					concept.setScore(1.0);
-					fullConceptSet.add(concept);
+					// TODO: should the score be 0.6
+					concept.setScore(0.6);
+					this.addConcept(fullConcepts, concept);
+//					fullConceptSet.add(concept);
 				}
 			}
 		}
-		return fullConceptSet;
+		return new HashSet<Concept>(fullConcepts.values());
+	}
+	
+//	private Set<Concept> collectConcepts(InstanceTripleSet instanceTripleSet){
+//		Set<Concept> fullConceptSet = new LinkedHashSet<Concept>();
+//		
+//		/*
+//		 * 
+//		 */
+//		Collection<Concept> conceptSet = instanceTripleSet.getConceptSet();
+//		if (conceptSet != null) {
+//			for (Concept concept : conceptSet) {
+//				/*
+//				 *  record the concepts learned from the Entity Graph
+//				 */
+//				String value = concept.getConceptName().trim();
+//				fullConceptSet.add(concept);
+//				double score = Math.log(concept.getScore()) > 1 ? Math.log(concept.getScore()) : 1;
+//				System.out.println("   - concept: " + value + ", " + score);
+//			}
+//		}
+//		
+//		/*
+//		 *  get concepts from matched properties 
+//		 */
+//		Collection<MatchedOntProperty> relation2PropertyMappingPairs = new ArrayList<MatchedOntProperty>();
+//		for (String relation : instanceTripleSet.getCustomRelation()) {
+//			MatchedOntProperty pair = relation2PropertyMap.get(relation);
+//			if (pair != null) {
+//				relation2PropertyMappingPairs.add(pair);
+//				String targetPropertyURI = pair.getOntPropertyURI();
+//				OntPropertyInfo ontPropertyInfo = ontologyRepository.getOntPropertyByURI(targetPropertyURI);
+//				for(String domainStr : ontPropertyInfo.getAllDomains()){
+//					System.out.println("   - concept: " + domainStr + " from property " + ontPropertyInfo.getLocalName() + ", " + 1.0);
+//					Concept concept = new Concept(domainStr);
+//					concept.setScore(1.0);
+//					fullConceptSet.add(concept);
+//				}
+//			}
+//		}
+//		return fullConceptSet;
+//	}
+	
+	private void addConcept(Map<Concept, Concept> concepts, Concept concept){
+		if (concepts.containsKey(concept)) {
+			concepts.get(concept).addScore(concept.getScore());
+		} else {
+			concepts.put(concept, concept);
+		}
 	}
     
 	@Override

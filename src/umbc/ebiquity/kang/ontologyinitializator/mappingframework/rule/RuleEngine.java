@@ -12,21 +12,24 @@ import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.impl.SetNu
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.interfaces.IConcept2ClassMappingRule;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMapping;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMappingPairSet;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRecordsAccessor;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
 
 public class RuleEngine {
 
 	private Collection<IConcept2ClassMappingRule> _concept2ClassMappingUpdateRuleSet;
-	
 
-	public void applyConcept2ClassMappingUpdateRules(String instanceClassName,
-			                                         IConcept2OntClassMappingPairSet newConceptSet, 
-			                                         IConcept2OntClassMappingPairSet oldConceptSet,
-			                                         IOntologyRepository ontologyRepository,
-			                                         IManufacturingLexicalMappingRepository MLRepository) {
+	private IOntologyRepository _ontologyRepository;
 
-		this.loadConcept2ClassMappingUpdateRules(ontologyRepository, MLRepository);
+	public RuleEngine(IOntologyRepository ontologyRepository) {
+		_ontologyRepository = ontologyRepository;
+	}
+
+	public void applyConcept2ClassMappingUpdateRules(String instanceClassName, IConcept2OntClassMappingPairSet newConceptSet,
+			IConcept2OntClassMappingPairSet oldConceptSet, IManufacturingLexicalMappingRecordsAccessor MLRepository) {
+
+		this.loadConcept2ClassMappingUpdateRules(_ontologyRepository, MLRepository);
 		for (IConcept2OntClassMapping newConcept2OntClassMapingPair : newConceptSet.getConcept2OntClassMappingPairs()) {
 			
 //			System.out.println(newConcept2OntClassMapingPair.getMappingCode());
@@ -55,7 +58,7 @@ public class RuleEngine {
 	}
 
 	
-	private void loadConcept2ClassMappingUpdateRules(IOntologyRepository ontologyRepository, IManufacturingLexicalMappingRepository MLRepository) {
+	private void loadConcept2ClassMappingUpdateRules(IOntologyRepository ontologyRepository, IManufacturingLexicalMappingRecordsAccessor MLRepository) {
 		_concept2ClassMappingUpdateRuleSet = new ArrayList<IConcept2ClassMappingRule>();
 		_concept2ClassMappingUpdateRuleSet.add(new Concept2ClassMappingBoostingRule(ontologyRepository, MLRepository));
 		_concept2ClassMappingUpdateRuleSet.add(new Concept2ClassMappingPenalizeRule(ontologyRepository, MLRepository));

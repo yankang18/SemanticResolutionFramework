@@ -26,11 +26,11 @@ public class TripleRepositoryExtractionTest {
 	
 	private ITripleRepository createTripleRepository(boolean local) throws IOException{
 		
-//		String webSiteURLString = "http://www.astromfg.com";
+//		String webSiteURLString = "http://www.bassettinc.com";
 		String webSiteURLString = "http://www.accutrex.com";
 		URL webSiteURL = new URL(webSiteURLString);
 		
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/kangyan2003/Desktop/";
+		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/home/yankang/Desktop/";
 		String tripleRepository = RepositoryParameterConfiguration.getTripleRepositoryDirectoryFullPath();
 		System.out.println("Triple Repo: " + tripleRepository);
 		ITripleRepository extractedTripleStore = TripleRepositoryFactory.createTripleRepository(webSiteURL, local);

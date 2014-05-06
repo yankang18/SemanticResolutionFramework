@@ -9,7 +9,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.Concept;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.BestMatchedOntClassFinder;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMappingPairLookUpper;
@@ -20,10 +20,13 @@ import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.inter
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IConcept2OntClassMappingPairPruner;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.MatchedOntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.factories.InterpretationCorrectionRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ManufacturingLexicalMappingRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.Concept2OntClassMapping;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrectionRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMapping;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRecordsReader;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
 
@@ -31,14 +34,14 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyR
 public class InstanceClassificationAlgorithmTest {
 	
 	private IOntologyRepository ontologyRepository;
-	private IManufacturingLexicalMappingRepository MLRepository;
+	private IManufacturingLexicalMappingRecordsReader MLRepository;
 	
 	@Before
 	public void Init() throws IOException{ 
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/kangyan2003/Desktop/";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/kangyan2003/Desktop/Ontology/MSDL-Fullv1.owl";
+		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yanakng/Desktop/";
+		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
 		ontologyRepository = OntologyRepositoryFactory.createOntologyRepository();
-		MLRepository = ManufacturingLexicalMappingRepositoryFactory.createManufacturingLexiconRepository();
+		MLRepository = ManufacturingLexicalMappingRepositoryFactory.createAggregratedManufacturingLexicalMappingRepository(ontologyRepository);
 	}
 	
 	@Test
@@ -52,7 +55,7 @@ public class InstanceClassificationAlgorithmTest {
 	private Collection<Concept> concepts;
 	public void Concept2OntClassMapperTest(){
 		IConcept2OntClassMappingPairLookUpper concept2OntClassMappingPairLookUpper = new Concept2OntClassMappingPairLookUpper(MLRepository, ontologyRepository);
-		IConcept2OntClassMapper concept2OntClassMapper = new Concept2OntClassMapper(concept2OntClassMappingPairLookUpper);
+		IConcept2OntClassMapper concept2OntClassMapper = new Concept2OntClassMapper(concept2OntClassMappingPairLookUpper, true);
 		Map<String, String> domainSpecificConceptMap = this.createDomainSpecificConceptMap();
 		concept2OntClassMapper.setDomainSpecificConceptMap(domainSpecificConceptMap);
 		
@@ -85,9 +88,11 @@ public class InstanceClassificationAlgorithmTest {
 	
 	private MatchedOntoClassInfo matchedOntClassResult;
 	private String instancelabel = "cnc turning";
-	public void BestMatchedOntClassFinderTest(){
+	public void BestMatchedOntClassFinderTest() throws IOException{
 		IBestMatchedOntClassFinder bestMatchedOntClassFinder = new BestMatchedOntClassFinder(ontologyRepository);
-		matchedOntClassResult = bestMatchedOntClassFinder.findBestMatchedOntoClass(instancelabel, mappingPairs);
+		IClassificationCorrectionRepository aggregatedClassificationCorrectionRepository = InterpretationCorrectionRepositoryFactory
+				.createAggregratedClassificationCorrectionRepository();
+		matchedOntClassResult = bestMatchedOntClassFinder.findBestMatchedOntoClass(instancelabel, mappingPairs, aggregatedClassificationCorrectionRepository);
 	}
 	
 	public void PruneConcept2OntClassMappingPairTest(){

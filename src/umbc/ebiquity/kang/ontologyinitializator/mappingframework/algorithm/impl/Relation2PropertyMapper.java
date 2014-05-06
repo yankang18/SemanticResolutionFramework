@@ -16,10 +16,10 @@ import umbc.csee.ebiquity.ontologymatcher.algorithm.component.OntPropertyInfo.On
 import umbc.csee.ebiquity.ontologymatcher.config.AlgorithmMode;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.SimilarityAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IRelation2PropertyMapper;
-import umbc.ebiquity.kang.ontologyinitializator.similarity.impl.EqualSemanticRootBoostingLabelSimilarity;
+import umbc.ebiquity.kang.ontologyinitializator.similarity.impl.EqualStemBoostingLabelSimilarity;
 import umbc.ebiquity.kang.ontologyinitializator.similarity.impl.OrderedWordListSimilarity;
 import umbc.ebiquity.kang.ontologyinitializator.similarity.impl.SimpleLabelSimilarity;
-import umbc.ebiquity.kang.ontologyinitializator.similarity.impl.SizeSensitiveSetSimilarity;
+import umbc.ebiquity.kang.ontologyinitializator.similarity.impl.CardinalitySensitiveSetSimilarity;
 import umbc.ebiquity.kang.ontologyinitializator.similarity.interfaces.ILabelSimilarity;
 import umbc.ebiquity.kang.ontologyinitializator.similarity.interfaces.ISetSimilarity;
 
@@ -35,7 +35,7 @@ public class Relation2PropertyMapper implements IRelation2PropertyMapper{
 	
 	public Relation2PropertyMapper(){
 		labelSimilarity = new SimpleLabelSimilarity(new OrderedWordListSimilarity());
-		setSimilarity = new SizeSensitiveSetSimilarity(new EqualSemanticRootBoostingLabelSimilarity(new OrderedWordListSimilarity(), true));
+		setSimilarity = new CardinalitySensitiveSetSimilarity(new EqualStemBoostingLabelSimilarity(new OrderedWordListSimilarity(), true));
 	}
 	
 	@Override
@@ -44,7 +44,6 @@ public class Relation2PropertyMapper implements IRelation2PropertyMapper{
 	}
 	
 	private MSMResult matchRelations2OntProperties(OntPropertyInfo[] sPropertyNodeSet, OntPropertyInfo[] tPropertyNodeSet) {
-
 		SimilarityMatrixLabel[] slabelSet = new SimilarityMatrixLabel[sPropertyNodeSet.length];
 		for (int i = 0; i < sPropertyNodeSet.length; i++) {
 			slabelSet[i] = new SimilarityMatrixLabel(sPropertyNodeSet[i].getLocalName());
@@ -75,8 +74,8 @@ public class Relation2PropertyMapper implements IRelation2PropertyMapper{
 	 */
 	private MSMResult matchRelations2OntProperties(OntPropertyInfo[] sPropertyNodeSet, SimilarityMatrixLabel[] sPropertyLabelSet, OntPropertyInfo[] tPropertyNodeSet,
 			SimilarityMatrixLabel[] tPropetyLabelSet) {
-		
 		SimilarityMatrix sm = new SimilarityMatrix(sPropertyNodeSet.length, tPropertyNodeSet.length);
+		System.out.println("HERE " + sPropertyNodeSet.length + "," + tPropertyNodeSet.length);
 		for (int j = 0; j < tPropertyNodeSet.length; j++) {
 			sm.setCol(j, tPropetyLabelSet[j]);
 		}
@@ -84,7 +83,6 @@ public class Relation2PropertyMapper implements IRelation2PropertyMapper{
 			sm.setRow(i, sPropertyLabelSet[i]);
 
 			for (int j = 0; j < tPropertyNodeSet.length; j++) {
-
 				boolean isDatatypeProperty = false;
 				if (tPropertyNodeSet[j].getPropertyType() == OntPropertyType.DataTypeProperty) {
 					isDatatypeProperty = true;
@@ -178,11 +176,9 @@ public class Relation2PropertyMapper implements IRelation2PropertyMapper{
 		// combination of the three similarities
 		if (isRangeSetCompared && isDomainSetCompared) {
 			if (rangeSetSimilarity >= relationLabelSimilarity) {
-				overallSimilarity = 0.3 * relationLabelSimilarity + 0.7 * rangeSetSimilarity ;
-//				+ 0.1 * domainSetSimilarity;
+				overallSimilarity = 0.3 * relationLabelSimilarity + 0.05 * rangeSetSimilarity + 0.05 * domainSetSimilarity;
 			} else {
-				overallSimilarity = 0.7 * relationLabelSimilarity + 0.3 * rangeSetSimilarity  ;
-//				+ 0.1 * domainSetSimilarity;
+				overallSimilarity = 0.8 * relationLabelSimilarity + 0.15 * rangeSetSimilarity + 0.05 * domainSetSimilarity;
 			}
 
 		} else if (isDomainSetCompared) {
@@ -193,7 +189,7 @@ public class Relation2PropertyMapper implements IRelation2PropertyMapper{
 			}
 		} else if (isRangeSetCompared) {
 			if (relationLabelSimilarity > rangeSetSimilarity) {
-				overallSimilarity = 0.7 * relationLabelSimilarity + 0.3 * rangeSetSimilarity;
+				overallSimilarity = 0.8 * relationLabelSimilarity + 0.2 * rangeSetSimilarity;
 			} else {
 				overallSimilarity = 0.3 * relationLabelSimilarity + 0.7 * rangeSetSimilarity;
 			}

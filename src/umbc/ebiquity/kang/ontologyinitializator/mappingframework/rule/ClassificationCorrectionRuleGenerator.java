@@ -16,6 +16,7 @@ import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrection;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrectionRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstanceDetailRecord;
+import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMapping;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
 import umbc.ebiquity.kang.ontologyinitializator.utilities.Debugger;
 
@@ -62,8 +63,38 @@ public class ClassificationCorrectionRuleGenerator {
 //		Collection<IClassificationCorrectionRule> correctionRules = new ArrayList<IClassificationCorrectionRule>();
 		Collection<CorrectionClusterFeatureWrapper> correctionClusterFeatureWrappers = new ArrayList<CorrectionClusterFeatureWrapper>();
 		
-//		Collection<ClassificationCorrectionCluster> clusters = _sourceClass2CorrectionCluster.get(sourceClassName);
+		Set<String> classNames = new HashSet<String>();
 		Collection<ClassificationCorrectionCluster> correctionClusters = new HashSet<ClassificationCorrectionCluster>();
+		
+		/*
+		 * 
+		 */
+//		for(IConcept2OntClassMapping c2c : instance.getConcept2OntClassMappingPairs()){
+//			
+//			if(c2c.isMappedConcept()){
+//				if (classNames.contains(c2c.getMappedOntoClassName()) || sourceClassName.equals(c2c.getMappedOntoClassName())) {
+//					continue;
+//				}
+//				
+//				CorrectionDirection correctionDirection = new CorrectionDirection(
+//																				_ontologyRepository.getLightWeightOntClassByName(sourceClassName), 
+//																				c2c.getMappedOntoClass()
+//																				);
+//				
+//				String correctionClusterCode = _correctionClusterCodeGenerator.generateCorrectionClusterCode(correctionDirection);
+//					
+//				ClassificationCorrectionCluster cluster = new ClassificationCorrectionCluster(correctionClusterCode, 
+//																								  correctionDirection, 
+//							                                                                      _instanceLexicalFeatureExtractor,
+//							                                                                      _instanceConcept2OntClassMappingFeatureExtractor
+//							                                                                      );
+//				correctionClusters.add(cluster);
+//				classNames.add(c2c.getMappedOntoClassName());
+//			}
+//		}
+		
+		
+//		Collection<ClassificationCorrectionCluster> clusters = _sourceClass2CorrectionCluster.get(sourceClassName);
 		for (String superClassName : _ontologyRepository.getUpwardCotopy(sourceClassName)) {
 			Collection<ClassificationCorrectionCluster> clusters = _sourceClass2CorrectionCluster.get(superClassName);
 			if (clusters != null) {

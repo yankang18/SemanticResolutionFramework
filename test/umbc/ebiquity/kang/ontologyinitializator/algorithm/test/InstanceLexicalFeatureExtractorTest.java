@@ -26,15 +26,19 @@ public class InstanceLexicalFeatureExtractorTest {
 
 	@BeforeClass
 	public static void init() throws IOException {
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/kangyan2003/Desktop/";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/kangyan2003/Desktop/Ontology/MSDL-Fullv1.owl";
+		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
+		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
+		RepositoryParameterConfiguration.CLASSIFIED_INSTANCE_HOST_DIRECTORY = "/Users/yankang/Desktop/Test_NoRule";
+		RepositoryParameterConfiguration.MANUFACTUIRNG_LEXICON_HOST_DIRECTORY = "/Users/yankang/Desktop/Test_NoRule";
+		RepositoryParameterConfiguration.CLASSIFICATION_CORRECTION_HOST_DIRECTORY = "/Users/yankang/Desktop/Test_NoRule";
+		
 		_ontoRepo = OntologyRepositoryFactory.createOntologyRepository();
 		// _repo =
 		// ClassifiedInstancesRepositoryFactory.createClassifiedInstancesRepository(OntologyRepositoryFactory
 		// .createOntologyRepository());
 
 		_instanceLexicalFeatureExtractor = new InstanceLexicalFeatureExtractor(
-				ClassifiedInstancesRepositoryFactory.createClassifiedInstancesRepository(_ontoRepo), new SimpleLexicalFeatureExtractor(
+				ClassifiedInstancesRepositoryFactory.createAggregatedClassifiedInstancesRepository(_ontoRepo), new SimpleLexicalFeatureExtractor(
 						new SequenceInReversedOrderPhraseExtractor()));
 
 	}
@@ -42,7 +46,7 @@ public class InstanceLexicalFeatureExtractorTest {
 	@Test
 	public void GetInstanceLexicalFeatureTest() {
 		IClassifiedInstancesAccessor classifiedInstanceAccessor = ClassifiedInstancesRepositoryFactory
-				.createClassifiedInstancesRepository(_ontoRepo);
+				.createAggregatedClassifiedInstancesRepository(_ontoRepo);
 		classifiedInstanceAccessor.showRepositoryDetail();
 		
 		IInstanceLexicalFeatureExtractor instanceLexicalFeatureExtractor = new InstanceLexicalFeatureExtractor(classifiedInstanceAccessor,
@@ -52,7 +56,7 @@ public class InstanceLexicalFeatureExtractorTest {
 		String className2 = "Process";
 		String className3 = "SubtractionProcess";
 		String className4 = "EngineeringService";
-		String className5 = "WaterJetCutting";
+		String className5 = "StainlessSteel";
 
 		outputFeatures(className1, instanceLexicalFeatureExtractor.getInstanceLexicalFeaturesOfOntClass(className1));
 		outputFeatures(className2, instanceLexicalFeatureExtractor.getInstanceLexicalFeaturesOfOntClass(className2));
