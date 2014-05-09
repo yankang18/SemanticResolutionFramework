@@ -32,6 +32,8 @@ public class MappingDataGateway {
 			String origInstanceName = updatedInstance.getOriginalInstanceName();
 			IClassifiedInstanceDetailRecord originalInstance = this._proprietoryClassifiedInstanceRepository.getClassifiedInstanceDetailRecordByInstanceName(origInstanceName);
 			_proprietoryClassifiedInstanceRepository.updateInstance(updatedInstance);
+			
+			if(updatedInstance.isDeletedInstance()) continue;
 			_classificationCorrectionRepository.extractCorrection(updatedInstance, originalInstance);
 			_manufacturingLexicalMappingRepository.updateValidityOfConcept2OntClassMapping(updatedInstance, originalInstance);
 		}

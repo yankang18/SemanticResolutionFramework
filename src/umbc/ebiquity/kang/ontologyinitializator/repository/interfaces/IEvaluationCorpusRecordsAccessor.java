@@ -7,7 +7,9 @@ import java.util.Set;
 
 public interface IEvaluationCorpusRecordsAccessor extends IEvaluationCorpusRecordsReader {
 
-	void parseRecord(String record);
+
+//	void parseRecord(String record);
+
 	
 	public void addClassifiedInstance(String instanceLabel, String classLabel);
 	

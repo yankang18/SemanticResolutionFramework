@@ -31,29 +31,6 @@ public class EvaluationCorpusRecordsAccessor implements IEvaluationCorpusRecords
 		rpMappingDetail = new HashMap<String, Map<String, Set<String>>>();
 	}
 
-	@Override
-	public void parseRecord(String record) {
-//		System.out.println("@@@ " + record);
-		if(this.isBlank(record)) return;
-		String[] tokens = record.split("	");
-		String type = tokens[0].trim();
-			if ("R".equals(type)) {
-//				System.out.println("@1 " + record);
-				String relationLabel = trimBracket(tokens[1]);
-				String propertyLabel = trimBracket(tokens[2]);
-				relation2PropertyMap.put(relationLabel, propertyLabel);
-			} else if ("C".equals(type)) {
-//				System.out.println("@2 " + record);
-				String instanceLabel = trimBracket(tokens[1]);
-				String classLabel = trimBracket(tokens[2]);
-				instance2ClassMap.put(instanceLabel, classLabel);
-			} else {
-//				System.out.println("@3 " + record);
-				String conceptLabel = trimBracket(tokens[0].trim());
-				String classLabel = trimBracket(tokens[1].trim());
-				concept2ClassMap.put(conceptLabel, classLabel);
-			}
-	}
 	
 	private boolean isBlank(CharSequence cs) {
 		int strLen;
@@ -75,6 +52,16 @@ public class EvaluationCorpusRecordsAccessor implements IEvaluationCorpusRecords
 	@Override
 	public String getClassLabelforInstance(String instanceLabel){
 		return instance2ClassMap.get(instanceLabel);
+	}
+	
+	@Override
+	public boolean containsInstance(String instanceLabel){
+		return instance2ClassMap.containsKey(instanceLabel);
+	}
+	
+	@Override
+	public Set<String> getInstanceSet(){
+		return instance2ClassMap.keySet();
 	}
 	
 	@Override

@@ -79,6 +79,8 @@ public class InstanceClassificationAlgorithm implements IInstanceClassificationA
 		List<ClassifiedInstanceDetailRecord> classifiedInstanceInfoes = new ArrayList<ClassifiedInstanceDetailRecord>();
 		for (InstanceTripleSet instanceTripleSet : instanceTripleSets) {
 			
+			if(!instanceTripleSet.containsConcept()) continue;
+			
 			System.out.println();
 			System.out.println("Identifying class for: <" + instanceTripleSet.getSubjectLabel() + ">");
 			

@@ -94,38 +94,6 @@ public class ProprietaryClassifiedInstanceRepositoriesAutomaticConstructor exten
 					IOntologyRepository ontologyRepository = OntologyRepositoryFactory.createOntologyRepository();
 					ClassifiedInstancesRepositoryFactory.createProprietoryClassifiedInstancesRepository(webSiteURL, ontologyRepository, false, false, false);
 					
-//					IOntologyRepository ontologyRepository = OntologyRepositoryFactory.createOntologyRepository();
-//					ITripleRepository tripleStore = TripleRepositoryFactory.createTripleRepository(webSiteURL, true);
-//					
-//					IManufacturingLexicalMappingRecordsReader aggregratedManufacturingLexicalMappingRepository = ManufacturingLexicalMappingRepositoryFactory
-//							.createAggregratedManufacturingLexicalMappingRepository(ontologyRepository);
-//					
-//					
-//					// Create Relation-Property Mapping Algorithm Object
-//					IRelation2PropertyMappingAlgorithm relation2PropertymMappingAlgorithm = new Relation2PropertyMappingAlgorithm(
-//							tripleStore, ontologyRepository, new Relation2PropertyMapper());
-//					
-//					// Create Instance Classification Algorithm Object
-//					IInstanceClassificationAlgorithm instanceClassificationAlgorithm = new InstanceClassificationAlgorithm(tripleStore,
-//							ontologyRepository, 
-//							new Concept2OntClassMapper(new Concept2OntClassMappingPairLookUpper(aggregratedManufacturingLexicalMappingRepository, 
-//																								ontologyRepository), 
-//																								false));
-//
-//					// Create the Annotation (Mapping) Algorithm Object
-//					IMappingAlgorithm mappingAlgorithm = new TS2OntoMappingAlgorithm2(relation2PropertymMappingAlgorithm, instanceClassificationAlgorithm);
-//					mappingAlgorithm.mapping();
-//					
-//					
-//					IManufacturingLexicalMappingRepository proprietaryManufacturingLexicalMappingRepository = ManufacturingLexicalMappingRepositoryFactory
-//							.createProprietaryManufacturingLexiconRepository(repositoryName);
-//					IClassifiedInstancesRepository proprietoryClassifiedInstancesRepository = new ProprietoryClassifiedInstancesRepository(tripleStore.getRepositoryName(), 
-//							  ontologyRepository, 
-//							  proprietaryManufacturingLexicalMappingRepository, 
-//							  mappingAlgorithm.getRelation2PropertyMap(), 
-//							  mappingAlgorithm.getClassifiedInstances());
-//					
-//					boolean succeed22 = proprietoryClassifiedInstancesRepository.saveRepository();
 				} catch (MalformedURLException e) {
 				}
 			}

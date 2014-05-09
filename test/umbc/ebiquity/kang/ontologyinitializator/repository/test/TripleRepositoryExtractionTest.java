@@ -15,7 +15,7 @@ public class TripleRepositoryExtractionTest {
 	
 	@Test
 	public void ExtractTriplesFromWebSite() throws IOException{ 
-		this.createTripleRepository(false).showTriples();
+		this.createTripleRepository(true).showTriples();
 	}
 	
 	@Test
@@ -26,11 +26,10 @@ public class TripleRepositoryExtractionTest {
 	
 	private ITripleRepository createTripleRepository(boolean local) throws IOException{
 		
-//		String webSiteURLString = "http://www.bassettinc.com";
-		String webSiteURLString = "http://www.accutrex.com";
+		String webSiteURLString = "http://www.aerostarmfg.com";
+//		String webSiteURLString = "http://www.accutrex.com";
 		URL webSiteURL = new URL(webSiteURLString);
-		
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/home/yankang/Desktop/";
+		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
 		String tripleRepository = RepositoryParameterConfiguration.getTripleRepositoryDirectoryFullPath();
 		System.out.println("Triple Repo: " + tripleRepository);
 		ITripleRepository extractedTripleStore = TripleRepositoryFactory.createTripleRepository(webSiteURL, local);

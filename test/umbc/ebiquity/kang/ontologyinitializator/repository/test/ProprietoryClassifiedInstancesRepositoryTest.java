@@ -2,7 +2,7 @@ package umbc.ebiquity.kang.ontologyinitializator.repository.test;
 
 import java.io.IOException;
 import java.net.URL;
-
+import java.util.HashSet;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -55,7 +55,7 @@ public class ProprietoryClassifiedInstancesRepositoryTest {
 				true
 		);
 		
-		((ProprietoryClassifiedInstancesRepository)_ProperietoryClassifiedInstancesRepository).saveHumanReadableFile(RepositoryParameterConfiguration.getMappingHumanReadableDirectoryFullPath());
+		((ProprietoryClassifiedInstancesRepository)_ProperietoryClassifiedInstancesRepository).saveHumanReadableFile(RepositoryParameterConfiguration.getMappingHumanReadableDirectoryFullPath(), new HashSet<String>());
 	}
 
 	@Ignore

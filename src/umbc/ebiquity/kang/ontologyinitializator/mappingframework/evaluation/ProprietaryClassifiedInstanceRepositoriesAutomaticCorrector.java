@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -69,12 +70,14 @@ public class ProprietaryClassifiedInstanceRepositoriesAutomaticCorrector extends
 
 	private IOntologyRepository _ontologyRepository;
 	private InterpretationEvaluator _evaluator;
+	private TestType _testType;
+	
 	public static void main(String[] args) throws IOException {
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
-		String fileFullPath = "/Users/yankang/Desktop/WebSiteURLs.txt";
+		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/home/yankang/Desktop/";
+		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/home/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
+		String fileFullPath = "/home/yankang/Desktop/WebSiteURLs.txt";
 		
-		String dir = "Test_None";
+//		String dir = "Test_None";
 //		String dir = "Test_Rule_Naive";
 //		String dir = "Test_Rule";
 //		String dir = "Test_Naive";
@@ -84,23 +87,51 @@ public class ProprietaryClassifiedInstanceRepositoriesAutomaticCorrector extends
 //		testType = TestType.Bayes;
 //		testType = TestType.Rule;
 //		testType = TestType.Rule_Bayes;
-
 		
-		ProprietaryClassifiedInstanceRepositoriesAutomaticCorrector PCIRAC = new ProprietaryClassifiedInstanceRepositoriesAutomaticCorrector(
-				"/Users/yankang/Desktop/" + dir, "/Users/yankang/Desktop/standards/", "/Users/yankang/Desktop/" + dir + "/EvaluationResult/");
-		PCIRAC.loadRecords(fileFullPath);
-		PCIRAC.createProprietaryClassifiedInstanceRepositories(PopulationType.CRAWL_INDICATED);
+		Set<TestType> testTypes = new LinkedHashSet<TestType>();
+		testTypes.add(TestType.None);
+		testTypes.add(TestType.Bayes);
+		testTypes.add(TestType.Rule);
+		testTypes.add(TestType.Rule_Bayes);
+
+		String dir = "";
+		for (TestType testType : testTypes) {
+			
+			switch (testType) {
+			case None:
+				dir = "Test_None";
+				break;
+			case Bayes:
+				dir = "Test_Naive";
+				break;
+			case Rule:
+				dir = "Test_Rule";
+				break;
+			case Rule_Bayes:
+				dir = "Test_Rule_Naive";
+				break;
+			}
+
+			ProprietaryClassifiedInstanceRepositoriesAutomaticCorrector PCIRAC = new ProprietaryClassifiedInstanceRepositoriesAutomaticCorrector(
+					"/home/yankang/Desktop/" + dir, "/home/yankang/Desktop/standards/", "/home/yankang/Desktop/" + dir
+							+ "/EvaluationResult/", testType);
+			PCIRAC.loadRecords(fileFullPath);
+			PCIRAC.createProprietaryClassifiedInstanceRepositories(PopulationType.CRAWL_INDICATED);
+		}
 	}
 
-	public ProprietaryClassifiedInstanceRepositoriesAutomaticCorrector(String hostDirectory, 
+	public ProprietaryClassifiedInstanceRepositoriesAutomaticCorrector(
+			String hostDirectory, 
 			String goldenStandardRepositoriesDir, 
-			String evaluationResultDirectory)
+			String evaluationResultDirectory,
+			TestType testType)
 			throws IOException {
 		_hostDirectory = hostDirectory;
 		_goldenStandardRepositoriesDir = goldenStandardRepositoriesDir;
 		_evaluationResultDirectory = evaluationResultDirectory;
 		_ontologyRepository = OntologyRepositoryFactory.createOntologyRepository();
 		_evaluator = new InterpretationEvaluator(_ontologyRepository);
+		_testType = testType;
 	}
 
 	public void createProprietaryClassifiedInstanceRepositories(PopulationType populationType) throws IOException {
@@ -123,9 +154,28 @@ public class ProprietaryClassifiedInstanceRepositoriesAutomaticCorrector extends
 		RepositoryParameterConfiguration.CLASSIFIED_INSTANCE_HOST_DIRECTORY = _hostDirectory;
 		RepositoryParameterConfiguration.MANUFACTUIRNG_LEXICON_HOST_DIRECTORY = _hostDirectory;
 		RepositoryParameterConfiguration.CLASSIFICATION_CORRECTION_HOST_DIRECTORY = _hostDirectory;
-		
 		boolean applyMappingRule = false;
 		boolean applyCorrections = false;
+
+		switch (_testType) {
+		case None:
+			applyMappingRule = false;
+			applyCorrections = false;
+			break;
+		case Bayes:
+			applyMappingRule = false;
+			applyCorrections = true;
+			break;
+		case Rule:
+			applyMappingRule = true;
+			applyCorrections = false;
+			break;
+		case Rule_Bayes:
+			applyMappingRule = true;
+			applyCorrections = true;
+			break;
+		}
+		
 		
 		for (String webSiteURLStr : crawlIndicators.keySet()) {
 			boolean recrawl = crawlIndicators.get(webSiteURLStr);
@@ -145,12 +195,12 @@ public class ProprietaryClassifiedInstanceRepositoriesAutomaticCorrector extends
 					System.out.println("1" + evaluationCorpusFileFullName);
 					System.out.println("2" + basicInfoFileFullName);
 					System.out.println("3" + detailInfoFileFullName);
-
 					boolean goldenStandardFileExists = FileUtility.exists(evaluationCorpusFileFullName);
 
 //					if (!basicInfoFileExists || !detailInfoFileExists || !goldenStandardFileExists) {
 //						continue;
 //					}
+					
 					
 					if (!goldenStandardFileExists) {
 						continue;
@@ -239,13 +289,12 @@ public class ProprietaryClassifiedInstanceRepositoriesAutomaticCorrector extends
 				mappingAlgorithm.mapping();
 				
 				IClassifiedInstancesRepository proprietoryClassifiedInstancesRepository = new ProprietoryClassifiedInstancesRepository(tripleStore.getRepositoryName(), 
-						_ontologyRepository, 
+						  _ontologyRepository, 
 						  proprietaryManufacturingLexicalMappingRepository, 
 						  mappingAlgorithm.getRelation2PropertyMap(), 
 						  mappingAlgorithm.getClassifiedInstances());
 				
 				// apply the classification correction algorithm here!!!
-
 				proprietaryManufacturingLexicalMappingRepository.addNewConcept2OntoClassMappings(proprietoryClassifiedInstancesRepository.getAllClassifiedInstanceDetailRecords());
 				
 //				boolean succeed11 = proprietaryManufacturingLexicalMappingRepository.saveRepository();
@@ -346,11 +395,6 @@ public class ProprietaryClassifiedInstanceRepositoriesAutomaticCorrector extends
 		
 		
 		
-		
-		
-		
-		
-		
 		//
 		IClassificationCorrectionRepository classificationCorrectionRepository = InterpretationCorrectionRepositoryFactory
 				.createProprietaryClassificationCorrectionRepository(repositoryName);
@@ -373,51 +417,57 @@ public class ProprietaryClassifiedInstanceRepositoriesAutomaticCorrector extends
 			instanceRecord.setOriginalInstanceName(origInstanceName);
 			instanceRecord.setUpdatedInstanceName(origInstanceName);
 			instanceRecord.setOriginalClassName(origOntoClassName);
-			String stardandClassLabel = evaluationCorpusRecordsReader.getClassLabelforInstance(origInstanceName);
-
-			if (stardandClassLabel != null && !origOntoClassName.equals(stardandClassLabel.trim())) {
-				numberOfUpdatedInstance++;
-				instanceRecord.setUpdatedClassName(stardandClassLabel);
-				instanceRecord.isUpdatedInstance(true);
-			} else {
-				instanceRecord.setUpdatedClassName(origOntoClassName);
-				instanceRecord.isUpdatedInstance(false);
-			}
-
-			for (IConcept2OntClassMapping c2cMapping : record.getConcept2OntClassMappingPairs()) {
-				Concept concept = c2cMapping.getConcept();
-				String conceptLabel = concept.getConceptName();
-				String standardMappedOntClassLabel = evaluationCorpusRecordsReader.getOntClassForConcept(conceptLabel);
-				List<String> standardMappedOntClassSet = evaluationCorpusRecordsReader.getClassSet(origInstanceName, conceptLabel);
+			
+			if(evaluationCorpusRecordsReader.containsInstance(origInstanceName)){
 				
-				if (c2cMapping.isMappedConcept()) {
-					String mappedOntClassLabel = c2cMapping.getMappedOntoClassName().trim();
-					if (standardMappedOntClassSet.size() > 0 && !mappedOntClassLabel.equals(standardMappedOntClassSet.get(0).trim())) {
-//					if (standardMappedOntClassLabel != null && !mappedOntClassLabel.equals(standardMappedOntClassLabel.trim())) {
-						standardMappedOntClassLabel = standardMappedOntClassSet.get(0).trim();
-						System.out.println("### Change Concept_Class Mapping: " + conceptLabel + "  --> " + standardMappedOntClassLabel);
-						OntoClassInfo updatedMappedOntClass = _ontologyRepository.getLightWeightOntClassByName(standardMappedOntClassLabel);
-						double sim = 0.75;
-						instanceRecord.addConcept2OntClassMappingPair(concept, null, updatedMappedOntClass, true, true, sim);
-					} else {
-						instanceRecord.addConcept2OntClassMappingPair(concept, c2cMapping.getRelation(), c2cMapping.getMappedOntoClass(), c2cMapping.isDirectMapping(), c2cMapping.isManualMapping(), c2cMapping.getMappingScore());
-					}
-
+				String stardandClassLabel = evaluationCorpusRecordsReader.getClassLabelforInstance(origInstanceName);
+				if (!origOntoClassName.equals(stardandClassLabel.trim())) {
+					numberOfUpdatedInstance++;
+					instanceRecord.setUpdatedClassName(stardandClassLabel);
+					instanceRecord.isUpdatedInstance(true);
 				} else {
+					instanceRecord.setUpdatedClassName(origOntoClassName);
+					instanceRecord.isUpdatedInstance(false);
+				}
+
+				for (IConcept2OntClassMapping c2cMapping : record.getConcept2OntClassMappingPairs()) {
+					Concept concept = c2cMapping.getConcept();
+					String conceptLabel = concept.getConceptName();
+					String standardMappedOntClassLabel = evaluationCorpusRecordsReader.getOntClassForConcept(conceptLabel);
+					List<String> standardMappedOntClassSet = evaluationCorpusRecordsReader.getClassSet(origInstanceName, conceptLabel);
 					
-					if (standardMappedOntClassSet.size() > 0 ) {
-//					if (standardMappedOntClassLabel != null) {
-						standardMappedOntClassLabel = standardMappedOntClassSet.get(0).trim();
-						System.out.println("### Add New Concept_Class Mapping: " + conceptLabel + "  --> " + standardMappedOntClassLabel);
-						OntoClassInfo updatedMappedOntClass = _ontologyRepository.getLightWeightOntClassByName(standardMappedOntClassLabel);
-						double sim = 0.75;
-						instanceRecord.addConcept2OntClassMappingPair(concept, MappingRelationType.relatedTo, updatedMappedOntClass, true, true, sim);
-						proprietaryManufacturingLexicalMappingRepository.addNewConcept2OntoClassMapping(concept, MappingRelationType.relatedTo, updatedMappedOntClass, sim); 
+					if (c2cMapping.isMappedConcept()) {
+						String mappedOntClassLabel = c2cMapping.getMappedOntoClassName().trim();
+						if (standardMappedOntClassSet.size() > 0 && !mappedOntClassLabel.equals(standardMappedOntClassSet.get(0).trim())) {
+//						if (standardMappedOntClassLabel != null && !mappedOntClassLabel.equals(standardMappedOntClassLabel.trim())) {
+							standardMappedOntClassLabel = standardMappedOntClassSet.get(0).trim();
+							System.out.println("### Change Concept_Class Mapping: " + conceptLabel + "  --> " + standardMappedOntClassLabel);
+							OntoClassInfo updatedMappedOntClass = _ontologyRepository.getLightWeightOntClassByName(standardMappedOntClassLabel);
+							double sim = 0.75;
+							instanceRecord.addConcept2OntClassMappingPair(concept, null, updatedMappedOntClass, true, true, sim);
+						} else {
+							instanceRecord.addConcept2OntClassMappingPair(concept, c2cMapping.getRelation(), c2cMapping.getMappedOntoClass(), c2cMapping.isDirectMapping(), c2cMapping.isManualMapping(), c2cMapping.getMappingScore());
+						}
+
 					} else {
-						instanceRecord.addConcept2OntClassMappingPair(concept, null, null, false, false, 0.0);
+						
+						if (standardMappedOntClassSet.size() > 0 ) {
+//						if (standardMappedOntClassLabel != null) {
+							standardMappedOntClassLabel = standardMappedOntClassSet.get(0).trim();
+							System.out.println("### Add New Concept_Class Mapping: " + conceptLabel + "  --> " + standardMappedOntClassLabel);
+							OntoClassInfo updatedMappedOntClass = _ontologyRepository.getLightWeightOntClassByName(standardMappedOntClassLabel);
+							double sim = 0.75;
+							instanceRecord.addConcept2OntClassMappingPair(concept, MappingRelationType.relatedTo, updatedMappedOntClass, true, true, sim);
+							proprietaryManufacturingLexicalMappingRepository.addNewConcept2OntoClassMapping(concept, MappingRelationType.relatedTo, updatedMappedOntClass, sim); 
+						} else {
+							instanceRecord.addConcept2OntClassMappingPair(concept, null, null, false, false, 0.0);
+						}
 					}
 				}
+			} else {
+				instanceRecord.setDeletedInstance(true); 
 			}
+			
 		}
 
 		System.out.println("### number of classified instances: " + numberOfClassifiedInstance);

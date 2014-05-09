@@ -135,4 +135,10 @@ public interface IOntologyRepository {
  
 	void printOntologyInfo();
 
+//	boolean isSibling(String firstClassName, String secondClassName);
+
+	boolean isInTheSamePath(String firstClassName, String secondClassName);
+
+	String getLowestCommonAncestor(String globalPathOne, String globalPathTwo);
+
 }

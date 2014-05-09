@@ -48,12 +48,13 @@ public class Concept {
 		this.computingLabel = computeLabel;
 	}
 	public String getConceptName(){
-		return this.label;
+		return this.label.toLowerCase();
 	}
 	
 	public String getComputingLabel(){
 		return this.computingLabel;
 	}
+	
 	
 	public boolean isFromInstance(){
 		return this.isFromInstance;

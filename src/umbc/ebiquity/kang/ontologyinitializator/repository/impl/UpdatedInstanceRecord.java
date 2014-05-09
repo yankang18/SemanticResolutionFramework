@@ -20,6 +20,7 @@ public class UpdatedInstanceRecord implements IInstanceRecord{
 	private String _updatedClassName;
 //	private OntoClassInfo _updatedOntClass;
 	private boolean _isUpdatedInstance;
+	private boolean _isDeletedInstance;
 	private Collection<IConcept2OntClassMapping> _concept2OntClassMappings;
 	private Map<String, IConcept2OntClassMapping> _conceptName2MappingPairMap;
 	
@@ -51,6 +52,11 @@ public class UpdatedInstanceRecord implements IInstanceRecord{
 	@Override
 	public void isUpdatedInstance(boolean isUpdatedInstance) {
 		this._isUpdatedInstance = isUpdatedInstance;
+	}
+	
+	@Override
+	public void setDeletedInstance(boolean isDeletedInstance) {
+		this._isDeletedInstance = isDeletedInstance;
 	}
 
 	@Override
@@ -85,6 +91,11 @@ public class UpdatedInstanceRecord implements IInstanceRecord{
 	@Override
 	public boolean isUpdatedInstance() {
 		return this._isUpdatedInstance;
+	}
+	
+	@Override
+	public boolean isDeletedInstance() {
+		return this._isDeletedInstance;
 	}
 
 	@Override

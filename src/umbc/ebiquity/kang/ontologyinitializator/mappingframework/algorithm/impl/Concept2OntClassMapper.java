@@ -31,6 +31,12 @@ public class Concept2OntClassMapper implements IConcept2OntClassMapper {
 		this.applyMappingRule = applyMappingRule;
 	}
 	
+	public Concept2OntClassMapper(){
+		this.domainSpecificTermMap = new HashMap<String, String>();
+		this.labelSimilarity = new SubSumptionRelationshipBoostingLabelSimilarity(new OrderedWordListSimilarity(), true);
+		this.applyMappingRule = false;
+	}
+	
 	@Override
 	public void setDomainSpecificConceptMap(Map<String, String> domainSpecificConceptMap){
 		this.domainSpecificTermMap.putAll(domainSpecificConceptMap);
@@ -40,7 +46,6 @@ public class Concept2OntClassMapper implements IConcept2OntClassMapper {
 	public Collection<Concept2OntClassMapping> mapConcept2OntClass(Collection<Concept> conceptSet, Collection<OntoClassInfo> ontClasses) {
 		
 		List<Concept2OntClassMapping> concept2OntClassMappingPairs = new ArrayList<Concept2OntClassMapping>(); 
-//		Concept2OntClassMappingPairLookUpper lookUpper = new Concept2OntClassMappingPairLookUpper(0.75, MLRepository, this.domaindOntology);
 		for (Concept concept : conceptSet) {
 
 			/*
@@ -58,10 +63,6 @@ public class Concept2OntClassMapper implements IConcept2OntClassMapper {
 				}
 			}
 			
-			
-			/*
-			 * 
-			 */
 //			for (String relation : domainSpecificTermMap.keySet()) {
 //				double sim = labelSimilarity.computeLabelSimilarity(concept.getConceptName(), relation);
 //				if (sim >= this.equalityThreshold) {

@@ -1,6 +1,7 @@
 package umbc.ebiquity.kang.ontologyinitializator.algorithm.test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -38,14 +39,17 @@ public class InstanceClassificationAlgorithmTest {
 	
 	@Before
 	public void Init() throws IOException{ 
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yanakng/Desktop/";
+		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
 		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
+		
+		RepositoryParameterConfiguration.MANUFACTUIRNG_LEXICON_HOST_DIRECTORY = "/Users/yankang/Desktop/MLM";
+		
 		ontologyRepository = OntologyRepositoryFactory.createOntologyRepository();
 		MLRepository = ManufacturingLexicalMappingRepositoryFactory.createAggregratedManufacturingLexicalMappingRepository(ontologyRepository);
 	}
 	
 	@Test
-	public void BundleTest(){
+	public void BundleTest() throws IOException{ 
 		Concept2OntClassMapperTest();
 //		BestMatchedOntClassFinderTest();
 //		PruneConcept2OntClassMappingPairTest();
@@ -56,12 +60,12 @@ public class InstanceClassificationAlgorithmTest {
 	public void Concept2OntClassMapperTest(){
 		IConcept2OntClassMappingPairLookUpper concept2OntClassMappingPairLookUpper = new Concept2OntClassMappingPairLookUpper(MLRepository, ontologyRepository);
 		IConcept2OntClassMapper concept2OntClassMapper = new Concept2OntClassMapper(concept2OntClassMappingPairLookUpper, true);
-		Map<String, String> domainSpecificConceptMap = this.createDomainSpecificConceptMap();
-		concept2OntClassMapper.setDomainSpecificConceptMap(domainSpecificConceptMap);
+//		Map<String, String> domainSpecificConceptMap = this.createDomainSpecificConceptMap();
+//		concept2OntClassMapper.setDomainSpecificConceptMap(domainSpecificConceptMap);
 		
 		mappingPairs = concept2OntClassMapper.mapConcept2OntClass(this.createConceptCollection(), ontologyRepository.getAllOntClasses());
 		for(Concept2OntClassMapping mappingPair : mappingPairs){
-			System.out.println("1: " + mappingPair.getConceptName() + " -->" + mappingPair.getMappedOntoClassName() + "  " +  mappingPair.getMappingScore());
+			System.out.println("1: " + mappingPair.getConceptName() + " --> " + mappingPair.getMappedOntoClassName() + "  " +  mappingPair.getMappingScore());
 		}
 	}
 	
@@ -76,7 +80,7 @@ public class InstanceClassificationAlgorithmTest {
 		concepts = new LinkedHashSet<Concept>();
 		Concept concept1 = new Concept("Capability");
 		Concept concept2 = new Concept("Machining Service");
-		Concept concept3 = new Concept("Stone Waterjet Cutting");
+		Concept concept3 = new Concept("Assembly Services");
 		concept1.setScore(1.0);
 		concept2.setScore(1.0);
 		concept3.setScore(1.0);
@@ -90,9 +94,10 @@ public class InstanceClassificationAlgorithmTest {
 	private String instancelabel = "cnc turning";
 	public void BestMatchedOntClassFinderTest() throws IOException{
 		IBestMatchedOntClassFinder bestMatchedOntClassFinder = new BestMatchedOntClassFinder(ontologyRepository);
-		IClassificationCorrectionRepository aggregatedClassificationCorrectionRepository = InterpretationCorrectionRepositoryFactory
-				.createAggregratedClassificationCorrectionRepository();
+		IClassificationCorrectionRepository aggregatedClassificationCorrectionRepository = null;
+		mappingPairs = new ArrayList<Concept2OntClassMapping>();
 		matchedOntClassResult = bestMatchedOntClassFinder.findBestMatchedOntoClass(instancelabel, mappingPairs, aggregatedClassificationCorrectionRepository);
+		System.out.println("class: " + matchedOntClassResult.getMatchedOntoClassInfo().getOntClassName());
 	}
 	
 	public void PruneConcept2OntClassMappingPairTest(){

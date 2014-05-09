@@ -1,13 +1,12 @@
 package umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-
-//import umbc.csee.ebiquity.ontologymatcher.textprocessing.TextProcessingUtils;
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.SimilarityAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IConcept2OntClassMappingPairLookUpper;
@@ -55,24 +54,41 @@ public class Concept2OntClassMappingPairLookUpper implements IConcept2OntClassMa
 		List<Concept2OntClassMapping> concept2OntClassMappingPairs = new ArrayList<Concept2OntClassMapping>();
 		
 		Set<String> hierarchies = new HashSet<String>();
-		OntoClassInfo mappedOntClass1 = null;
-		for (OntoClassInfo ontClass : MLRepository.getMappedOntClasses(concept.getConceptName())){
-			double applyScore = this.getConcept2ClassMappingApplyScore(concept, ontClass);
-			if (applyScore >= 0.4) {
+		Map<String, OntoClassInfo> hierarchy2MappedOntClass = new HashMap<String, OntoClassInfo>();
+//		OntoClassInfo mappedOntClass1 = null;
+		for (OntoClassInfo ontClass : MLRepository.getMappedOntClasses(concept.getConceptName().toLowerCase())){
+			double newScore = this.getConcept2ClassMappingScore(concept, ontClass);
+//			if (applyScore >= 0.4) {
 				String hierarchyStr = String.valueOf(OntRepository.getOntClassHierarchyNumber(ontClass));
-				if (!hierarchies.contains(hierarchyStr)) {
-					mappedOntClass1 = ontClass;
-					hierarchies.add(hierarchyStr);
-					double similarity = this.getSimilarity(concept, mappedOntClass1);
-					mappedOntClass1.setSimilarityToConcept(similarity);
-					System.out.println("From MLR: <" + concept.getConceptName() + "> --> <" + mappedOntClass1.getOntClassName() + "> with " + similarity);
-					Concept2OntClassMapping concept2ClassMapping = new Concept2OntClassMapping(concept, mappedOntClass1, similarity);
-					concept2ClassMapping.setDirectMapping(false); 
-					concept2OntClassMappingPairs.add(concept2ClassMapping);
+				if (hierarchy2MappedOntClass.containsKey(hierarchyStr)) {
+					
+					double oldScore = hierarchy2MappedOntClass.get(hierarchyStr).getSimilarityToConcept();
+					if(newScore > oldScore){
+						ontClass.setSimilarityToConcept(newScore);
+						hierarchy2MappedOntClass.put(hierarchyStr, ontClass);
+					}
+//					
+//					String newClassName = ontClass.getOntClassName();
+//					String oldClassName = hierarchy2MappedOntClass.get(hierarchyStr).getOntClassName();
+//					if(OntRepository.isSuperClassOf(newClassName, oldClassName, false)){
+//						ontClass.setSimilarityToConcept(newScore);
+//						hierarchy2MappedOntClass.put(hierarchyStr, ontClass);
+//					}
+					
+				} else {
+					ontClass.setSimilarityToConcept(newScore);
+					hierarchy2MappedOntClass.put(hierarchyStr, ontClass);
 				}
-			}
+//			}
 		}
 		
+		
+		for(String hierarchyStr : hierarchy2MappedOntClass.keySet()){
+			OntoClassInfo ontoClassInfo = hierarchy2MappedOntClass.get(hierarchyStr);
+			Concept2OntClassMapping concept2ClassMapping = new Concept2OntClassMapping(concept, ontoClassInfo, ontoClassInfo.getSimilarityToConcept());
+			concept2ClassMapping.setDirectMapping(false); 
+			concept2OntClassMappingPairs.add(concept2ClassMapping);
+		}
 		
 //		if (concept2OntClassMappingPairs.size() > 0) {
 //			return concept2OntClassMappingPairs;
@@ -166,9 +182,6 @@ public class Concept2OntClassMappingPairLookUpper implements IConcept2OntClassMa
 //		}
 //		return concept2OntClassMappingPairs;
 //	}
-	
-	
-	
 	
 
 //	@Override
@@ -273,7 +286,6 @@ public class Concept2OntClassMappingPairLookUpper implements IConcept2OntClassMa
 //		return concept2OntClassMappingPairs;
 //	}
 
-	
 	private double getConcept2ClassMappingApplyScore(Concept concept, OntoClassInfo ontClass){
 		double score = 0.0;
 		try {
@@ -348,8 +360,8 @@ public class Concept2OntClassMappingPairLookUpper implements IConcept2OntClassMa
 			}
 			
 			double succeedWeight = 1.0;
-			double failedWeight = 0.0;
-			double unSettltedWeight = 0.5;
+			double failedWeight = -1.0;
+			double unSettltedWeight = 0.0;
 			double weightedTotalCounts = failedWeight * failedCounts + succeedWeight * succeedCounts + unSettltedWeight * unSettledCounts;
 			double adjt_strength = weightedTotalCounts / totalCounts; // adjustment strength
 
@@ -361,6 +373,7 @@ public class Concept2OntClassMappingPairLookUpper implements IConcept2OntClassMa
 			}
 			score = similarity + alpha * maximalAdjustmentQuantity * adjt_strength;
 		} catch (NoSuchEntryItemException e) {
+			System.out.println("here: " + score);
 			return score;
 		}
 		return score;

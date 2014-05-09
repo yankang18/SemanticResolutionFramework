@@ -55,6 +55,10 @@ public class InstanceTripleSet {
 		instance2ConceptSetTriples.add(triple);
 	}
 	
+	public boolean containsConcept() {
+		return instance2ConceptualSetMap.values().size() > 0 ? true : false;
+	}
+
 	public void addNonTaxonomicTriple(Triple triple) {
 		String predicate = triple.getPredicate();
 		String object = triple.getObject();

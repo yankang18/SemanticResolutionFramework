@@ -97,7 +97,14 @@ public class BestMatchedOntClassFinder implements IBestMatchedOntClassFinder {
 			}
 			
 		} else {
-			System.out.println("No onto-class hierarchy identified");
+			
+			matchedOntClassInfo = new MatchedOntoClassInfo();
+			OntoClassInfo ontoClassInfo = OntologyRepository.getLightWeightOntClassByName("Any");
+			matchedOntClassInfo.setMatchedOntoClassInfo(ontoClassInfo);
+			matchedOntClassInfo.setSimilarity(1.0);
+			matchedOntClassInfo.setClassHierarchyNumber(OntologyRepository.getOntClassHierarchyNumber(ontoClassInfo));
+			
+			System.out.println("No onto-class hierarchy identified, Therefore give <Any>");
 		}
 		
 		System.out.println("------------------------------------------");

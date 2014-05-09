@@ -24,12 +24,15 @@ public class Concept2OntClassMappingLookUpTest {
 
 	@BeforeClass
 	public static void LoadDataFromFile() throws IOException {
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/kangyan2003/Desktop/";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/kangyan2003/Desktop/Ontology/MSDL-Fullv2.owl";
-		IManufacturingLexicalMappingRepository _MLReposiory = ManufacturingLexicalMappingRepositoryFactory.createProprietaryManufacturingLexiconRepository("");
+		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
+		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
+		
+		RepositoryParameterConfiguration.MANUFACTUIRNG_LEXICON_HOST_DIRECTORY = "/Users/yankang/Desktop/MLM";
+		IManufacturingLexicalMappingRepository _MLReposiory = ManufacturingLexicalMappingRepositoryFactory.createProprietaryManufacturingLexiconRepository("_MLM");
 		_MLReposiory.showRepositoryDetail();
 		IOntologyRepository _ontologyRepository = OntologyRepositoryFactory.createOntologyRepository();
 		lookUpper = new Concept2OntClassMappingPairLookUpper(0.75, _MLReposiory, _ontologyRepository);
+		
 	}
 	
 	@Test
@@ -39,10 +42,18 @@ public class Concept2OntClassMappingLookUpTest {
 		Collection<Concept2OntClassMapping> mappingPairs = lookUpper.lookupConcept2OntClassMappingPairs(concept);
 		
 		for(Concept2OntClassMapping mappingPair:mappingPairs){
-			System.out.println("<" + mappingPair.getConceptName() + "  " + mappingPair.getRelation().toString() + "  " + mappingPair.getMappedOntoClassName() + ">");
+			System.out.println("<" + mappingPair.getConceptName() + "  " + mappingPair.getMappedOntoClassName() + "  " + mappingPair.getMappingScore() + ">");
+		}
+		
+		Concept concept2 = new Concept("shearing");
+		Collection<Concept2OntClassMapping> mappingPairs2 = lookUpper.lookupConcept2OntClassMappingPairs(concept2);
+		
+		for(Concept2OntClassMapping mappingPair:mappingPairs2){
+			System.out.println("<" + mappingPair.getConceptName() + "  " + mappingPair.getMappedOntoClassName() + "  " + mappingPair.getMappingScore() + ">");
 		}
 	}
 
+	@Ignore
 	@Test
 	public void lookUpConceptWithMultipleMappedClassesInSameHierarchyPathTest() {
 		System.out.println();
@@ -55,6 +66,7 @@ public class Concept2OntClassMappingLookUpTest {
 		}
 	}
 	
+	@Ignore
 	@Test
 	public void lookUpConceptWithMultipleMappedClassesInSameHierarchyButInDifferentPathTest() {
 		System.out.println();
@@ -66,7 +78,7 @@ public class Concept2OntClassMappingLookUpTest {
 		}
 	}
 	
-
+	@Ignore
 	@Test
 	public void lookUpConceptWithMultipleMappedClassesInDifferentHierarchyTest() {
 		System.out.println();

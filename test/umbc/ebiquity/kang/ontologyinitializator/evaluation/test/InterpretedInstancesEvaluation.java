@@ -73,7 +73,7 @@ public class InterpretedInstancesEvaluation {
 	                    );
 //			evaluationCorpusRecordsReader.showRecords();
 			EvaluationResult evaluationResult = _evaluator.evaluate(evaluationCorpusRecordsReader, proprietoryClassifiedInstancesRepository); 
-			System.out.println("Score: " + evaluationResult.getOverallScore());
+			System.out.println("Score: " + evaluationResult.getPrecision());
 		} else {
 		}
 	}

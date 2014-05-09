@@ -59,6 +59,10 @@ public class ProprietoryClassifiedInstancesRepository implements IClassifiedInst
 	private StringBuilder _detailRecords;
 	private StringBuilder _textRecords;
 	
+	public ProprietoryClassifiedInstancesRepository() throws IOException {
+		this.init();
+	}
+
 	/***
 	 * This Constructor is called when the mapping information is loaded from
 	 * local storage.
@@ -298,12 +302,59 @@ public class ProprietoryClassifiedInstancesRepository implements IClassifiedInst
 			}
 		}
 	}
-
 	
-//	@Override
-//	public IUpdatedInstanceRecord createInstanceClassificationRecord(){
-//		return new UpdatedInstanceRecord();
-//	}
+	private void createTextRecordOfMappingInfo(Set<String> instanceBlackList){
+		System.out.println("### createTextRecordOfMappingInfo ");
+		this._textRecords = new StringBuilder();
+		for(String instanceName : _instanceURI2DetailedInstanceRecordMap.keySet()){
+			
+			//
+			if(instanceBlackList.contains(instanceName)){
+				continue;
+			}
+			IClassifiedInstanceDetailRecord classifiedInstanceInfo = _instanceURI2DetailedInstanceRecordMap.get(instanceName);
+			OntoClassInfo ontoClassInfo = classifiedInstanceInfo.getMatchedOntoClass();
+			String instanceOntClassName = ontoClassInfo.getOntClassName();
+			
+			//
+			if (instanceOntClassName.equals("Any"))
+				continue;
+			
+			String instance2OntClass = "<"+instanceName + ">	<" +instanceOntClassName + ">";
+			System.out.println("I2C: " + instance2OntClass);
+			_textRecords.append("C	" + instance2OntClass);
+			_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+			for (IConcept2OntClassMapping concept2OntClassMappingPair : classifiedInstanceInfo.getConcept2OntClassMappingPairs()) {
+				
+				if (concept2OntClassMappingPair.isMappedConcept()) {
+					/*
+					 * if the concept has mapped to certain onto-class, record
+					 * the basic information of this onto-class
+					 */
+					Concept concept = new Concept(concept2OntClassMappingPair.getConceptName());
+					OntoClassInfo ontoClassInfo2 = concept2OntClassMappingPair.getMappedOntoClass();
+					System.out.println("C2C: " + concept.getConceptName() + " " + ontoClassInfo2.getOntClassName());
+					String concept2OntClass = "               <" + concept.getConceptName() + ">	<" + ontoClassInfo2.getOntClassName() + ">";
+					_textRecords.append(concept2OntClass);
+					_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+				}
+			}
+			_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		}
+		
+		_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		
+		for (IMatchedOntProperty mappedRelationInfo : _relationName2RPMappingPairMap.values()) {
+
+			String relationName = mappedRelationInfo.getRelationName();
+			String propertyName = mappedRelationInfo.getOntPropertyName();
+			String relation2Property = "R	<" + relationName + ">	<" + propertyName + ">";
+			_textRecords.append(relation2Property);
+			_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		}
+	}
 	
 	private void createTextRecordOfMappingInfo(){
 		System.out.println("### createTextRecordOfMappingInfo ");
@@ -511,9 +562,9 @@ public class ProprietoryClassifiedInstancesRepository implements IClassifiedInst
 		}
 	}
 	
-	public boolean saveHumanReadableFile(String goldenStandardsFullPath){
+	public boolean saveHumanReadableFile(String goldenStandardsFullPath, Set<String> instanceBlackList){
 		
-		this.createTextRecordOfMappingInfo();
+		this.createTextRecordOfMappingInfo(instanceBlackList);
 //		String dirFullPath = RepositoryParameterConfiguration.getMappingHumanReadableDirectoryFullPath();
 		String dirFullPath = goldenStandardsFullPath;
 		boolean dirExists = FileUtility.exists(dirFullPath);
@@ -805,12 +856,23 @@ public class ProprietoryClassifiedInstancesRepository implements IClassifiedInst
 	}
 	
 	@Override
-	public void updateInstance(IInstanceRecord updatedInstance){
-		this.updateInstanceClass(updatedInstance);
-		this.updateInstanceLabel(updatedInstance);
-		
+	public void updateInstance(IInstanceRecord updatedInstance) {
+		if (updatedInstance.isDeletedInstance()) {
+			this.deleteInstance(updatedInstance);
+		} else {
+			this.updateInstanceClass(updatedInstance);
+			this.updateInstanceLabel(updatedInstance);
+		}
+
 	}
 	
+	private void deleteInstance(IInstanceRecord instance) {
+		String originalLabel = instance.getOriginalInstanceName();
+		_instanceURI2BasicInstanceRecordMap.remove(originalLabel);
+		_instanceURI2DetailedInstanceRecordMap.remove(originalLabel);
+		_instanceSet.remove(originalLabel);
+	}
+
 	private void updateInstanceLabel(IInstanceRecord updatedInstance) {
 		String originalLabel = updatedInstance.getOriginalInstanceName();
 		IClassifiedInstanceDetailRecord originalDetailedInstanceRecord1 = this._instanceURI2DetailedInstanceRecordMap.get(originalLabel);

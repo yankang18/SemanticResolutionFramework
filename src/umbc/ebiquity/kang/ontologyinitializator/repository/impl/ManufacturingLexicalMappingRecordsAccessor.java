@@ -70,7 +70,7 @@ public class ManufacturingLexicalMappingRecordsAccessor implements IManufacturin
 			String classURI = mappedOntoClassInfo.get(MappingInfoSchemaParameter.CLASS_URI);
 			
 			OntoClassInfo ontClassInfo = new OntoClassInfo(classURI, classNS, className); 
-			Map<String, String> mappedClassEntryItem = getMappedClassEntryItem(concept, ontClassInfo);
+			Map<String, String> mappedClassEntryItem = this.getMappedClassEntryItem(concept, ontClassInfo);
 			if(null != mappedClassEntryItem){
 				
 				int verication_attempts = Integer.valueOf(mappedClassEntryItem.get(MappingInfoSchemaParameter.MAPPING_VERIFICATION_ATTEMPTS));
@@ -394,8 +394,10 @@ public class ManufacturingLexicalMappingRecordsAccessor implements IManufacturin
 	}
 
 	@Override
-	public void addNewConcept2OntoClassMapping(Concept concept, MappingRelationType mappingRelationType, OntoClassInfo ontoClass,
-			double similarity) {
+	public void addNewConcept2OntoClassMapping(Concept concept, 
+											   MappingRelationType mappingRelationType, 
+											   OntoClassInfo ontoClass,
+											   double similarity) {
 		if (this.hasConcept2OntoClassMapping(concept, ontoClass)) {
 			/*
 			 * The entry for this mapping has already existed
