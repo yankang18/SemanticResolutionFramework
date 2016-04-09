@@ -11,12 +11,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.IEntityGraphInstanceConceptsExtractor;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.IEntityGraphRelationExtractor;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.IEntityPathExtractor;
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.IRelationExtractionAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.impl.InstanceConceptSetExtractionAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.impl.RelationCluster;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.interfaces.IEntityGraphInstanceConceptsExtractor;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.interfaces.IEntityGraphRelationExtractor;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.interfaces.IEntityPathExtractor;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.interfaces.IRelationExtractionAlgorithm;
 import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
 import umbc.ebiquity.kang.webpageparser.LeafNode;
 
@@ -30,6 +30,7 @@ public class EntityGraph implements IEntityGraphRelationExtractor, IEntityGraphI
 	 * 
 	 */
 	private Set<EntityPath> entityPathSet;
+	private Collection<EntityPath> entityPaths;
 	/**
 	 * 
 	 */
@@ -61,16 +62,19 @@ public class EntityGraph implements IEntityGraphRelationExtractor, IEntityGraphI
 	 */
 	private Map<EntityNode, Map<EntityNode, Set<EntityNode>>> analyzedForwardTermDescendantsMap;
 
-	public EntityGraph(){
-		this.commonValidator = new EntityValidator();
-		this.init(); 
-	}
-	public EntityGraph(IEntityPathExtractor entityPathConstructor) {
-		this.entityPathConstructor = entityPathConstructor;
+	public EntityGraph(Collection<EntityPath> entityPaths) {
+		this.entityPaths = entityPaths;
 		this.commonValidator = new EntityValidator();
 		this.init(); 
 		this.initializeEntityGraph();
 	}
+	
+//	public EntityGraph(IEntityPathExtractor entityPathConstructor) {
+//		this.entityPathConstructor = entityPathConstructor;
+//		this.commonValidator = new EntityValidator();
+//		this.init(); 
+//		this.initializeEntityGraph();
+//	}
 	
 	private void init(){
 		this.entityPathSet = new LinkedHashSet<EntityPath>();
@@ -128,7 +132,8 @@ public class EntityGraph implements IEntityGraphRelationExtractor, IEntityGraphI
 	private void initializeEntityGraph() {
 		System.out.println("[INITIALIZING ENTITY GRAPH 2...]");
 		
-		for (EntityPath entityPath : entityPathConstructor.constructEntityPaths()) {
+//		for (EntityPath entityPath : entityPathConstructor.constructEntityPaths()) {
+		for (EntityPath entityPath : entityPaths) {
 			System.out.println("Path:  " + entityPath.printPathBottomUp());
 			if (entityPathSet.contains(entityPath)) {
 				continue;

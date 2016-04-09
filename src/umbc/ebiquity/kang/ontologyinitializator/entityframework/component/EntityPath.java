@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.List;
 
 import umbc.ebiquity.kang.webpageparser.LeafNode;
-import umbc.ebiquity.kang.webpageparser.WebPage;
-import umbc.ebiquity.kang.webpageparser.WebTagPath;
+import umbc.ebiquity.kang.webpageparser.WebPageImpl;
+import umbc.ebiquity.kang.webpageparser.WebPathPath;
 import umbc.ebiquity.kang.webpageparser.LeafNode.LeafType;
 
 /***
@@ -16,19 +16,19 @@ import umbc.ebiquity.kang.webpageparser.LeafNode.LeafType;
  */
 public class EntityPath {
 
-	private WebTagPath path;
-	private WebPage webPage;
+	private WebPathPath path;
+	private WebPageImpl webPage;
 	private Collection<Entity> entityPath;
 	private LeafNode leafNode;
 	private String topDownPathString;
 	private String bottomUpPathString;
 
-	public EntityPath(WebTagPath webPagePath, LeafNode leafNode) {
+	public EntityPath(WebPathPath webPagePath, LeafNode leafNode) {
 		this.path = webPagePath;
 		this.leafNode = leafNode;
 	}
 
-	public WebTagPath getWebPagePath() {
+	public WebPathPath getWebPagePath() {
 		return path;
 	}
 
@@ -48,13 +48,13 @@ public class EntityPath {
 		return this.entityPath.size();
 	}
 
-	public void setWebPage(WebPage webPage) {
-		this.webPage = webPage;
-	}
-
-	public WebPage getWebPage() {
-		return webPage;
-	}
+//	public void setWebPage(WebPageImpl webPage) {
+//		this.webPage = webPage;
+//	}
+//
+//	public WebPageImpl getWebPage() {
+//		return webPage;
+//	}
 
 	public LeafNode getLeafNode() {
 		return leafNode;

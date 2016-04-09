@@ -1,4 +1,4 @@
-package umbc.ebiquity.kang.ontologyinitializator.entityframework.interfaces;
+package umbc.ebiquity.kang.ontologyinitializator.entityframework;
 
 import java.util.Collection;
 import java.util.Set;

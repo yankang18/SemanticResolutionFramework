@@ -4,23 +4,24 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
-import umbc.ebiquity.kang.webpageparser.WebTagNode.WebTagNodeType;
+import umbc.ebiquity.kang.webpageparser.WebPageNode.WebTagNodeType;
 
-public class WebTagPath {
+public class WebPathPath {
 	
-	private String pathID;
-	private LinkedList<WebTagNode> nodeList;
+	private String pathId;
+	private LinkedList<WebPageNode> nodeList;
 	private String host;
 	private boolean isPathPatternCreated = false;
+	private boolean isPathIdCreated = false;
 	private String pathPattern;
 	
-	public WebTagPath(){
-		pathID = null;
-		nodeList = new LinkedList<WebTagNode>();
+	public WebPathPath(){
+		pathId = null;
+		nodeList = new LinkedList<WebPageNode>();
 	}
 	
-	public void addNode(WebTagNode node) {
-		WebTagNode last = null;
+	public void addNode(WebPageNode node) {
+		WebPageNode last = null;
 		if (nodeList.size() != 0) {
 			last = nodeList.getLast();
 			last.setChild(node);
@@ -30,20 +31,23 @@ public class WebTagPath {
 		node.setResidePath(this);
 		nodeList.add(node);
 	}
-	
+
 	public String getPathID() {
-		return this.computePathID();
-	}
-	
-	public String getPathPattern() {
-		if (this.isPathPatternCreated) {
-			return pathPattern;
+		if (isPathIdCreated) {
+			return pathId;
 		}
-		return this.computePathPattern();
+		return computePathId();
 	}
 
-	public WebTagNode getNode(String prefixPathID){
-		for(WebTagNode node : nodeList){
+	public String getPathPattern() {
+		if (isPathPatternCreated) {
+			return pathPattern;
+		}
+		return computePathPattern();
+	}
+
+	public WebPageNode getNode(String prefixPathID){
+		for(WebPageNode node : nodeList){
 			if(node.getPrefixPathID().equals(prefixPathID)){
 				return node;
 			}
@@ -52,30 +56,29 @@ public class WebTagPath {
 	}
 	
 	@Override
-	public WebTagPath clone(){
-		WebTagPath newPath = new WebTagPath();
+	public WebPathPath clone(){
+		WebPathPath newPath = new WebPathPath();
 		newPath.setPathID(this.getPathID());
 		newPath.setClonedNodes(this.getClonedNodes());
 		return newPath;
 	}
 	
-	private void setPathID(String pathID) {
-		this.pathID = pathID;
+	private void setPathID(String pathId) {
+		this.pathId = pathId;
 	}
 	
-	private void setClonedNodes(Collection<WebTagNode> nodes) {
-		for (WebTagNode node : nodes) {
+	private void setClonedNodes(Collection<WebPageNode> nodes) {
+		for (WebPageNode node : nodes) {
 			node.setResidePath(this);
 			this.nodeList.add(node);
 		}
 	}
 	
-	private Collection<WebTagNode> getClonedNodes() {
-		LinkedList<WebTagNode> newNodes = new LinkedList<WebTagNode>();
-
-		WebTagNode parent = null;
-		for (WebTagNode node : this.nodeList) {
-			WebTagNode newNode = node.clone();
+	private Collection<WebPageNode> getClonedNodes() {
+		LinkedList<WebPageNode> newNodes = new LinkedList<WebPageNode>();
+		WebPageNode parent = null;
+		for (WebPageNode node : this.nodeList) {
+			WebPageNode newNode = node.clone();
 			if (parent != null) {
 				parent.setChild(newNode);
 			}
@@ -86,42 +89,24 @@ public class WebTagPath {
 		return newNodes;
 	}
 	
-	private String computePathID(){
+	private String computePathId() {
 		StringBuilder builder = new StringBuilder();
-		for (WebTagNode node : nodeList) {
-			
-//			StringBuilder attributeBuilder = new StringBuilder("[");
-//			for (String key : node.attributeKeySet()) {
-//				attributeBuilder.append(key + ":" + node.attributeValue(key) + ",");
-//			}
-//			String attributes = node.listAttributes().size() == 0 ? "" : attributeBuilder.substring(0, attributeBuilder.length() - 1) + "]";
-//			String content  = "";
-//			if (node.isLeafNode()) {
-//				builder.append(node.getTag() + attributes + "[" + node.getFullContent() + "]");
-//			} else {
-//				builder.append(node.getTag() + attributes + content + "/");
-//			}
-			
-			
-////			StringBuilder attributeBuilder = new StringBuilder("[");
-////			for (String key : node.attributeKeySet()) {
-////				attributeBuilder.append(key + ":" + node.attributeValue(key) + ",");
-////			}
-////			String attributes = node.listAttributes().size() == 0 ? "" : attributeBuilder.substring(0, attributeBuilder.length() - 1) + "]";
-
-			String content  = "";
+		for (WebPageNode node : nodeList) {
+			String content = "";
 			if (node.isLeafNode()) {
 				builder.append(node.getTag() + node.getTagCount() + "[" + node.getFullContent() + "]");
 			} else {
 				builder.append(node.getTag() + node.getTagCount() + content + "/");
 			}
 		}
-		return builder.toString();
+		isPathIdCreated = true;
+		pathId = builder.toString();
+		return pathId;
 	}
 	
 	private String computePathPattern() {
 		StringBuilder builder = new StringBuilder();
-		for (WebTagNode node : nodeList) {
+		for (WebPageNode node : nodeList) {
 
 			StringBuilder attributeBuilder = new StringBuilder("[");
 			for (String key : node.attributeKeySet()) {
@@ -134,16 +119,15 @@ public class WebTagPath {
 			} else {
 				builder.append(node.getTag() + attributes + content + "/");
 			}
-
 		}
 		this.isPathPatternCreated = true;
-		this.pathPattern =builder.toString();
+		this.pathPattern = builder.toString();
 		return pathPattern;
 	}
 
 	public boolean containsTextContent() {
 		boolean containsTextContent = false;
-		for (WebTagNode node : nodeList) {
+		for (WebPageNode node : nodeList) {
 			
 			if(!TextProcessingUtils.isStringEmpty(node.getFullContent())){
 				containsTextContent = true;
@@ -155,7 +139,7 @@ public class WebTagPath {
 		return containsTextContent;
 	}
 	
-	public WebTagNode getLastNode() {
+	public WebPageNode getLastNode() {
 		if (nodeList.size() == 0) {
 			return null;
 		}
@@ -163,7 +147,7 @@ public class WebTagPath {
 		return nodeList.getLast();
 	}
 	
-	public WebTagNode getSecondToLastNode(){
+	public WebPageNode getSecondToLastNode(){
 		
 		if (nodeList.size() == 1) {
 			return null;
@@ -180,7 +164,7 @@ public class WebTagPath {
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
-		WebTagPath webPagePath = (WebTagPath) obj;
+		WebPathPath webPagePath = (WebPathPath) obj;
 		return this.getPathPattern().equals(webPagePath.getPathPattern());
 	}
 

@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.IReadOnlyEntityGraph;
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Entity;
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityNode;
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityPath;
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityPathSorterByLeafNodeText;
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityValidator;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.interfaces.IReadOnlyEntityGraph;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.ITripleRepositoryExtractor;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.Triple;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.Triple.BuiltinType;

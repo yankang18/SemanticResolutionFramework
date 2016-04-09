@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.IEntityGraphInstanceConceptsExtractor;
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityNode;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.interfaces.IEntityGraphInstanceConceptsExtractor;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.LongestCommonPhraseAnalyzer;
 import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
 import umbc.ebiquity.kang.textprocessing.stemmer.PluralStemmer;

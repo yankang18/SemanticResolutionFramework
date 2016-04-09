@@ -3,11 +3,11 @@ package umbc.ebiquity.kang.ontologyinitializator.repository.factories;
 import java.io.IOException;
 import java.net.URL;
 
+import umbc.ebiquity.kang.ontologyinitializator.entityframework.IRelationExtractionAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityGraph;
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityPathExtractor;
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.impl.InstanceConceptSetExtractionAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.impl.RelationExtractionAlgorithm;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.interfaces.IRelationExtractionAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.TripleRepositoryExtractor;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.ITripleRepositoryExtractor;
 import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
@@ -60,8 +60,8 @@ public class TripleRepositoryFactory {
 		/*
 		 * extract Entity Paths and create Entity Graph
 		 */
-//		EntityGraph entityGraph = new EntityGraph(new EntityPathExtractor(crawler, null));
-		EntityGraph entityGraph = new EntityGraph(new EntityPathExtractor(crawler, new SimplePageTemplatesSplitter()));
+		EntityPathExtractor extractor = new EntityPathExtractor(crawler, new SimplePageTemplatesSplitter());
+		EntityGraph entityGraph = new EntityGraph(extractor.extractor());
 		entityGraph.labelEntityGraph(new RelationExtractionAlgorithm(), new InstanceConceptSetExtractionAlgorithm());
 		/*
 		 * extract triples from the Entity Graph

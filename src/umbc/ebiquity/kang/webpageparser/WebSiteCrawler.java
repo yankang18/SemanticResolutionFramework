@@ -11,30 +11,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
-import umbc.ebiquity.kang.webpageparser.interfaces.ICrawler;
+import umbc.ebiquity.kang.webpageparser.interfaces.Crawler;
+import umbc.ebiquity.kang.webpageparser.interfaces.WebPage;
 
+public class WebSiteCrawler implements Crawler {
 
-/***
- * 
- * @author kangyan2003
- */
-public class WebSiteCrawler implements ICrawler {
-
-
+	private final static int MAX_VISIT_PAGE = 1000;
 	private Queue<WebPage> webPageQueue;
 	private HashMap<String, WebPage> visitedPageDir;
 	private HashSet<String> visitedPage;
 	
 	private String homePageURLString;
 	private URL webSiteURL;
-	private WebPage homePageNode;
+	private WebPage homePage;
 	private int maxNumberPagesToVisit;
 	private boolean isCrawled;
-
-	public WebSiteCrawler(URL homePageUrl, int maxNumberPagesToVisit) throws IOException {
-		this.webSiteURL = homePageUrl;
-		this.homePageURLString = homePageUrl.toString().trim();
-		this.homePageNode = new WebPage(new CrawlerUrl(homePageURLString, 0));
+	
+	public WebSiteCrawler(URL siteURL, int maxNumberPagesToVisit) throws IOException {
+		this.webSiteURL = siteURL;
+		this.homePageURLString = siteURL.toString().trim();
+		this.homePage = new WebPageImpl(new CrawlerUrl(homePageURLString, 0));
 		this.webPageQueue = new LinkedList<WebPage>();
 		this.visitedPageDir = new HashMap<String, WebPage>();
 		this.visitedPage = new HashSet<String>();
@@ -42,17 +38,23 @@ public class WebSiteCrawler implements ICrawler {
 		this.maxNumberPagesToVisit = maxNumberPagesToVisit;
 	}
 	
-	public WebSiteCrawler(URL homePageUrl) throws IOException {
-		this(homePageUrl, 1000);
+	public WebSiteCrawler(URL start) throws IOException {
+		this(start, MAX_VISIT_PAGE);
 	}
 
-	public void crawl() {
+	@Override
+	public List<WebPage> crawl() throws IOException { 
 		System.out.println("Crawling Web Site ...");
-		this.webPageQueue.clear();
-		this.homePageNode.extractLinks(visitedPage);
-		this.webPageQueue.add(homePageNode);
 		
-		String hostName = homePageNode.getHostName();
+		if (isCrawled)
+			return new ArrayList<WebPage>(this.visitedPageDir.values());
+		
+		this.webPageQueue.clear();
+		homePage.load();
+		this.homePage.extractLinks(visitedPage);
+		this.webPageQueue.add(homePage);
+		
+		String hostName = homePage.getHostName();
 
 		// BFS crawling
 		while (this.continueCrawling()) {
@@ -63,13 +65,14 @@ public class WebSiteCrawler implements ICrawler {
 					WebPage webPage;
 					String text = links.get(webPageUrl);
 					try {
-						webPage = new WebPage(new CrawlerUrl(webPageUrl, 0));
+						webPage = new WebPageImpl(new CrawlerUrl(webPageUrl, 0));
+						webPage.load();
 						webPage.setHostName(hostName);
 						webPage.addPredecessor(top);
-						webPage.setWebPageMainTopic(text);
+//						webPage.setWebPageMainTopic(text);
 						top.addDecendant(webPage);
-						System.out.println("@ Now crawling <" + webPage.getPageURLString() + "> with main topic <"
-								+ webPage.getWebPageMainTopic() + ">");
+						System.out.println("@ Now crawling <" + webPage.getPageURL().getUrlString() + "> with main topic <"
+								+ text + ">");
 						this.extractLinks(webPage);
 						this.webPageQueue.add(webPage);
 					} catch (IOException e) {
@@ -78,9 +81,9 @@ public class WebSiteCrawler implements ICrawler {
 				}
 			}
 		}
-
 		isCrawled = true;
 		System.out.println(visitedPageDir.size() + " have been crawled");
+		return new ArrayList<WebPage>(this.visitedPageDir.values()); 
 	}
 
 	private void extractLinks(WebPage webPage) {
@@ -89,6 +92,13 @@ public class WebSiteCrawler implements ICrawler {
 		webPage.extractLinks(visitedPage);
 	}
 
+	/**
+	 * if no web page exists or the max number of web pages to be visited was
+	 * reached, return false indicating that web crawling should be continued.
+	 * Otherwise, return true.
+	 * 
+	 * @return true if continue crawling the web site. Otherwise, return false
+	 */
 	private boolean continueCrawling() {
 		return (!webPageQueue.isEmpty() && getNumberOfPagesVisited() < this.maxNumberPagesToVisit);
 	}
@@ -105,15 +115,16 @@ public class WebSiteCrawler implements ICrawler {
 		return this.visitedPageDir.size();
 	}
 	
-	public Collection<WebPage> getCrawledWebPages(){
+	@Override
+	public Collection<WebPage> getCrawledWebPages() throws IOException { 
 		if(!this.isCrawled){
 			crawl();
 		}
 		return this.visitedPageDir.values();
 	}
 	
+	@Override
 	public URL getWebSiteURL(){
 		return this.webSiteURL;
 	}
-
 }

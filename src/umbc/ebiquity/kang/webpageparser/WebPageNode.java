@@ -13,13 +13,13 @@ import org.jsoup.nodes.TextNode;
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Entity;
 import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
 
-public class WebTagNode {
+public class WebPageNode {
 	
 	public enum WebTagNodeType {TextNode, ElementNode}
 //	private String tag;
-	private WebTagNode parent;
-	private WebTagNode child;
-	private WebTagPath residePath;
+	private WebPageNode parent;
+	private WebPageNode child;
+	private WebPathPath residePath;
 	
 	private WebTagNodeType nodeType;
 	private String prefixPathID;
@@ -28,13 +28,13 @@ public class WebTagNode {
 	private int tagCount;
 //	private TextNode textNode;
 	private String textContent;
-	private Collection<WebTagNode> children;
-	private Collection<WebTagNode> sibling;
+	private Collection<WebPageNode> children;
+	private Collection<WebPageNode> sibling;
 	private Map<String, String> attributes;
 	private boolean isLeafNode = true;
 //	private Collection<Topic> topics;
 	
-	public WebTagNode(Element node, int tagCount) {
+	public WebPageNode(Element node, int tagCount) {
 		this.element = node;
 		this.tagCount = tagCount;
 		this.nodeType = WebTagNodeType.ElementNode;
@@ -47,7 +47,7 @@ public class WebTagNode {
 		this.init();
 	}
 	
-	public WebTagNode(String textNodeContent) {
+	public WebPageNode(String textNodeContent) {
 //		this.textNode = node;
 		this.nodeType = WebTagNodeType.TextNode;
 		this.isLeafNode = true;
@@ -129,12 +129,12 @@ public class WebTagNode {
 		return "";
 	}
 
-	public Collection<WebTagNode> listChildren() {
+	public Collection<WebPageNode> listChildren() {
 		this.populateChildrenCollection();
 		return this.children;
 	}
 
-	public Collection<WebTagNode> listSiblings() {
+	public Collection<WebPageNode> listSiblings() {
 		this.populateSiblingCollection();
 		return this.sibling;
 	}
@@ -193,12 +193,12 @@ public class WebTagNode {
 	
 	private void populateChildrenCollection(){
 		if (this.children == null) {
-			this.children = new ArrayList<WebTagNode>();
+			this.children = new ArrayList<WebPageNode>();
 			if(nodeType == WebTagNodeType.TextNode){
 				return;
 			}
 			for (Element child : this.element.children()) {
-				WebTagNode nodeWrapper = new WebTagNode(child,1);
+				WebPageNode nodeWrapper = new WebPageNode(child,1);
 				this.children.add(nodeWrapper);
 			}
 		}
@@ -206,12 +206,12 @@ public class WebTagNode {
 	
 	private void populateSiblingCollection(){
 		if (this.sibling == null) {
-			this.sibling = new ArrayList<WebTagNode>();
+			this.sibling = new ArrayList<WebPageNode>();
 			if(nodeType == WebTagNodeType.TextNode){
 				return;
 			}
 			for (Element child : this.element.siblingElements()) {
-				WebTagNode nodeWrapper = new WebTagNode(child,1);
+				WebPageNode nodeWrapper = new WebPageNode(child,1);
 				this.sibling.add(nodeWrapper);
 			}
 		}
@@ -229,15 +229,15 @@ public class WebTagNode {
 		return this.isLeafNode;
 	}
 	
-	public void setParent(WebTagNode parent) {
+	public void setParent(WebPageNode parent) {
 		this.parent = parent;
 	}
 
-	public WebTagNode getParent() {
+	public WebPageNode getParent() {
 		return parent;
 	}
 
-	public void setResidePath(WebTagPath residePath) {
+	public void setResidePath(WebPathPath residePath) {
 		this.residePath = residePath;
 	}
 
@@ -245,7 +245,7 @@ public class WebTagNode {
 		return residePath.getPathID();
 	}
 	
-	public WebTagPath getResidePath() {
+	public WebPathPath getResidePath() {
 		return residePath;
 	}
 
@@ -257,11 +257,11 @@ public class WebTagNode {
 		return prefixPathID;
 	}
 
-	public void setChild(WebTagNode child) {
+	public void setChild(WebPageNode child) {
 		this.child = child;
 	}
 
-	public WebTagNode getChild() {
+	public WebPageNode getChild() {
 		return child;
 	}
 	
@@ -269,8 +269,8 @@ public class WebTagNode {
 		return this.element;
 	}
 	
-	public WebTagNode fomer(int i) {
-		WebTagNode node = this;
+	public WebPageNode fomer(int i) {
+		WebPageNode node = this;
 		for (int index = 0; index < i; index++) {
 			node = node.getParent();
 			if (node == null)
@@ -285,7 +285,7 @@ public class WebTagNode {
 		String attributePattern = this.getAttributePattern(attributes.get("class"), attributes.get("id"), attributes.get("style"));
 		StringBuilder patternBuilder = new StringBuilder(this.getTag() + attributePattern);
 		
-		WebTagNode parentNode = this.getParent();
+		WebPageNode parentNode = this.getParent();
 		while (parentNode != null) {
 			Map<String, String> parentAttributes = parentNode.listAttributes();
 			String parentAttributePattern = this.getAttributePattern(parentAttributes.get("class"), parentAttributes.get("id"), parentAttributes.get("style"));
@@ -332,12 +332,12 @@ public class WebTagNode {
 	}
 
 	@Override
-	public WebTagNode clone() {
-		WebTagNode node = null;
+	public WebPageNode clone() {
+		WebPageNode node = null;
 		if (nodeType == WebTagNodeType.TextNode) {
-			node = new WebTagNode(this.textContent);
+			node = new WebPageNode(this.textContent);
 		} else {
-			node = new WebTagNode(this.element, this.tagCount);
+			node = new WebPageNode(this.element, this.tagCount);
 			node.setTagNodeType(this.nodeType);
 		}
 		

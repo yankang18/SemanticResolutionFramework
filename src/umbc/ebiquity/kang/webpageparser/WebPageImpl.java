@@ -19,7 +19,8 @@ import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Entity
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityPathExtractor;
 import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityValidator;
 import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
-import umbc.ebiquity.kang.webpageparser.WebTagNode.WebTagNodeType;
+import umbc.ebiquity.kang.webpageparser.WebPageNode.WebTagNodeType;
+import umbc.ebiquity.kang.webpageparser.interfaces.WebPage;
 
 import org.apache.commons.validator.routines.UrlValidator;
 import org.jsoup.Connection;
@@ -29,12 +30,13 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
+import org.junit.After;
 
 /***
  * 
  * @author kangyan2003
  */
-public class WebPage {
+public class WebPageImpl implements WebPage {
 
 	private String baseURL;
 	private String hostName;
@@ -43,10 +45,9 @@ public class WebPage {
 	private Document webPageDoc;
 	private List<WebPage> predecessorList;
 	private List<WebPage> descendantList;
-//	private List<String> externalLinks;
 	private Map<String, String> externalLinks;
-	private List<WebTagPath> webPagePathList;
-	private boolean visited;
+	private List<WebPathPath> webPagePathList;
+	private boolean loaded;
 	private boolean linksExtracted;
 	private UrlValidator urlValidator;
 	private Collection<EntityPath> entityPaths;
@@ -54,63 +55,69 @@ public class WebPage {
 	private String webPageMainTopic;
 	private Map<String, Integer> tagCounterMapper;
 
-	public WebPage(CrawlerUrl pageURL) throws IOException {
+	public WebPageImpl(CrawlerUrl pageURL) throws IOException {
 		this.pageURL = pageURL;
-		this.visited = false;
+		this.loaded = false;
 		this.linksExtracted = false;
 		this.predecessorList = new ArrayList<WebPage>();
 		this.descendantList = new ArrayList<WebPage>();
 //		this.externalLinks = new ArrayList<String>();
 		this.externalLinks = new LinkedHashMap<String, String>();
 		this.tagCounterMapper = new HashMap<String, Integer>();
-		this.webPagePathList = new ArrayList<WebTagPath>();
+		this.webPagePathList = new ArrayList<WebPathPath>();
 		this.entityPaths = new LinkedHashSet<EntityPath>();
 		this.webPageTopics = new LinkedHashSet<String>();
-		
 		String[] schemes = { "http", "https" };
 		this.urlValidator = new UrlValidator(schemes);
-		this.initWebPageDoc();
 	}
 
-	private void initWebPageDoc() throws IOException {
-		String URL = this.pageURL.getUrlString();
-		this.visited = true;
-		if (this.validateURL(URL)) {
-			webPageDoc = Jsoup.connect(this.pageURL.getUrlString()).get();
-			this.baseURL = webPageDoc.baseUri();
-			this.hostName = this.getHostName(baseURL);
-		} else {
-			throw new IOException(URL + " is not a valid URL");
+	@Override
+	public void load() throws IOException {
+		if (!loaded) {
+			String URL = this.pageURL.getUrlString();
+			this.loaded = true;
+			if (this.validateURL(URL)) {
+				this.webPageDoc = Jsoup.connect(this.pageURL.getUrlString()).get();
+				this.baseURL = getWebPageDocument().baseUri();
+				this.hostName = this.extractHostName(baseURL);
+			} else {
+				// TODO: use a more specific exception
+				throw new IOException(URL + " is not a valid URL");
+			}
 		}
 	}
-	
-	public String getHostName(){
+
+	private String extractHostName(String baseURL) {
+		String[] tokens = baseURL.split("/");
+		return tokens[2];
+	}
+
+	@Override
+	public String getHostName() {
 		return this.hostName;
 	}
-	
+
+	@Override
 	public void setHostName(String hostName){
 		this.hostName = hostName;
 	}
 	
-	private String getHostName(String baseURL) {
-		String[] tokens =  baseURL.split("/");
-//		System.out.println(tokens[2]);
-		return tokens[2];
-	}
-
+	@Override
 	public void addPredecessor(WebPage pageNode) {
 		this.predecessorList.add(pageNode);
 	}
 	
+	@Override
 	public void addDecendant(WebPage pageNode){
 		this.descendantList.add(pageNode);
 	}
 
+	@Override
 	public CrawlerUrl getPageURL() {
 		return pageURL;
 	}
 	
-	public String getPageURLString(){
+	private String getPageURLAsString(){
 		return pageURL.getUrlString();
 	}
 
@@ -118,8 +125,8 @@ public class WebPage {
 	 * 
 	 */
 	public void analyzeWebPage() {
-		this.extractWebPageTopics(webPageDoc);
-		this.constructWebPagePaths(webPageDoc);
+		this.extractWebPageTopics(getWebPageDocument());
+		this.constructWebPagePaths(getWebPageDocument());
 	}
 	
 	/***
@@ -134,34 +141,44 @@ public class WebPage {
 		webPageTopics.add(webPageTitle);
 	}
 
+	/*
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
+	
 	/***
 	 * 
 	 * @param webPageDoc
 	 */
 	private void constructWebPagePaths(Document webPageDoc) {
-		
 //		print("\n@ Constructing WebPagePaths from: <%s>", this.getPageURLString());
 		Element body = webPageDoc.body();
 		for (Element child : body.children()) {
-			
 			String childTagName = child.tagName().toLowerCase();
 //			System.out.println("## " + childTagName);
 			if (!HTMLTags.getEliminatedTags().contains(childTagName) 
 					&& !HTMLTags.getIgnoredTags().contains(childTagName)){
-				
-				WebTagPath path = new WebTagPath();
+				WebPathPath path = new WebPathPath();
 				this.webPagePathList.add(path);
-				path.setHost(this.getPageURLString());
-				WebTagNode webPageNode = this.createWebPageNode(child);
+				path.setHost(this.getPageURLAsString());
+				WebPageNode webPageNode = this.createWebPageNode(child);
 				webPageNode.setLeafNode(false);
 				path.addNode(webPageNode);
 				this.appendWebPagePathNode(path, child);
-				
 			}
 		}
 	}
 	
-	private void appendWebPagePathNode(WebTagPath path, Element element) {
+	private void appendWebPagePathNode(WebPathPath path, Element element) {
 		
 		if (!this.hasOnlyOneTextNode(element)) {
 			List<Node> childNodeList = element.childNodes();
@@ -171,9 +188,9 @@ public class WebPage {
 			 * Clone paths before navigating children of current element.
 			 */
 			int numOfPaths = numOfChildrenNode;
-			WebTagPath[] webPagePaths = null;
+			WebPathPath[] webPagePaths = null;
 			if (numOfPaths > 0) {
-				webPagePaths = new WebTagPath[numOfPaths];
+				webPagePaths = new WebPathPath[numOfPaths];
 				
 				/*
 				 * The first path is not cloned but the path that has already
@@ -188,7 +205,7 @@ public class WebPage {
 				 */
 				for (int i = 1; i < numOfPaths; i++) {
 					webPagePaths[i] = path.clone();
-					webPagePaths[i].setHost(this.getPageURLString());
+					webPagePaths[i].setHost(this.getPageURLAsString());
 				}
 			}
 			
@@ -222,9 +239,9 @@ public class WebPage {
 						
 //						System.out.println("#### Topic Tag: " + elementNodeTagName);
 						if (textContent != null && !TextProcessingUtils.isStringEmpty(textContent)) {
-							WebTagNode newWebPageNode = this.createWebPageNode(textContent);
+							WebPageNode newWebPageNode = this.createWebPageNode(textContent);
 							newWebPageNode.setLeafNode(true);
-							WebTagPath webPagePath = webPagePaths[indexOfPath];
+							WebPathPath webPagePath = webPagePaths[indexOfPath];
 							webPagePath.addNode(newWebPageNode);
 
 							/*
@@ -242,9 +259,9 @@ public class WebPage {
 //						String text = elementNode.text();
 						if (!TextProcessingUtils.isStringEmpty(combinedText)) {
 //							System.out.println("#### content: " + combinedText);
-							WebTagNode newWebPageNode = this.createWebPageNode(elementNode);
+							WebPageNode newWebPageNode = this.createWebPageNode(elementNode);
 							newWebPageNode.setLeafNode(true);
-							WebTagPath webPagePath = webPagePaths[indexOfPath];
+							WebPathPath webPagePath = webPagePaths[indexOfPath];
 							webPagePath.addNode(newWebPageNode);
 							if (indexOfPath != 0) {
 //								System.out.println("#### *content: " + combinedText);
@@ -256,9 +273,9 @@ public class WebPage {
 					} else if (HTMLTags.getEliminatedTags().contains(elementNodeTagName)){
 						
 						if (textContent != null && !TextProcessingUtils.isStringEmpty(textContent)) {
-							WebTagNode newWebPageNode = this.createWebPageNode(textContent);
+							WebPageNode newWebPageNode = this.createWebPageNode(textContent);
 							newWebPageNode.setLeafNode(true);
-							WebTagPath webPagePath = webPagePaths[indexOfPath];
+							WebPathPath webPagePath = webPagePaths[indexOfPath];
 							webPagePath.addNode(newWebPageNode);
 							if (indexOfPath != 0) {
 								this.webPagePathList.add(webPagePath);
@@ -270,9 +287,9 @@ public class WebPage {
 					} else {
 						
 						if (textContent != null && !TextProcessingUtils.isStringEmpty(textContent)) {
-							WebTagNode newWebPageNode = this.createWebPageNode(textContent);
+							WebPageNode newWebPageNode = this.createWebPageNode(textContent);
 							newWebPageNode.setLeafNode(true);
-							WebTagPath webPagePath = webPagePaths[indexOfPath];
+							WebPathPath webPagePath = webPagePaths[indexOfPath];
 							webPagePath.addNode(newWebPageNode);
 							if (indexOfPath != 0) {
 								this.webPagePathList.add(webPagePath);
@@ -285,8 +302,8 @@ public class WebPage {
 							
 							// Here should create a unique number for each newly
 							// created WebPageNode
-							WebTagNode newWebPageNode = this.createWebPageNode(elementNode);
-							WebTagPath webPagePath = webPagePaths[indexOfPath];
+							WebPageNode newWebPageNode = this.createWebPageNode(elementNode);
+							WebPathPath webPagePath = webPagePaths[indexOfPath];
 							webPagePath.addNode(newWebPageNode);
 							if (indexOfPath != 0) {
 								this.webPagePathList.add(webPagePath);
@@ -304,9 +321,9 @@ public class WebPage {
 			 * element is a text node.
 			 */
 			if (textContent != null && !TextProcessingUtils.isStringEmpty(textContent)) {
-				WebTagNode newWebPageNode = this.createWebPageNode(textContent);
+				WebPageNode newWebPageNode = this.createWebPageNode(textContent);
 				newWebPageNode.setLeafNode(true);
-				WebTagPath webPagePath = webPagePaths[indexOfPath];
+				WebPathPath webPagePath = webPagePaths[indexOfPath];
 				webPagePath.addNode(newWebPageNode);
 				if (indexOfPath != 0) {
 					this.webPagePathList.add(webPagePath);
@@ -316,9 +333,8 @@ public class WebPage {
 		} else {
 //			WebTagNode webPageNode = path.getLastNode();
 //			webPageNode.setLeafNode(true); 
-			
-			WebTagNode webPageNode = path.getLastNode();
-			WebTagNode newWebPageNode = this.createWebPageNode(webPageNode.getFullContent());
+			WebPageNode webPageNode = path.getLastNode();
+			WebPageNode newWebPageNode = this.createWebPageNode(webPageNode.getFullContent());
 			newWebPageNode.setLeafNode(true);
 			path.addNode(newWebPageNode);
 		}
@@ -351,7 +367,7 @@ public class WebPage {
 		return true;
 	}
 
-	private WebTagNode createWebPageNode(Element child) {
+	private WebPageNode createWebPageNode(Element child) {
 		Integer counter = tagCounterMapper.get(child.tagName().toLowerCase());
 		if (counter == null) {
 			counter = new Integer(1);
@@ -361,12 +377,12 @@ public class WebPage {
 			tagCounterMapper.put(child.tagName(), counter);
 		}
 		
-		WebTagNode node = new WebTagNode(child, counter);
+		WebPageNode node = new WebPageNode(child, counter);
 		return node;
 	}
 	
-	private WebTagNode createWebPageNode(String textNodeContent) {
-		WebTagNode node = new WebTagNode(textNodeContent);		
+	private WebPageNode createWebPageNode(String textNodeContent) {
+		WebPageNode node = new WebPageNode(textNodeContent);		
 		return node;
 	}
 	
@@ -374,7 +390,7 @@ public class WebPage {
 	 * get all web page paths
 	 * @return a list of WebPagePath instances
 	 */
-	public List<WebTagPath> listWebTagPaths(){
+	public List<WebPathPath> listWebTagPaths(){
 		return this.webPagePathList;
 	}
 	
@@ -382,19 +398,35 @@ public class WebPage {
 	 * 
 	 * @return
 	 */
-	public List<WebTagPath> listWebTagPathsWithTextContent() {
+	public List<WebPathPath> listWebTagPathsWithTextContent() {
 		
 		/*
 		 * Note here we use ArrayList that allows duplicate paths.  
 		 */
-		List<WebTagPath> webPagePathsWithLeafContent = new ArrayList<WebTagPath>();
-		for (WebTagPath path : webPagePathList) {
+		List<WebPathPath> webPagePathsWithLeafContent = new ArrayList<WebPathPath>();
+		for (WebPathPath path : webPagePathList) {
 			if (path.containsTextContent() || path.getLastNode().getTag().equals("img")) {
 				webPagePathsWithLeafContent.add(path);
 			}
 		}
 		return webPagePathsWithLeafContent;
 	}
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
 
 	/**
 	 * extract out-going links from the WebPage instance
@@ -402,7 +434,7 @@ public class WebPage {
 	 */
 	public void extractLinks(Set<String> visitedLinkSet) {
 //		System.out.println("base url " + hostName);
-		Elements links = webPageDoc.select("a[href]");
+		Elements links = getWebPageDocument().select("a[href]");
 //		print("Links (%d)", links.size());
 		for (Element link : links) {
 			String href = link.attr("abs:href").trim();
@@ -538,7 +570,7 @@ public class WebPage {
 	
 	public void addEntityPath(EntityPath entityPath){
 		this.entityPaths.add(entityPath);
-		entityPath.setWebPage(this);
+//		entityPath.setWebPage(this);
 	}
 
 	public Collection<EntityPath> getEntityPaths(){
@@ -552,8 +584,8 @@ public class WebPage {
 		return this.externalLinks;
 	}
 
-	public boolean isVisited() {
-		return visited;
+	public boolean isLoaded() { 
+		return loaded;
 	}
 	
 	public String getBaseURL(){
@@ -571,5 +603,9 @@ public class WebPage {
 	private void print(String msg, Object... args) {
 		System.out.println(String.format(msg, args));
 	}
-	
+
+	@Override
+	public Document getWebPageDocument() {
+		return webPageDoc;
+	}
 }
