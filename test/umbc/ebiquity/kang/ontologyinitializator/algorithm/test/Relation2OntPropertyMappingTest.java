@@ -13,21 +13,21 @@ import umbc.csee.ebiquity.ontologymatcher.algorithm.component.MSMResult;
 import umbc.csee.ebiquity.ontologymatcher.algorithm.component.OntPropertyInfo;
 import umbc.csee.ebiquity.ontologymatcher.algorithm.component.OntResourceInfo;
 import umbc.csee.ebiquity.ontologymatcher.algorithm.component.MSMResult.SubMapping;
+import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Relation2PropertyMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Relation2PropertyMappingAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IRelation2PropertyMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IRelation2PropertyMappingAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
-import umbc.ebiquity.kang.ontologyinitializator.repository.factories.TripleRepositoryFactory;
+import umbc.ebiquity.kang.ontologyinitializator.repository.factories.InstanceDescriptionModelFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.MatchedOntProperty;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.ITripleRepository;
 
 public class Relation2OntPropertyMappingTest {
 	
 	private IOntologyRepository ontologyRepository;
-	private ITripleRepository extractedTripleStore;;
+	private IInstanceDescriptionModel extractedTripleStore;;
 	
 	@Before
 	public void Init() throws IOException{ 
@@ -37,7 +37,7 @@ public class Relation2OntPropertyMappingTest {
 		
 		String webSiteURLString = "http://www.numericalconcepts.com";
 		URL webSiteURL = new URL(webSiteURLString);
-		extractedTripleStore = TripleRepositoryFactory.createTripleRepository(webSiteURL, true);
+		extractedTripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL, true);
 	}
 	
 	@Test

@@ -14,27 +14,25 @@ import java.util.StringTokenizer;
 
 public class Synonyms {
 
-	private static final Map<String, Set<Set<String>>> WORD_TO_SYNOYMYM_SETS = new HashMap<String, Set<Set<String>>>(
-			15000);
-	private static final Set<Set<String>> EMPTY_SET = Collections
-			.unmodifiableSet(new HashSet<Set<String>>());
+	private static final Map<String, Set<Set<String>>> WORD_TO_SYNOYMYM_SETS = new HashMap<String, Set<Set<String>>>(15000);
+	private static final Set<Set<String>> EMPTY_SET = Collections.unmodifiableSet(new HashSet<Set<String>>());
 
 	static {
 		synchronized (WORD_TO_SYNOYMYM_SETS) {
 
 			String projectDir = System.getProperty("user.dir");
-//			load(projectDir + "/../data/WordNet-3.0/dict/data.adj");
-//			load(projectDir + "/../data/WordNet-3.0/dict/data.adv");
-//			load(projectDir + "/../data/WordNet-3.0/dict/data.noun");
-//			load(projectDir + "/../data/WordNet-3.0/dict/data.verb");
-			
+			// load(projectDir + "/../data/WordNet-3.0/dict/data.adj");
+			// load(projectDir + "/../data/WordNet-3.0/dict/data.adv");
+			// load(projectDir + "/../data/WordNet-3.0/dict/data.noun");
+			// load(projectDir + "/../data/WordNet-3.0/dict/data.verb");
+
 			load(projectDir + "/data/WordNet-3.0/dict/data.adj");
 			load(projectDir + "/data/WordNet-3.0/dict/data.adv");
 			load(projectDir + "/data/WordNet-3.0/dict/data.noun");
 			load(projectDir + "/data/WordNet-3.0/dict/data.verb");
 		}
 	}
-	
+
 	public static void load(String[] paths) {
 		for (String path : paths) {
 			load(path);
@@ -105,7 +103,7 @@ public class Synonyms {
 				 * token is letter, the token is a word
 				 */
 				if (token.length() > 2 && Character.isLetter(token.charAt(0))) {
-					// System.out.println("word:  " + token);
+					// System.out.println("word: " + token);
 					synonymSet.add(token);
 				}
 			}
@@ -118,8 +116,7 @@ public class Synonyms {
 				 * synonymSet
 				 */
 				for (String word : synonymSet) {
-					Set<Set<String>> synonymSetsForThisWord = WORD_TO_SYNOYMYM_SETS
-							.get(word);
+					Set<Set<String>> synonymSetsForThisWord = WORD_TO_SYNOYMYM_SETS.get(word);
 					if (synonymSetsForThisWord == null) {
 						synonymSetsForThisWord = new HashSet<Set<String>>();
 						WORD_TO_SYNOYMYM_SETS.put(word, synonymSetsForThisWord);
@@ -134,8 +131,7 @@ public class Synonyms {
 		// why here using the synchronized
 		synchronized (WORD_TO_SYNOYMYM_SETS) {
 			Set<Set<String>> synonymSets = WORD_TO_SYNOYMYM_SETS.get(word);
-			return ((synonymSets != null) ? Collections
-					.unmodifiableSet(synonymSets) : EMPTY_SET);
+			return ((synonymSets != null) ? Collections.unmodifiableSet(synonymSets) : EMPTY_SET);
 		}
 	}
 

@@ -15,7 +15,7 @@ import java.util.StringTokenizer;
 
 import umbc.ebiquity.kang.ontologyinitializator.repository.FileAccessor;
 import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
-import umbc.ebiquity.kang.ontologyinitializator.repository.factories.TripleRepositoryFactory;
+import umbc.ebiquity.kang.ontologyinitializator.repository.factories.InstanceDescriptionModelFactory;
 
 public class TripleRepositoriesAutomaticConstructor extends AbstractWebUrlLoader {
 
@@ -66,7 +66,7 @@ public class TripleRepositoriesAutomaticConstructor extends AbstractWebUrlLoader
 				try {
 					URL webSiteURL = new URL(webSiteURLStr);
 					try {
-						TripleRepositoryFactory.createTripleRepository(webSiteURL, false);
+						InstanceDescriptionModelFactory.createModel(webSiteURL, false);
 						this.recordSuccess(webSiteURL.toString());
 					} catch (MalformedURLException e) {
 						this.recordErrorMsg(webSiteURL.toString(), e.getMessage());

@@ -10,7 +10,7 @@ import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Entity;
+import umbc.ebiquity.kang.instanceconstructor.entityframework.object.Entity;
 import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
 
 public class WebPageNode {

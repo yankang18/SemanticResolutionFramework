@@ -13,7 +13,7 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
+import umbc.ebiquity.kang.instanceconstructor.entityframework.object.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.RuleEngine;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.FileAccessor;

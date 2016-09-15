@@ -20,7 +20,8 @@ import umbc.csee.ebiquity.ontologymatcher.algorithm.component.SimilarityMatrixLa
 import umbc.csee.ebiquity.ontologymatcher.algorithm.component.MSMResult.SubMapping;
 import umbc.csee.ebiquity.ontologymatcher.algorithm.component.OntPropertyInfo.OntPropertyType;
 import umbc.csee.ebiquity.ontologymatcher.config.AlgorithmMode;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityValidator;
+import umbc.ebiquity.kang.instanceconstructor.entityframework.object.EntityValidator;
+import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.SimilarityAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.SimilarityAlgorithm.SimilarityType;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IMappingAlgorithmComponent;
@@ -29,7 +30,6 @@ import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.inter
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IRelation2PropertyMappingAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.MatchedOntProperty;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.ITripleRepository;
 import umbc.ebiquity.kang.ontologyinitializator.similarity.impl.OrderedWordListSimilarity;
 import umbc.ebiquity.kang.ontologyinitializator.similarity.impl.SimpleLabelSimilarity;
 import umbc.ebiquity.kang.ontologyinitializator.similarity.interfaces.ILabelSimilarity;
@@ -40,7 +40,7 @@ public class Relation2PropertyMappingAlgorithm implements IRelation2PropertyMapp
 	/**
 	 * Java representation of a triple store extracted from a web site
 	 */
-	private ITripleRepository tripleStore;
+	private IInstanceDescriptionModel tripleStore;
 	
 	/**
 	 * Java representation of the specific domain ontology
@@ -65,7 +65,7 @@ public class Relation2PropertyMappingAlgorithm implements IRelation2PropertyMapp
 	private IRelation2PropertyMapper relation2PropertyMapper;
 	private ILabelSimilarity labelSimilarity;
 
-	public Relation2PropertyMappingAlgorithm(ITripleRepository tripleStore, IOntologyRepository ontologyRepository, IRelation2PropertyMapper relation2PropertyMapper){
+	public Relation2PropertyMappingAlgorithm(IInstanceDescriptionModel tripleStore, IOntologyRepository ontologyRepository, IRelation2PropertyMapper relation2PropertyMapper){
 		this.tripleStore = tripleStore;
 		this.domaindOntology = ontologyRepository;
 		this.relation2PropertyMapper = relation2PropertyMapper;

@@ -11,14 +11,15 @@ import java.util.Map;
 import java.util.Set;
 
 import umbc.csee.ebiquity.ontologymatcher.algorithm.component.OntPropertyInfo;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
+import umbc.ebiquity.kang.instanceconstructor.entityframework.object.Concept;
+import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
+import umbc.ebiquity.kang.instanceconstructor.model.InstanceTripleSet;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IBestMatchedOntClassFinder;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IConcept2OntClassMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IConcept2OntClassMappingPairPruner;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IInstanceClassificationAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IMappingAlgorithmComponent;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IMappingAlgorithmVisitor;
-import umbc.ebiquity.kang.ontologyinitializator.ontology.InstanceTripleSet;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.MatchedOntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ClassifiedInstanceDetailRecord;
@@ -27,7 +28,6 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.impl.MatchedOntProper
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrectionRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMapping;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.ITripleRepository;
 import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
 
 public class InstanceClassificationAlgorithm implements IInstanceClassificationAlgorithm,  IMappingAlgorithmComponent {
@@ -35,7 +35,7 @@ public class InstanceClassificationAlgorithm implements IInstanceClassificationA
 	/**
 	 * Java representation of a triple store extracted from a web site
 	 */
-	private ITripleRepository tripleStore;
+	private IInstanceDescriptionModel tripleStore;
 	
 	/**
 	 * Java representation of the specific domain ontology
@@ -51,7 +51,7 @@ public class InstanceClassificationAlgorithm implements IInstanceClassificationA
 	
 	private Map<String, MatchedOntProperty> relation2PropertyMap;
 
-	public InstanceClassificationAlgorithm(ITripleRepository tripleStore, IOntologyRepository ontologyRepository, IConcept2OntClassMapper concept2OntClassMapper, IClassificationCorrectionRepository aggregratedClassificationCorrectionRepository){
+	public InstanceClassificationAlgorithm(IInstanceDescriptionModel tripleStore, IOntologyRepository ontologyRepository, IConcept2OntClassMapper concept2OntClassMapper, IClassificationCorrectionRepository aggregratedClassificationCorrectionRepository){
 		this.tripleStore = tripleStore;
 		this.ontologyRepository = ontologyRepository;
 		this.concept2OntClassMapper = concept2OntClassMapper;

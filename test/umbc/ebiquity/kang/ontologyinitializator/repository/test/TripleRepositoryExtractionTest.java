@@ -6,9 +6,9 @@ import java.net.URL;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
 import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
-import umbc.ebiquity.kang.ontologyinitializator.repository.factories.TripleRepositoryFactory;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.ITripleRepository;
+import umbc.ebiquity.kang.ontologyinitializator.repository.factories.InstanceDescriptionModelFactory;
 
 
 public class TripleRepositoryExtractionTest {
@@ -24,7 +24,7 @@ public class TripleRepositoryExtractionTest {
 		this.createTripleRepository(true).showTriples();
 	}
 	
-	private ITripleRepository createTripleRepository(boolean local) throws IOException{
+	private IInstanceDescriptionModel createTripleRepository(boolean local) throws IOException{
 		
 		String webSiteURLString = "http://www.aerostarmfg.com";
 //		String webSiteURLString = "http://www.accutrex.com";
@@ -32,7 +32,7 @@ public class TripleRepositoryExtractionTest {
 		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
 		String tripleRepository = RepositoryParameterConfiguration.getTripleRepositoryDirectoryFullPath();
 		System.out.println("Triple Repo: " + tripleRepository);
-		ITripleRepository extractedTripleStore = TripleRepositoryFactory.createTripleRepository(webSiteURL, local);
+		IInstanceDescriptionModel extractedTripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL, local);
 		return extractedTripleStore;
 	}
 }

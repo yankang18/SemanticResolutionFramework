@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
+import umbc.ebiquity.kang.instanceconstructor.entityframework.object.Concept;
+import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMappingPairLookUpper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.CorrectionClusterCodeGenerator;
@@ -20,12 +21,12 @@ import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Relation2PropertyMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Relation2PropertyMappingAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.SimpleLexicalFeatureExtractor;
-import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.TS2OntoMappingAlgorithm2;
+import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.InstanceDescriptionModelSemanticResolver;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.ICorrectionClusterCodeGenerator;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IInstanceClassificationAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IInstanceConcept2OntClassMappingFeatureExtractor;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IInstanceLexicalFeatureExtractor;
-import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IMappingAlgorithm;
+import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IModelSemanticResolver;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IRelation2PropertyMappingAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.evaluation.AbstractWebUrlLoader.PopulationType;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.ClassificationCorrectionRuleGenerator;
@@ -37,7 +38,7 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ClassifiedI
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.InterpretationCorrectionRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ManufacturingLexicalMappingRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
-import umbc.ebiquity.kang.ontologyinitializator.repository.factories.TripleRepositoryFactory;
+import umbc.ebiquity.kang.ontologyinitializator.repository.factories.InstanceDescriptionModelFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.EvaluationCorpus;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.EvaluationCorpusRecordsAccessor;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.MappingDataGateway;
@@ -54,7 +55,6 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceR
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRecordsReader;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.ITripleRepository;
 import umbc.ebiquity.kang.ontologyinitializator.utilities.FileUtility;
 import umbc.ebiquity.kang.textprocessing.impl.SequenceInReversedOrderPhraseExtractor;
 
@@ -272,7 +272,7 @@ public class ProprietaryClassifiedInstanceRepositoriesAutomaticCorrector extends
 				IManufacturingLexicalMappingRecordsReader aggregratedManufacturingLexicalMappingRepository = ManufacturingLexicalMappingRepositoryFactory
 		                .createAggregratedManufacturingLexicalMappingRepository(_ontologyRepository);
 				
-				ITripleRepository tripleStore = TripleRepositoryFactory.createTripleRepository(webSiteURL, true);
+				IInstanceDescriptionModel tripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL, true);
 				
 				// Create Relation-Property Mapping Algorithm Object
 				IRelation2PropertyMappingAlgorithm relation2PropertymMappingAlgorithm = new Relation2PropertyMappingAlgorithm(
@@ -285,8 +285,8 @@ public class ProprietaryClassifiedInstanceRepositoriesAutomaticCorrector extends
 								_ontologyRepository), 
 																							applyMappingRule), aggregatedClassificationCorrectionRepository);
 				// Create the Annotation (Mapping) Algorithm Object
-				IMappingAlgorithm mappingAlgorithm = new TS2OntoMappingAlgorithm2(relation2PropertymMappingAlgorithm, instanceClassificationAlgorithm);
-				mappingAlgorithm.mapping();
+				IModelSemanticResolver mappingAlgorithm = new InstanceDescriptionModelSemanticResolver(relation2PropertymMappingAlgorithm, instanceClassificationAlgorithm);
+				mappingAlgorithm.resolve();
 				
 				IClassifiedInstancesRepository proprietoryClassifiedInstancesRepository = new ProprietoryClassifiedInstancesRepository(tripleStore.getRepositoryName(), 
 						  _ontologyRepository, 

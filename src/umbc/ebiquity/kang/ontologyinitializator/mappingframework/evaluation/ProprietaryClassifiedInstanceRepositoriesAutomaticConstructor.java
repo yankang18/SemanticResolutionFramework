@@ -5,26 +5,26 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
+import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMappingPairLookUpper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.InstanceClassificationAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Relation2PropertyMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Relation2PropertyMappingAlgorithm;
-import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.TS2OntoMappingAlgorithm2;
+import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.InstanceDescriptionModelSemanticResolver;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IInstanceClassificationAlgorithm;
-import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IMappingAlgorithm;
+import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IModelSemanticResolver;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IRelation2PropertyMappingAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ClassifiedInstancesRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ManufacturingLexicalMappingRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
-import umbc.ebiquity.kang.ontologyinitializator.repository.factories.TripleRepositoryFactory;
+import umbc.ebiquity.kang.ontologyinitializator.repository.factories.InstanceDescriptionModelFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ProprietoryClassifiedInstancesRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstancesRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRecordsReader;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.ITripleRepository;
 import umbc.ebiquity.kang.ontologyinitializator.utilities.FileUtility;
 
 public class ProprietaryClassifiedInstanceRepositoriesAutomaticConstructor extends AbstractWebUrlLoader {
@@ -83,7 +83,7 @@ public class ProprietaryClassifiedInstanceRepositoriesAutomaticConstructor exten
 					URL webSiteURL = new URL(webSiteURLStr);
 					String repositoryName = FileUtility.convertURL2FileName(webSiteURL);
 					System.out.println("Annotate Repository: " + repositoryName);
-					boolean existTripleRepository = TripleRepositoryFactory.existTripleRepository(webSiteURL);
+					boolean existTripleRepository = InstanceDescriptionModelFactory.instanceDescriptionModelConstructed(webSiteURL);
 					
 					if(!existTripleRepository){
 						continue;

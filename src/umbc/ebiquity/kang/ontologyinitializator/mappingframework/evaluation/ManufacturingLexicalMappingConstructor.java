@@ -20,23 +20,23 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
+import umbc.ebiquity.kang.instanceconstructor.entityframework.object.Concept;
+import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
+import umbc.ebiquity.kang.instanceconstructor.model.InstanceTripleSet;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IConcept2OntClassMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IInstanceClassificationAlgorithm;
-import umbc.ebiquity.kang.ontologyinitializator.ontology.InstanceTripleSet;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter.MappingRelationType;
 import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ManufacturingLexicalMappingRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
-import umbc.ebiquity.kang.ontologyinitializator.repository.factories.TripleRepositoryFactory;
+import umbc.ebiquity.kang.ontologyinitializator.repository.factories.InstanceDescriptionModelFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.Concept2OntClassMapping;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrectionRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRecordsReader;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.ITripleRepository;
 import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
 
 public class ManufacturingLexicalMappingConstructor extends AbstractWebUrlLoader {
@@ -95,7 +95,7 @@ public class ManufacturingLexicalMappingConstructor extends AbstractWebUrlLoader
 			boolean recrawl = crawlIndicators.get(webSiteURLStr);
 			if (recrawl) {
 				URL webSiteURL = new URL(webSiteURLStr);
-				ITripleRepository tripleStore = TripleRepositoryFactory.createTripleRepository(webSiteURL, true);
+				IInstanceDescriptionModel tripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL, true);
 				classifyInstances(tripleStore.getInstanceTripleSets(), ontologyRepository.getAllOntClasses());
 			}
 		}

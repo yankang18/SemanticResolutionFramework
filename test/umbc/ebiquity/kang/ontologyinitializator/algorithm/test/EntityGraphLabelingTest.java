@@ -9,11 +9,12 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.IRelationExtractionAlgorithm;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityGraph;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityPathExtractor;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.impl.InstanceConceptSetExtractionAlgorithm;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.impl.RelationExtractionAlgorithm;
+import umbc.ebiquity.kang.instanceconstructor.entityframework.IRelationExtractionAlgorithm;
+import umbc.ebiquity.kang.instanceconstructor.entityframework.impl.EntityGraph;
+import umbc.ebiquity.kang.instanceconstructor.entityframework.impl.EntityPathExtractor;
+import umbc.ebiquity.kang.instanceconstructor.entityframework.impl.EntityPathExtractorImpl;
+import umbc.ebiquity.kang.instanceconstructor.entityframework.impl.InstanceConceptSetExtractionAlgorithm;
+import umbc.ebiquity.kang.instanceconstructor.entityframework.impl.RelationExtractionAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
 import umbc.ebiquity.kang.webpageparser.SimplePageTemplatesSplitter;
 import umbc.ebiquity.kang.webpageparser.WebPagePathsImpl;
@@ -72,9 +73,10 @@ public class EntityGraphLabelingTest {
 		
 		WebPagePathsImpl webPagePath = new WebPagePathsImpl(webPages.get(0));  
 		webPagePath.construct();
-//		EntityPathExtractor extractor = new EntityPathExtractor(crawler, new SimplePageTemplatesSplitter());
-//		entityGraph = new EntityGraph(extractor.extractor());
-//		entityGraph.printForwardTermGraphNodesAfterAnalyzing();
+		EntityPathExtractor extractor = new EntityPathExtractor(crawler, new SimplePageTemplatesSplitter());
+//		EntityPathExtractorImpl extractor = new EntityPathExtractorImpl(crawler, new SimplePageTemplatesSplitter());
+		entityGraph = new EntityGraph(extractor.extractor());
+		entityGraph.printForwardTermGraphNodesAfterAnalyzing();
 	}
 	
 	public void RelationExtractionAlgorithmTest(){

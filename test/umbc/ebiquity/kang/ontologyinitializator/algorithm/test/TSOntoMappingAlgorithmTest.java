@@ -5,18 +5,18 @@ import java.net.URL;
 
 import org.junit.Before;
 
+import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
 import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ManufacturingLexicalMappingRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
-import umbc.ebiquity.kang.ontologyinitializator.repository.factories.TripleRepositoryFactory;
+import umbc.ebiquity.kang.ontologyinitializator.repository.factories.InstanceDescriptionModelFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRecordsReader;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.ITripleRepository;
 
 public class TSOntoMappingAlgorithmTest {
 	
-	private ITripleRepository extractedTripleStore;
+	private IInstanceDescriptionModel extractedTripleStore;
 	private IOntologyRepository ontologyRepository;
 	private IManufacturingLexicalMappingRecordsReader MLRepository;
 	
@@ -30,7 +30,7 @@ public class TSOntoMappingAlgorithmTest {
 //		String webSiteURLString = "http://www.accutrex.com";
 		String webSiteURLString = "http://www.princetonind.com";
 		URL webSiteURL = new URL(webSiteURLString);
-		extractedTripleStore = TripleRepositoryFactory.createTripleRepository(webSiteURL, false);
+		extractedTripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL, false);
 		extractedTripleStore.showTriples();
 	}
 
@@ -44,7 +44,7 @@ public class TSOntoMappingAlgorithmTest {
 //		String webSiteURLString = "http://cncmachining.boyermachine.com";
 		String webSiteURLString = "http://www.npcnc.com";
 		URL webSiteURL = new URL(webSiteURLString);
-		ITripleRepository extractedTripleStore = TripleRepositoryFactory.createTripleRepository(webSiteURL, false);
+		IInstanceDescriptionModel extractedTripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL, false);
 		extractedTripleStore.showTriples();
 	}
 	

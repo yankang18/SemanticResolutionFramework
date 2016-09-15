@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
+import umbc.ebiquity.kang.instanceconstructor.entityframework.object.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IConcept2OntClassMappingPairPruner;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.Concept2OntClassMapping;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMapping;

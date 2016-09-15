@@ -2,7 +2,7 @@ package umbc.ebiquity.kang.ontologyinitializator.repository.interfaces;
 
 import java.util.Collection;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.Concept;
+import umbc.ebiquity.kang.instanceconstructor.entityframework.object.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter.MappingRelationType;
 

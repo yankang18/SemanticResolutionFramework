@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityGraph;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityNode;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityPath;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityPathExtractor;
-import umbc.ebiquity.kang.ontologyinitializator.entityframework.component.EntityValidator;
+import umbc.ebiquity.kang.instanceconstructor.entityframework.impl.EntityGraph;
+import umbc.ebiquity.kang.instanceconstructor.entityframework.impl.EntityPathExtractor;
+import umbc.ebiquity.kang.instanceconstructor.entityframework.object.EntityNode;
+import umbc.ebiquity.kang.instanceconstructor.entityframework.object.EntityPath;
+import umbc.ebiquity.kang.instanceconstructor.entityframework.object.EntityValidator;
 import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
 import umbc.ebiquity.kang.webpageparser.WebPageNode.WebTagNodeType;
 import umbc.ebiquity.kang.webpageparser.interfaces.WebPage;
@@ -117,7 +117,7 @@ public class WebPageImpl implements WebPage {
 		return pageURL;
 	}
 	
-	private String getPageURLAsString(){
+	public String getPageURLAsString(){
 		return pageURL.getUrlString();
 	}
 

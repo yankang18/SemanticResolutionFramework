@@ -16,7 +16,7 @@ import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.ICorrectionClusterCodeGenerator;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IInstanceConcept2OntClassMappingFeatureExtractor;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IInstanceLexicalFeatureExtractor;
-import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IMappingAlgorithm;
+import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IModelSemanticResolver;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.ClassificationCorrectionCluster;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.ClassificationCorrectionRuleGenerator;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.CorrectionDirection;
@@ -42,7 +42,7 @@ private static ClassificationCorrectionRuleGenerator _ruleGenerator;
 private static IInstanceLexicalFeatureExtractor _instanceLexicalFeatureExtractor;
 private static IInstanceConcept2OntClassMappingFeatureExtractor _instanceC2CMappingFeatureExtractor;
 private static ICorrectionClusterCodeGenerator _correctionClusterCodeGenerator;
-private static IMappingAlgorithm _alg;
+private static IModelSemanticResolver _alg;
 	
 	@BeforeClass
 	public static void init() throws IOException{ 

@@ -3,6 +3,7 @@ package umbc.ebiquity.kang.ontologyinitializator.repository.factories;
 import java.io.IOException;
 import java.net.URL;
 
+import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMappingPairLookUpper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.CorrectionClusterCodeGenerator;
@@ -13,12 +14,12 @@ import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Relation2PropertyMappingAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.SimpleLexicalFeatureExtractor;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.TS2OntoMappingAlgorithm;
-import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.TS2OntoMappingAlgorithm2;
+import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.InstanceDescriptionModelSemanticResolver;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.ICorrectionClusterCodeGenerator;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IInstanceClassificationAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IInstanceConcept2OntClassMappingFeatureExtractor;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IInstanceLexicalFeatureExtractor;
-import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IMappingAlgorithm;
+import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IModelSemanticResolver;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IRelation2PropertyMappingAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.ClassificationCorrectionRuleGenerator;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.interfaces.ICorrectionRule;
@@ -34,7 +35,6 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufactu
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstancesRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.ITripleRepository;
 import umbc.ebiquity.kang.ontologyinitializator.utilities.FileUtility;
 import umbc.ebiquity.kang.textprocessing.impl.SequenceInReversedOrderPhraseExtractor;
 
@@ -83,23 +83,25 @@ public class ClassifiedInstancesRepositoryFactory {
 				IManufacturingLexicalMappingRecordsReader aggregratedManufacturingLexicalMappingRepository = ManufacturingLexicalMappingRepositoryFactory
 		                .createAggregratedManufacturingLexicalMappingRepository(ontologyRepository);
 				
-				ITripleRepository tripleStore = TripleRepositoryFactory.createTripleRepository(webSiteURL, true);
+				// create Instance Description Model of a web site
+				// move this out of this class
+				IInstanceDescriptionModel IDM = InstanceDescriptionModelFactory.createModel(webSiteURL, true);
 				
 				// Create Relation-Property Mapping Algorithm Object
 				IRelation2PropertyMappingAlgorithm relation2PropertymMappingAlgorithm = new Relation2PropertyMappingAlgorithm(
-						tripleStore, ontologyRepository, new Relation2PropertyMapper());
+						IDM, ontologyRepository, new Relation2PropertyMapper());
 				
 				// Create Instance Classification Algorithm Object
-				IInstanceClassificationAlgorithm instanceClassificationAlgorithm = new InstanceClassificationAlgorithm(tripleStore,
+				IInstanceClassificationAlgorithm instanceClassificationAlgorithm = new InstanceClassificationAlgorithm(IDM,
 						ontologyRepository, 
 						new Concept2OntClassMapper(new Concept2OntClassMappingPairLookUpper(aggregratedManufacturingLexicalMappingRepository, 
 																							ontologyRepository), 
 																							applyMappingRule), aggregatedClassificationCorrectionRepository);
 				// Create the Annotation (Mapping) Algorithm Object
-				IMappingAlgorithm mappingAlgorithm = new TS2OntoMappingAlgorithm2(relation2PropertymMappingAlgorithm, instanceClassificationAlgorithm);
-				mappingAlgorithm.mapping();
+				IModelSemanticResolver mappingAlgorithm = new InstanceDescriptionModelSemanticResolver(relation2PropertymMappingAlgorithm, instanceClassificationAlgorithm);
+				mappingAlgorithm.resolve();
 				
-				IClassifiedInstancesRepository proprietoryClassifiedInstancesRepository = new ProprietoryClassifiedInstancesRepository(tripleStore.getRepositoryName(), 
+				IClassifiedInstancesRepository proprietoryClassifiedInstancesRepository = new ProprietoryClassifiedInstancesRepository(IDM.getRepositoryName(), 
 						  ontologyRepository, 
 						  proprietaryManufacturingLexicalMappingRepository, 
 						  mappingAlgorithm.getRelation2PropertyMap(), 

@@ -5,8 +5,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IInstanceClassificationAlgorithm;
-import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IMappingAlgorithm;
+import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IModelSemanticResolver;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IMappingAlgorithmComponent;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IMappingAlgorithmVisitor;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IRelation2PropertyMappingAlgorithm;
@@ -17,7 +18,6 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufactu
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstancesRepository;
-import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.ITripleRepository;
 
 /***
  * This is the class that establish schema-level mapping between the triple
@@ -27,12 +27,12 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.ITripleRep
  * 
  */
 @Deprecated
-public class TS2OntoMappingAlgorithm implements IMappingAlgorithmVisitor, IMappingAlgorithm {
+public class TS2OntoMappingAlgorithm implements IMappingAlgorithmVisitor, IModelSemanticResolver {
 
 	/**
 	 * Java representation of a triple store extracted from a web site
 	 */
-	private ITripleRepository tripleStore;
+	private IInstanceDescriptionModel tripleStore;
 	
 	/**
 	 * Java representation of the specific domain ontology
@@ -48,7 +48,7 @@ public class TS2OntoMappingAlgorithm implements IMappingAlgorithmVisitor, IMappi
 	private List<IMappingAlgorithmComponent> mappingAlgorithmComponents;
 	
 	
-	public TS2OntoMappingAlgorithm(ITripleRepository tripleStore, 
+	public TS2OntoMappingAlgorithm(IInstanceDescriptionModel tripleStore, 
 			                       IOntologyRepository ontologyRepository,
 			                       IManufacturingLexicalMappingRepository proprietaryManufacturingLexicalMappingRepository,
 			                       IManufacturingLexicalMappingRecordsReader aggregratedManufacturingLexicalMappingRepository) {
@@ -66,7 +66,7 @@ public class TS2OntoMappingAlgorithm implements IMappingAlgorithmVisitor, IMappi
 	}
 
 	@Override
-	public void mapping() {
+	public void resolve() {
 		for (IMappingAlgorithmComponent component : mappingAlgorithmComponents) {
 			component.accept(this);
 		}
