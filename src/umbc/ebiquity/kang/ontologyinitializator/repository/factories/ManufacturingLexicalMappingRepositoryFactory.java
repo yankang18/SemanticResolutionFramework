@@ -3,7 +3,7 @@ package umbc.ebiquity.kang.ontologyinitializator.repository.factories;
 import java.io.IOException;
 
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.RuleEngine;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.AggregratedManufacturingLexicalMappingRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ManufacturingLexicalMappingRecordsAccessor;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ProprietaryManufacturingLexicalMappingRepository;
@@ -22,7 +22,7 @@ public class ManufacturingLexicalMappingRepositoryFactory {
 	}
 	
 	public static IManufacturingLexicalMappingRepository createProprietaryManufacturingLexiconRepository(String repositoryName) throws IOException { 
-		String directory = RepositoryParameterConfiguration.getManufacturingLexiconDirectoryFullPath();
+		String directory = FileRepositoryParameterConfiguration.getManufacturingLexiconDirectoryFullPath();
 		String fileFullName = directory + repositoryName;
 
 		if (FileUtility.exists(fileFullName)) {

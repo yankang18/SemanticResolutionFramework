@@ -1,15 +1,12 @@
 package umbc.ebiquity.kang.instanceconstructor.model;
 
+import java.net.URL;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
 public interface IInstanceDescriptionModel {
 	
-	public boolean save(String repositoryFullName);
-
-	public boolean loadRepository(String repositoryFullName);
-
 	public Collection<InstanceTripleSet> getInstanceTripleSets();
 	
 	public InstanceTripleSet getInstanceTripleSetByInstanceName(String instanceName);
@@ -33,5 +30,7 @@ public interface IInstanceDescriptionModel {
 	void showTriples();
 
 	Set<Triple> getRelationTypeTriple();
+
+	URL getSourceURL(); 
 
 }

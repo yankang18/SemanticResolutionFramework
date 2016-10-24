@@ -14,13 +14,15 @@ import umbc.csee.ebiquity.ontologymatcher.algorithm.component.OntPropertyInfo;
 import umbc.csee.ebiquity.ontologymatcher.algorithm.component.OntResourceInfo;
 import umbc.csee.ebiquity.ontologymatcher.algorithm.component.MSMResult.SubMapping;
 import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
+import umbc.ebiquity.kang.instanceconstructor.model.IInstanceRepository;
+import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelFactory;
+import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceFileRepository;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Relation2PropertyMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Relation2PropertyMappingAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IRelation2PropertyMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IRelation2PropertyMappingAlgorithm;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
-import umbc.ebiquity.kang.ontologyinitializator.repository.factories.InstanceDescriptionModelFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.MatchedOntProperty;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
 
@@ -31,13 +33,14 @@ public class Relation2OntPropertyMappingTest {
 	
 	@Before
 	public void Init() throws IOException{ 
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv1.owl";
+		FileRepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
+		FileRepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv1.owl";
 		ontologyRepository = OntologyRepositoryFactory.createOntologyRepository();
 		
 		String webSiteURLString = "http://www.numericalconcepts.com";
 		URL webSiteURL = new URL(webSiteURLString);
-		extractedTripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL, true);
+		IInstanceRepository repo = new InstanceFileRepository();
+		extractedTripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL, repo);
 	}
 	
 	@Test

@@ -15,7 +15,7 @@ import org.junit.Test;
 
 import umbc.ebiquity.kang.instanceconstructor.entityframework.object.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter.MappingRelationType;
 import umbc.ebiquity.kang.ontologyinitializator.repository.exception.NoSuchEntryItemException;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ManufacturingLexicalMappingRepositoryFactory;
@@ -46,9 +46,9 @@ public class ManufacturingLexiconRepositoryTest {
 	
 	@BeforeClass
 	public static void init() throws IOException {
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
-		System.out.println("@@@1 " + RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH);
+		FileRepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
+		FileRepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
+		System.out.println("@@@1 " + FileRepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH);
 		fakeDataCreator = new FakeDataCreator();
 		_updatedRecord2OriginalRecord = createUpdatedInstanceRecordsAndClassifiedInstanceRecords();
 		_updatedRecord2OriginalRecord1 = createUpdatedInstanceRecordsAndClassifiedInstanceRecords1();
@@ -65,9 +65,9 @@ public class ManufacturingLexiconRepositoryTest {
 //	@Ignore
 	@Test
 	public void xxxx() throws IOException{ 
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop";
-		RepositoryParameterConfiguration.MANUFACTUIRNG_LEXICON_HOST_DIRECTORY = "/Users/yankang/Desktop";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
+		FileRepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop";
+		FileRepositoryParameterConfiguration.MANUFACTUIRNG_LEXICON_HOST_DIRECTORY = "/Users/yankang/Desktop";
+		FileRepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
 		IManufacturingLexicalMappingRecordsReader aggregratedManufacturingLexicalMappingRepository = ManufacturingLexicalMappingRepositoryFactory
 				.createAggregratedManufacturingLexicalMappingRepository(OntologyRepositoryFactory.createOntologyRepository());
 		System.out.println("--------------------------");
@@ -109,7 +109,7 @@ public class ManufacturingLexiconRepositoryTest {
 	public void AddNewConcept2OntClassMappingsFromClassifiedInstanceRecordsTest() throws IOException {
 		System.out.println("addNewConcept2OntClassMappingsFromClassifiedInstanceRecordsTest");
 		System.out.println("");
-		System.out.println("@@@2 " + RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH);
+		System.out.println("@@@2 " + FileRepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH);
 		proprietaryManufacturingLexicalMappingRepository1.addNewConcept2OntoClassMappings(_updatedRecord2OriginalRecord.values());
 		System.out.println("--------------------------");
 		proprietaryManufacturingLexicalMappingRepository1.showRepositoryDetail();

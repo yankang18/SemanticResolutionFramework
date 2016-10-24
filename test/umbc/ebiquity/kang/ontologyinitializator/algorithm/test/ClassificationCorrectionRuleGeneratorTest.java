@@ -21,7 +21,7 @@ import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.Classifica
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.ClassificationCorrectionRuleGenerator;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.CorrectionDirection;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.interfaces.ICorrectionRule;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ClassifiedInstancesRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.InterpretationCorrectionRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
@@ -46,11 +46,11 @@ private static IModelSemanticResolver _alg;
 	
 	@BeforeClass
 	public static void init() throws IOException{ 
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
-		RepositoryParameterConfiguration.CLASSIFIED_INSTANCE_HOST_DIRECTORY = "/Users/yankang/Desktop/Test_NoRule_NoNaive";
-		RepositoryParameterConfiguration.MANUFACTUIRNG_LEXICON_HOST_DIRECTORY = "/Users/yankang/Desktop/Test_NoRule_NoNaive";
-		RepositoryParameterConfiguration.CLASSIFICATION_CORRECTION_HOST_DIRECTORY = "/Users/yankang/Desktop/Test_NoRule_NoNaive";
+		FileRepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
+		FileRepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
+		FileRepositoryParameterConfiguration.CLASSIFIED_INSTANCE_HOST_DIRECTORY = "/Users/yankang/Desktop/Test_NoRule_NoNaive";
+		FileRepositoryParameterConfiguration.MANUFACTUIRNG_LEXICON_HOST_DIRECTORY = "/Users/yankang/Desktop/Test_NoRule_NoNaive";
+		FileRepositoryParameterConfiguration.CLASSIFICATION_CORRECTION_HOST_DIRECTORY = "/Users/yankang/Desktop/Test_NoRule_NoNaive";
 		
 		
 		_ontologyRepository = OntologyRepositoryFactory.createOntologyRepository();

@@ -10,7 +10,7 @@ import umbc.ebiquity.kang.instanceconstructor.entityframework.object.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMappingPairLookUpper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMappingPairPruner;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IConcept2OntClassMappingPairPruner;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ManufacturingLexicalMappingRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.Concept2OntClassMapping;
@@ -24,10 +24,10 @@ public class Concept2OntClassMappingLookUpTest {
 
 	@BeforeClass
 	public static void LoadDataFromFile() throws IOException {
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
+		FileRepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
+		FileRepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
 		
-		RepositoryParameterConfiguration.MANUFACTUIRNG_LEXICON_HOST_DIRECTORY = "/Users/yankang/Desktop/MLM";
+		FileRepositoryParameterConfiguration.MANUFACTUIRNG_LEXICON_HOST_DIRECTORY = "/Users/yankang/Desktop/MLM";
 		IManufacturingLexicalMappingRepository _MLReposiory = ManufacturingLexicalMappingRepositoryFactory.createProprietaryManufacturingLexiconRepository("_MLM");
 		_MLReposiory.showRepositoryDetail();
 		IOntologyRepository _ontologyRepository = OntologyRepositoryFactory.createOntologyRepository();

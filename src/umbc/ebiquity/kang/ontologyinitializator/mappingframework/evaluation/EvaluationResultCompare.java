@@ -13,7 +13,7 @@ import java.util.Map;
 
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.evaluation.TripleRepositoriesAutomaticConstructor.PopulationType;
 import umbc.ebiquity.kang.ontologyinitializator.repository.FileAccessor;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.utilities.FileUtility;
 
 public class EvaluationResultCompare extends AbstractWebUrlLoader {
@@ -72,9 +72,9 @@ public class EvaluationResultCompare extends AbstractWebUrlLoader {
 		StringBuilder stringBuilder = new StringBuilder();
 		for (String webSiteURLStr : crawlIndicators.keySet()) {
 //			System.out.println(webSiteURLStr);
-			stringBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+			stringBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 			stringBuilder.append(webSiteURLStr);
-			stringBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+			stringBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 			boolean recrawl = crawlIndicators.get(webSiteURLStr);
 			if (recrawl) {
 				try {
@@ -99,16 +99,16 @@ public class EvaluationResultCompare extends AbstractWebUrlLoader {
 //						stringBuilder.append(s + ":   "  + n4);
 //						stringBuilder.append(s + ":   " + n1 + "/" + n2 + "/" + n4);
 						stringBuilder.append(s + ":   " + n1 + "/" + n2 + "/" + n3 + "/" + n4);
-						stringBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+						stringBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 					}
 					
 				} catch (MalformedURLException e) {
 				}
 			}
 			
-			stringBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
-			stringBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
-			stringBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+			stringBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
+			stringBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
+			stringBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		}
 		
 		FileAccessor.saveTripleString(result, stringBuilder.toString());

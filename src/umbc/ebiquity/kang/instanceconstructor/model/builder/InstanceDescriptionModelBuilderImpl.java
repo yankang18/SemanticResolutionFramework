@@ -1,7 +1,6 @@
-package umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl;
+package umbc.ebiquity.kang.instanceconstructor.model.builder;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -20,26 +19,23 @@ import umbc.ebiquity.kang.instanceconstructor.model.InstanceDescriptionModel;
 import umbc.ebiquity.kang.instanceconstructor.model.Triple;
 import umbc.ebiquity.kang.instanceconstructor.model.Triple.BuiltinType;
 import umbc.ebiquity.kang.instanceconstructor.model.Triple.PredicateType;
-import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IInstanceDescriptionModelConstructor;
 import umbc.ebiquity.kang.webpageparser.LeafNode;
 
-public class InstanceDescriptionModelConstructorImpl implements IInstanceDescriptionModelConstructor {
-	
+public class InstanceDescriptionModelBuilderImpl implements IInstanceDescriptionModelBuilder {
+
 	private IReadOnlyEntityGraph entityGraph;
-	private EntityValidator entityValidator;
-	
-	public InstanceDescriptionModelConstructorImpl(IReadOnlyEntityGraph entityGraph) {
-		this.entityGraph = entityGraph;
-		this.entityValidator = new EntityValidator();
+	private EntityValidator entityValidator = new EntityValidator();
+
+	InstanceDescriptionModelBuilderImpl() {
 	}
-	
+
 	@Override
-	public IInstanceDescriptionModel extractTripleRepository() {
+	public IInstanceDescriptionModel build(IReadOnlyEntityGraph entityGraph) {
 		System.out.println("EXTRACTING TRIPLE STORE ...");
-		Collection<Triple> tripleSet = new ArrayList<Triple>();
+		Set<Triple> tripleSet = new HashSet<Triple>();
 		List<EntityPath> entityPathList = new ArrayList<EntityPath>(this.entityGraph.getEntityPaths());
 		Collections.sort(entityPathList, new EntityPathSorterByLeafNodeText());
-		
+
 		/*
 		 * 
 		 */

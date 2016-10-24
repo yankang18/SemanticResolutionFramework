@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.URL;
 
 import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
+import umbc.ebiquity.kang.instanceconstructor.model.IInstanceRepository;
+import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelFactory;
+import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceFileRepository;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMappingPairLookUpper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.CorrectionClusterCodeGenerator;
@@ -23,7 +26,7 @@ import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.inter
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IRelation2PropertyMappingAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.ClassificationCorrectionRuleGenerator;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.interfaces.ICorrectionRule;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.AggregratedClassifiedInstanceRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ProprietoryClassifiedInstancesRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ProprietoryClassifiedInstancesRepository.ClassifiedInstancesRepositoryType;
@@ -51,8 +54,8 @@ public class ClassifiedInstancesRepositoryFactory {
 																								boolean applyCorrection) throws IOException {
 
 		String repositoryName = FileUtility.convertURL2FileName(webSiteURL);
-		String basicInfoDirectory = RepositoryParameterConfiguration.getMappingBasicInfoDirectoryFullPath();
-		String detailInfoDirectory = RepositoryParameterConfiguration.getMappingDetailinfoDirectoryFullPath();
+		String basicInfoDirectory = FileRepositoryParameterConfiguration.getMappingBasicInfoDirectoryFullPath();
+		String detailInfoDirectory = FileRepositoryParameterConfiguration.getMappingDetailinfoDirectoryFullPath();
 		String basicInfoFileFullName = basicInfoDirectory + repositoryName;
 		String detailInfoFileFullName = detailInfoDirectory + repositoryName;
 		boolean basicInfoFileExists = FileUtility.exists(basicInfoFileFullName);
@@ -85,7 +88,8 @@ public class ClassifiedInstancesRepositoryFactory {
 				
 				// create Instance Description Model of a web site
 				// move this out of this class
-				IInstanceDescriptionModel IDM = InstanceDescriptionModelFactory.createModel(webSiteURL, true);
+				IInstanceRepository repo = new InstanceFileRepository();
+				IInstanceDescriptionModel IDM = InstanceDescriptionModelFactory.createModel(webSiteURL, repo);
 				
 				// Create Relation-Property Mapping Algorithm Object
 				IRelation2PropertyMappingAlgorithm relation2PropertymMappingAlgorithm = new Relation2PropertyMappingAlgorithm(

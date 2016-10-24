@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,7 +29,7 @@ import umbc.ebiquity.kang.instanceconstructor.model.Triple.BuiltinPredicate;
 import umbc.ebiquity.kang.instanceconstructor.model.Triple.BuiltinType;
 import umbc.ebiquity.kang.instanceconstructor.model.Triple.PredicateType;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 
 /**
  * 
@@ -40,12 +41,11 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterCo
  */
 public class InstanceDescriptionModel implements IInstanceDescriptionModel {
 	
-//	private String projectDir;
-	private String tripleStoreURI;
+	private URL tripleStoreURI;
 	private String tripleStoreName;
 	private int numberOfRelations;
 	private int numberOfTriples;
-//	private String storeDirectory = "/TripleStorage/";
+	
 	/**
 	 * This Set stores all the triples
 	 */
@@ -109,7 +109,7 @@ public class InstanceDescriptionModel implements IInstanceDescriptionModel {
 	private Map<EntityNode, Set<EntityNode>> propertyNodePrecedentMap;
 	
 	
-	private static final String TRIPLE_REPOSITORY_DIRECTORY_FULL_PATH = RepositoryParameterConfiguration.getTripleRepositoryDirectoryFullPath();
+	private static final String TRIPLE_REPOSITORY_DIRECTORY_FULL_PATH = FileRepositoryParameterConfiguration.getTripleRepositoryDirectoryFullPath();
 	
 
 	public InstanceDescriptionModel() {
@@ -122,24 +122,18 @@ public class InstanceDescriptionModel implements IInstanceDescriptionModel {
 	 * @param knowledgeBaseName
 	 * @param tripleSet
 	 */
-	public InstanceDescriptionModel(Collection<Triple> tripleSet, URL webSiteURL) {
+	public InstanceDescriptionModel(Set<Triple> tripleSet, URL webSiteURL) {
 		this.init();
-		this.tripleStoreURI = webSiteURL.toString();
+		this.tripleStoreURI = webSiteURL;
 		this.theWholeTripleSet.addAll(tripleSet);
-		this.tripleAssignment(tripleSet);
-		this.constructHierarchy(classNodeDescendantMap, classNodePrecedentMap, triplesWithClassSubsumptionPredicate);
-		this.constructHierarchy(propertyNodeDescendantMap, propertyNodePrecedentMap, triplesWithPropertySubsumptionPredicate);
+		this.construct(tripleSet);
 	}
-	
-	private void init(){
-		/*
-		 * 
-		 */
-//		this.projectDir = System.getProperty("user.dir");
+
+	private void init() {
 		this.theWholeTripleSet = new LinkedHashSet<Triple>();
 		this.subject2TripleSetMap = new LinkedHashMap<String, InstanceTripleSet>();
 		this.relationTypeTriple = new HashSet<Triple>();
-	
+
 		this.triplesWithCustomRelation = new LinkedHashSet<Triple>();
 		this.triplesWithPropertySubsumptionPredicate = new LinkedHashSet<Triple>();
 		this.triplesWithClassSubsumptionPredicate = new LinkedHashSet<Triple>();
@@ -157,7 +151,7 @@ public class InstanceDescriptionModel implements IInstanceDescriptionModel {
 	 * This method does the groundwork including group triples based on their
 	 * subjects, types of predicate and predicates themselves
 	 */
-	private void tripleAssignment(Collection<Triple> tripleSet) {
+	private void construct(Collection<Triple> tripleSet) {
 
 		for (Triple triple : tripleSet) {
 			PredicateType predicateType = triple.getPredicateType();
@@ -231,6 +225,8 @@ public class InstanceDescriptionModel implements IInstanceDescriptionModel {
 				}
 			}
 		}
+		this.constructHierarchy(classNodeDescendantMap, classNodePrecedentMap, triplesWithClassSubsumptionPredicate);
+		this.constructHierarchy(propertyNodeDescendantMap, propertyNodePrecedentMap, triplesWithPropertySubsumptionPredicate);
 	}
 
 	private void constructHierarchy(Map<EntityNode, Set<EntityNode>> nodeDescendantMap, Map<EntityNode, Set<EntityNode>> nodePrecedentMap,
@@ -256,307 +252,293 @@ public class InstanceDescriptionModel implements IInstanceDescriptionModel {
 				precedentSet.add(node);
 				nodePrecedentMap.put(descendant, precedentSet);
 			}
-			// }
 		}
 	}
-	
+
+//	/**
+//	 * Save triples to local storage (i.e., file system) in the format of JSON.
+//	 * If succeed, return true, otherwise return false. <br/>
+//	 * 
+//	 * There are three types of records: <Strong>metadata</Strong>, <Strong>relation-to-property mapping
+//	 * (R2P)</Strong> and <Strong>concept-of-instance mapping (CoI)</Strong>. Every record has a Record
+//	 * Type attribute to indicate the type of this record. <br/>
+//	 * 
+//	 * <ul>
+//	 * <li>Record of metadata type has two additional attributes:
+//	 * Triple_Store_URI and Triple_Store_Name.</li>
+//	 * 
+//	 * <li>Record of R2P type has additional attributes: Subject, Predicate,
+//	 * Object, Normalized Subject, Normalized Subject and Predicate Type.</li>
+//	 * 
+//	 * <li>Record of CoI type has additional attributes: Subject, Predicate,
+//	 * Object, Normalized Subject, Normalized Subject, Predicate Type and
+//	 * Is_From_Instance.</li>
+//	 * </ul>
+//	 * 
+//	 * @return true if save succeed, false otherwise
+//	 */
+//	public boolean save(String tripleRepositoryFileName) {
+//		System.out.println("Saving Extracted Triples ...");
+////		this.tripleStoreURI = tripleStoreURI;
+//		this.tripleStoreName = tripleRepositoryFileName;
+//		
+//		boolean hasTriples = false;
+//		StringBuilder triplesStringBuilder = new StringBuilder();
+//		/*
+//		 * create data record for meta-data
+//		 */
+//		Map<String, String> metaDataRecord = new LinkedHashMap<String, String>();
+//		metaDataRecord.put(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE, MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE_META_DATA);
+//		metaDataRecord.put(MappingInfoSchemaParameter.TRIPLE_STORE_URI, this.tripleStoreURI.toString());
+//		metaDataRecord.put(MappingInfoSchemaParameter.TRIPLE_STORE_NUMBER_OF_TRIPLES, String.valueOf(this.numberOfTriples));
+//		metaDataRecord.put(MappingInfoSchemaParameter.TRIPLE_STORE_NUMBER_OF_RELATIONS, String.valueOf(this.numberOfRelations));
+//		triplesStringBuilder.append(JSONValue.toJSONString(metaDataRecord));
+//		triplesStringBuilder.append(MappingInfoSchemaParameter.LINE_SEPARATOR);
+//		
+//		for (InstanceTripleSet instanceTripleSet : this.subject2TripleSetMap.values()) {
+//			hasTriples = true;
+//			String subjectLabel = instanceTripleSet.getSubjectLabel();
+//			Map<String, Set<String>> relation2ValueMap = instanceTripleSet.getRelation2ValueMap();
+//			Map<String, Set<Concept>> instance2ConceptSetMap = instanceTripleSet.getInstance2ConceptualSetMap();
+//			for (String relationLabel : relation2ValueMap.keySet()) {
+//				/*
+//				 * create data records for relation-values mappings
+//				 */
+//				Map<String, String> tripleRecord = new LinkedHashMap<String, String>();
+//				for (String valueLabel : relation2ValueMap.get(relationLabel)) {
+//					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE, MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE_RELATION_VALUE);
+//					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_SUBJECT, subjectLabel);
+//					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_PREDICATE, relationLabel);
+//					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_OBJECT, valueLabel);
+//					
+//					String predicateTypeStr = "";
+//					if (Triple.BuiltinPredicateSet.contains(relationLabel)) {
+//						predicateTypeStr = PredicateType.Builtin.toString();
+//					} else {
+//						predicateTypeStr = PredicateType.Custom.toString();
+//					}
+//					
+//					tripleRecord.put(MappingInfoSchemaParameter.NORMALIZED_TRIPLE_OBJECT, "");
+//					tripleRecord.put(MappingInfoSchemaParameter.NORMALIZED_TRIPLE_SUBJECT, "");
+//					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_PREDICATE_TYPE, predicateTypeStr);
+//					triplesStringBuilder.append(JSONValue.toJSONString(tripleRecord));
+//					triplesStringBuilder.append(MappingInfoSchemaParameter.LINE_SEPARATOR);
+//					numberOfTriples++;
+//				}
+//			}
+//			
+//			for (String relationLabel : instance2ConceptSetMap.keySet()) {
+//				/*
+//				 * create data records for class-concept mappings
+//				 */
+//				Map<String, String> tripleRecord = new LinkedHashMap<String, String>();
+//				for (Concept concept : instance2ConceptSetMap.get(relationLabel)) {
+//					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE, MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE_CONCEPT_OF_INSTANCE);
+//					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_SUBJECT, subjectLabel);
+//					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_PREDICATE, relationLabel);
+//					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_OBJECT, concept.getConceptName());
+//					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_OBJECT_AS_CONCEPT_SCORE, String.valueOf(concept.getScore()));
+//
+//					/*
+//					 * 
+//					 */
+//					String predicateTypeStr = "";
+//					if (Triple.BuiltinPredicateSet.contains(relationLabel)) {
+//						predicateTypeStr = PredicateType.Builtin.toString();
+//					} else {
+//						predicateTypeStr = PredicateType.Custom.toString();
+//					}
+//
+//					tripleRecord.put(MappingInfoSchemaParameter.NORMALIZED_TRIPLE_OBJECT, "");
+//					tripleRecord.put(MappingInfoSchemaParameter.NORMALIZED_TRIPLE_SUBJECT, "");
+//					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_PREDICATE_TYPE, predicateTypeStr);
+//					/*
+//					 * 
+//					 */
+//					String isFromInstance = String.valueOf(concept.isFromInstance());
+//					tripleRecord.put(MappingInfoSchemaParameter.IS_FROM_INSTANCE, isFromInstance);
+//					triplesStringBuilder.append(JSONValue.toJSONString(tripleRecord));
+//					triplesStringBuilder.append(MappingInfoSchemaParameter.LINE_SEPARATOR);
+//					numberOfTriples++;
+//				}
+//			}
+//		}
+//		
+//		for (Triple triple : relationTypeTriple) {
+//			hasTriples = true;
+//			/*
+//			 * create data records for relation-to-property mappings
+//			 */
+//			Map<String, String> tripleRecord = new LinkedHashMap<String, String>();
+//			tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE, MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE_RELATION_DEFINITION);
+//			tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_SUBJECT, triple.getSubject());
+//			tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_PREDICATE, triple.getPredicate());
+//			tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_OBJECT, triple.getObject());
+//
+//			String predicateTypeStr = "";
+//			if (Triple.BuiltinPredicateSet.contains(triple.getPredicate())) {
+//				predicateTypeStr = PredicateType.Builtin.toString();
+//			} else {
+//				predicateTypeStr = PredicateType.Custom.toString();
+//			}
+//
+//			tripleRecord.put(MappingInfoSchemaParameter.NORMALIZED_TRIPLE_OBJECT, "");
+//			tripleRecord.put(MappingInfoSchemaParameter.NORMALIZED_TRIPLE_SUBJECT, "");
+//			tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_PREDICATE_TYPE, predicateTypeStr);
+//			triplesStringBuilder.append(JSONValue.toJSONString(tripleRecord));
+//			triplesStringBuilder.append(MappingInfoSchemaParameter.LINE_SEPARATOR);
+//			numberOfTriples++;
+//			numberOfRelations++;
+//		}
+//		
+//		if (hasTriples) {
+//			System.out.println("Triples Extracted");
+//			String filePath = TRIPLE_REPOSITORY_DIRECTORY_FULL_PATH;
+//			String fileName = this.tripleStoreName;
+//			String fileFullName = filePath + fileName;
+//			return this.saveTripleString(fileFullName, triplesStringBuilder.toString());
+//		}
+//		return true;
+//	}
+//	
+//	private boolean saveTripleString(String fileFullName, String tripleString) {
+//
+//		File file = new File(fileFullName);
+//		Writer writer = null;
+//		try {
+//			writer = new BufferedWriter(new FileWriter(file));
+//			writer.write(tripleString);
+//			writer.flush();
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//			return false;
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			return false;
+//		} finally {
+//			try {
+//				if (writer != null) {
+//					writer.close();
+//				}
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//				return false;
+//			}
+//		}
+//		return true;
+//	}
+//	
+//	/**
+//	 * @param tripleStoreURI
+//	 *                 the URI of the triple store
+//	 * @return 
+//	 */
+//	public boolean load(String tripleRepositoryFileName){
+//		this.tripleStoreName = tripleRepositoryFileName;
+//		String fileName = tripleRepositoryFileName;
+//		String filePath = FileRepositoryParameterConfiguration.getTripleRepositoryDirectoryFullPath();
+//		String fileFullName = filePath + fileName;
+//		return loadTriples(fileFullName);
+//	}
+//	
+//	/**
+//	 * Load triples from local storage (i.e., file system). This
+//	 * method will also populate various Sets and Maps with these triples. If
+//	 * succeed, return true. Otherwise return false
+//	 * 
+//	 * @param fileName - the name of the file store triples.
+//	 * @return true if load succeed, false otherwise
+//	 */
+//	private boolean loadTriples(String fileFullName){ 
+//		System.out.println("Loading Triples from " + fileFullName);
+//		File file = new File(fileFullName);
+//		BufferedReader reader = null;
+//		try{
+//			
+//			String line;
+//			reader = new BufferedReader(new FileReader(file));
+//			while ((line = reader.readLine()) != null) {
+//				this.loadTriple(line);
+//			}
+//			
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//			return false;
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			return false;
+//		} finally {
+//			try {
+//				if (reader != null) {
+//					reader.close();
+//				}
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//				return false;
+//			}
+//		}
+//		
+//		this.construct(theWholeTripleSet);
+//		return true;
+//	}
+//	
+//	private void loadTriple(String line) throws MalformedURLException { 
+//		System.out.println("Loading: " + line);
+//		JSONObject record = (JSONObject) JSONValue.parse(line);
+//		String triple_record_type = (String) record.get(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE);
+//		if (triple_record_type.equals(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE_META_DATA)) {
+//			this.getMetaData(record);
+//		} else {
+//			this.createTriple(record);
+//		}
+//	}
+//	
 //	/**
 //	 * 
-//	 * @param tripleStoreURI
-//	 * @return
+//	 * @param token
+//	 * @throws MalformedURLException 
 //	 */
-//	private String getTripleStoreName(String tripleStoreURI) {
-//		int indexOfFirstPeriod = tripleStoreURI.indexOf(".");
-//		String temp = tripleStoreURI.substring(indexOfFirstPeriod + 1);
-//		indexOfFirstPeriod = temp.indexOf(".");
-//		temp = temp.substring(0, indexOfFirstPeriod);
-//		return temp;
+//	private void getMetaData(JSONObject record) throws MalformedURLException { 
+//		String triple_store_URI = (String) record.get(MappingInfoSchemaParameter.TRIPLE_STORE_URI);
+//		String triple_store_Relations = (String) record.get(MappingInfoSchemaParameter.TRIPLE_STORE_NUMBER_OF_RELATIONS);
+//		String triple_store_Triples = (String) record.get(MappingInfoSchemaParameter.TRIPLE_STORE_NUMBER_OF_TRIPLES);
+//		this.tripleStoreURI = new URL(triple_store_URI);
+//		this.numberOfRelations = Integer.valueOf(triple_store_Relations);
+//		this.numberOfTriples = Integer.valueOf(triple_store_Triples);
 //	}
-
-	/**
-	 * Save triples to local storage (i.e., file system) in the format of JSON.
-	 * If succeed, return true, otherwise return false. <br/>
-	 * 
-	 * There are three types of records: <Strong>metadata</Strong>, <Strong>relation-to-property mapping
-	 * (R2P)</Strong> and <Strong>concept-of-instance mapping (CoI)</Strong>. Every record has a Record
-	 * Type attribute to indicate the type of this record. <br/>
-	 * 
-	 * <ul>
-	 * <li>Record of metadata type has two additional attributes:
-	 * Triple_Store_URI and Triple_Store_Name.</li>
-	 * 
-	 * <li>Record of R2P type has additional attributes: Subject, Predicate,
-	 * Object, Normalized Subject, Normalized Subject and Predicate Type.</li>
-	 * 
-	 * <li>Record of CoI type has additional attributes: Subject, Predicate,
-	 * Object, Normalized Subject, Normalized Subject, Predicate Type and
-	 * Is_From_Instance.</li>
-	 * </ul>
-	 * 
-	 * @return true if save succeed, false otherwise
-	 */
-	public boolean save(String tripleRepositoryFileName) {
-		System.out.println("Saving Extracted Triples ...");
-//		this.tripleStoreURI = tripleStoreURI;
-		this.tripleStoreName = tripleRepositoryFileName;
-		
-		boolean hasTriples = false;
-		StringBuilder triplesStringBuilder = new StringBuilder();
-		/*
-		 * create data record for meta-data
-		 */
-		Map<String, String> metaDataRecord = new LinkedHashMap<String, String>();
-		metaDataRecord.put(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE, MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE_META_DATA);
-		metaDataRecord.put(MappingInfoSchemaParameter.TRIPLE_STORE_URI, this.tripleStoreURI);
-		metaDataRecord.put(MappingInfoSchemaParameter.TRIPLE_STORE_NUMBER_OF_TRIPLES, String.valueOf(this.numberOfTriples));
-		metaDataRecord.put(MappingInfoSchemaParameter.TRIPLE_STORE_NUMBER_OF_RELATIONS, String.valueOf(this.numberOfRelations));
-		triplesStringBuilder.append(JSONValue.toJSONString(metaDataRecord));
-		triplesStringBuilder.append(MappingInfoSchemaParameter.LINE_SEPARATOR);
-		
-		for (InstanceTripleSet instanceTripleSet : this.subject2TripleSetMap.values()) {
-			hasTriples = true;
-			String subjectLabel = instanceTripleSet.getSubjectLabel();
-			Map<String, Set<String>> relation2ValueMap = instanceTripleSet.getRelation2ValueMap();
-			Map<String, Set<Concept>> instance2ConceptSetMap = instanceTripleSet.getInstance2ConceptualSetMap();
-			for (String relationLabel : relation2ValueMap.keySet()) {
-				/*
-				 * create data records for relation-values mappings
-				 */
-				Map<String, String> tripleRecord = new LinkedHashMap<String, String>();
-				for (String valueLabel : relation2ValueMap.get(relationLabel)) {
-					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE, MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE_RELATION_VALUE);
-					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_SUBJECT, subjectLabel);
-					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_PREDICATE, relationLabel);
-					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_OBJECT, valueLabel);
-					
-					String predicateTypeStr = "";
-					if (Triple.BuiltinPredicateSet.contains(relationLabel)) {
-						predicateTypeStr = PredicateType.Builtin.toString();
-					} else {
-						predicateTypeStr = PredicateType.Custom.toString();
-					}
-					
-					tripleRecord.put(MappingInfoSchemaParameter.NORMALIZED_TRIPLE_OBJECT, "");
-					tripleRecord.put(MappingInfoSchemaParameter.NORMALIZED_TRIPLE_SUBJECT, "");
-					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_PREDICATE_TYPE, predicateTypeStr);
-					triplesStringBuilder.append(JSONValue.toJSONString(tripleRecord));
-					triplesStringBuilder.append(MappingInfoSchemaParameter.LINE_SEPARATOR);
-					numberOfTriples++;
-				}
-			}
-			
-			for (String relationLabel : instance2ConceptSetMap.keySet()) {
-				/*
-				 * create data records for class-concept mappings
-				 */
-				Map<String, String> tripleRecord = new LinkedHashMap<String, String>();
-				for (Concept concept : instance2ConceptSetMap.get(relationLabel)) {
-					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE, MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE_CONCEPT_OF_INSTANCE);
-					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_SUBJECT, subjectLabel);
-					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_PREDICATE, relationLabel);
-					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_OBJECT, concept.getConceptName());
-					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_OBJECT_AS_CONCEPT_SCORE, String.valueOf(concept.getScore()));
-
-					/*
-					 * 
-					 */
-					String predicateTypeStr = "";
-					if (Triple.BuiltinPredicateSet.contains(relationLabel)) {
-						predicateTypeStr = PredicateType.Builtin.toString();
-					} else {
-						predicateTypeStr = PredicateType.Custom.toString();
-					}
-
-					tripleRecord.put(MappingInfoSchemaParameter.NORMALIZED_TRIPLE_OBJECT, "");
-					tripleRecord.put(MappingInfoSchemaParameter.NORMALIZED_TRIPLE_SUBJECT, "");
-					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_PREDICATE_TYPE, predicateTypeStr);
-					/*
-					 * 
-					 */
-					String isFromInstance = String.valueOf(concept.isFromInstance());
-					tripleRecord.put(MappingInfoSchemaParameter.IS_FROM_INSTANCE, isFromInstance);
-					triplesStringBuilder.append(JSONValue.toJSONString(tripleRecord));
-					triplesStringBuilder.append(MappingInfoSchemaParameter.LINE_SEPARATOR);
-					numberOfTriples++;
-				}
-			}
-		}
-		
-		for (Triple triple : relationTypeTriple) {
-			/*
-			 * create data records for relation-to-property mappings
-			 */
-			Map<String, String> tripleRecord = new LinkedHashMap<String, String>();
-			tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE, MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE_RELATION_DEFINITION);
-			tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_SUBJECT, triple.getSubject());
-			tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_PREDICATE, triple.getPredicate());
-			tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_OBJECT, triple.getObject());
-
-			String predicateTypeStr = "";
-			if (Triple.BuiltinPredicateSet.contains(triple.getPredicate())) {
-				predicateTypeStr = PredicateType.Builtin.toString();
-			} else {
-				predicateTypeStr = PredicateType.Custom.toString();
-			}
-
-			tripleRecord.put(MappingInfoSchemaParameter.NORMALIZED_TRIPLE_OBJECT, "");
-			tripleRecord.put(MappingInfoSchemaParameter.NORMALIZED_TRIPLE_SUBJECT, "");
-			tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_PREDICATE_TYPE, predicateTypeStr);
-			triplesStringBuilder.append(JSONValue.toJSONString(tripleRecord));
-			triplesStringBuilder.append(MappingInfoSchemaParameter.LINE_SEPARATOR);
-			numberOfTriples++;
-			numberOfRelations++;
-		}
-		
-		if (hasTriples) {
-			System.out.println("Triples Extracted");
-			String filePath = TRIPLE_REPOSITORY_DIRECTORY_FULL_PATH;
-			String fileName = this.tripleStoreName;
-			String fileFullName = filePath + fileName;
-			return this.saveTripleString(fileFullName, triplesStringBuilder.toString());
-		}
-		return true;
-	}
-	
-	private boolean saveTripleString(String fileFullName, String tripleString) {
-
-		File file = new File(fileFullName);
-		Writer writer = null;
-		try {
-			writer = new BufferedWriter(new FileWriter(file));
-			writer.write(tripleString);
-			writer.flush();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return false;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		} finally {
-			try {
-				if (writer != null) {
-					writer.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	/**
-	 * @param tripleStoreURI
-	 *                 the URI of the triple store
-	 * @return 
-	 */
-	public boolean loadRepository(String tripleRepositoryFileName){
-		this.tripleStoreName = tripleRepositoryFileName;
-		String fileName = tripleRepositoryFileName;
-		String filePath = RepositoryParameterConfiguration.getTripleRepositoryDirectoryFullPath();
-		String fileFullName = filePath + fileName;
-		return loadTriples(fileFullName);
-	}
-	
-	/**
-	 * Load triples from local storage (i.e., file system). This
-	 * method will also populate various Sets and Maps with these triples. If
-	 * succeed, return true. Otherwise return false
-	 * 
-	 * @param fileName - the name of the file store triples.
-	 * @return true if load succeed, false otherwise
-	 */
-	private boolean loadTriples(String fileFullName){ 
-		System.out.println("Loading Triples from " + fileFullName);
-		File file = new File(fileFullName);
-		BufferedReader reader = null;
-		try{
-			
-			String line;
-			reader = new BufferedReader(new FileReader(file));
-			while ((line = reader.readLine()) != null) {
-				this.loadTriple(line);
-			}
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return false;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		} finally {
-			try {
-				if (reader != null) {
-					reader.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-				return false;
-			}
-		}
-		
-		this.tripleAssignment(theWholeTripleSet);
-		this.constructHierarchy(classNodeDescendantMap, classNodePrecedentMap, triplesWithClassSubsumptionPredicate);
-		this.constructHierarchy(propertyNodeDescendantMap, propertyNodePrecedentMap, triplesWithPropertySubsumptionPredicate);
-		return true;
-	}
-	
-	private void loadTriple(String line) {
-		System.out.println("Loading: " + line);
-		JSONObject record = (JSONObject) JSONValue.parse(line);
-		String triple_record_type = (String) record.get(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE);
-		if (triple_record_type.equals(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE_META_DATA)) {
-			this.getMetaData(record);
-		} else {
-			this.createTriple(record);
-		}
-	}
-	
-	/**
-	 * 
-	 * @param token
-	 */
-	private void getMetaData(JSONObject record) {
-		String triple_store_URI = (String) record.get(MappingInfoSchemaParameter.TRIPLE_STORE_URI);
-		String triple_store_Relations = (String) record.get(MappingInfoSchemaParameter.TRIPLE_STORE_NUMBER_OF_RELATIONS);
-		String triple_store_Triples = (String) record.get(MappingInfoSchemaParameter.TRIPLE_STORE_NUMBER_OF_TRIPLES);
-		this.tripleStoreURI = triple_store_URI;
-		this.numberOfRelations = Integer.valueOf(triple_store_Relations);
-		this.numberOfTriples = Integer.valueOf(triple_store_Triples);
-	}
-
-	private void createTriple(JSONObject record) {
-		
-		Triple triple = null;
-		String triple_record_type = (String) record.get(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE);
-		String subject = (String) record.get(MappingInfoSchemaParameter.TRIPLE_SUBJECT);
-		String object = (String) record.get(MappingInfoSchemaParameter.TRIPLE_OBJECT);
-		String predicate = (String) record.get(MappingInfoSchemaParameter.TRIPLE_PREDICATE);
-		String n_object = (String) record.get(MappingInfoSchemaParameter.NORMALIZED_TRIPLE_OBJECT);
-		String n_subject = (String) record.get(MappingInfoSchemaParameter.NORMALIZED_TRIPLE_SUBJECT);
-		String predicate_Type = (String) record.get(MappingInfoSchemaParameter.TRIPLE_PREDICATE_TYPE);
-		
-		if (triple_record_type.equals(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE_CONCEPT_OF_INSTANCE)) { 
-			boolean isFromInstance = Boolean.valueOf((String) record.get(MappingInfoSchemaParameter.IS_FROM_INSTANCE));
-			// TODO chech the nullpointer exception
-			double score = Double.valueOf((String) record.get(MappingInfoSchemaParameter.TRIPLE_OBJECT_AS_CONCEPT_SCORE));
-			Concept concept = new Concept(object, isFromInstance);
-			concept.setScore(score);
-			triple = new Triple(subject, concept);
-		} else if (triple_record_type.equals(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE_RELATION_VALUE)) {
-			triple = new Triple(subject, n_subject, predicate, object, n_object);
-		} else if (triple_record_type.equals(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE_RELATION_DEFINITION)) {
-			triple = new Triple(subject, BuiltinType.Property);
-		}
-
-		String predicateType = predicate_Type.trim();
-		if (predicateType.equals(Triple.PredicateType.Builtin.toString())) {
-			triple.setPredicateType(PredicateType.Builtin);
-		} else if (predicateType.equals(Triple.PredicateType.Custom.toString())) {
-			triple.setPredicateType(PredicateType.Custom);
-		}
-		theWholeTripleSet.add(triple);
-	}
+//
+//	private void createTriple(JSONObject record) {
+//		
+//		Triple triple = null;
+//		String triple_record_type = (String) record.get(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE);
+//		String subject = (String) record.get(MappingInfoSchemaParameter.TRIPLE_SUBJECT);
+//		String object = (String) record.get(MappingInfoSchemaParameter.TRIPLE_OBJECT);
+//		String predicate = (String) record.get(MappingInfoSchemaParameter.TRIPLE_PREDICATE);
+//		String n_object = (String) record.get(MappingInfoSchemaParameter.NORMALIZED_TRIPLE_OBJECT);
+//		String n_subject = (String) record.get(MappingInfoSchemaParameter.NORMALIZED_TRIPLE_SUBJECT);
+//		String predicate_Type = (String) record.get(MappingInfoSchemaParameter.TRIPLE_PREDICATE_TYPE);
+//		
+//		if (triple_record_type.equals(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE_CONCEPT_OF_INSTANCE)) { 
+//			boolean isFromInstance = Boolean.valueOf((String) record.get(MappingInfoSchemaParameter.IS_FROM_INSTANCE));
+//			// TODO chech the nullpointer exception
+//			double score = Double.valueOf((String) record.get(MappingInfoSchemaParameter.TRIPLE_OBJECT_AS_CONCEPT_SCORE));
+//			Concept concept = new Concept(object, isFromInstance);
+//			concept.setScore(score);
+//			triple = new Triple(subject, concept);
+//		} else if (triple_record_type.equals(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE_RELATION_VALUE)) {
+//			triple = new Triple(subject, n_subject, predicate, object, n_object);
+//		} else if (triple_record_type.equals(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE_RELATION_DEFINITION)) {
+//			triple = new Triple(subject, BuiltinType.Property);
+//		}
+//
+//		String predicateType = predicate_Type.trim();
+//		if (predicateType.equals(Triple.PredicateType.Builtin.toString())) {
+//			triple.setPredicateType(PredicateType.Builtin);
+//		} else if (predicateType.equals(Triple.PredicateType.Custom.toString())) {
+//			triple.setPredicateType(PredicateType.Custom);
+//		}
+//		theWholeTripleSet.add(triple);
+//	}
 
 	public Collection<InstanceTripleSet> getInstanceTripleSets(){
 		return subject2TripleSetMap.values();
@@ -735,6 +717,11 @@ public class InstanceDescriptionModel implements IInstanceDescriptionModel {
 	@Override
 	public String getRepositoryName() {
 		return this.tripleStoreName;
+	}
+	
+	@Override
+	public URL getSourceURL(){
+		return this.tripleStoreURI;
 	}
 
 }

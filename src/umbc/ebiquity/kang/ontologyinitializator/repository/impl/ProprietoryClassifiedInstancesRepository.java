@@ -29,7 +29,7 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.MappingBasicInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingDetailInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter.MappingRelationType;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstanceBasicRecord;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstanceDetailRecord;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMapping;
@@ -323,7 +323,7 @@ public class ProprietoryClassifiedInstancesRepository implements IClassifiedInst
 			String instance2OntClass = "<"+instanceName + ">	<" +instanceOntClassName + ">";
 			System.out.println("I2C: " + instance2OntClass);
 			_textRecords.append("C	" + instance2OntClass);
-			_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+			_textRecords.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 			for (IConcept2OntClassMapping concept2OntClassMappingPair : classifiedInstanceInfo.getConcept2OntClassMappingPairs()) {
 				
 				if (concept2OntClassMappingPair.isMappedConcept()) {
@@ -336,15 +336,15 @@ public class ProprietoryClassifiedInstancesRepository implements IClassifiedInst
 					System.out.println("C2C: " + concept.getConceptName() + " " + ontoClassInfo2.getOntClassName());
 					String concept2OntClass = "               <" + concept.getConceptName() + ">	<" + ontoClassInfo2.getOntClassName() + ">";
 					_textRecords.append(concept2OntClass);
-					_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+					_textRecords.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 				}
 			}
-			_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+			_textRecords.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		}
 		
-		_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
-		_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
-		_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		_textRecords.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
+		_textRecords.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
+		_textRecords.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		
 		for (IMatchedOntProperty mappedRelationInfo : _relationName2RPMappingPairMap.values()) {
 
@@ -352,7 +352,7 @@ public class ProprietoryClassifiedInstancesRepository implements IClassifiedInst
 			String propertyName = mappedRelationInfo.getOntPropertyName();
 			String relation2Property = "R	<" + relationName + ">	<" + propertyName + ">";
 			_textRecords.append(relation2Property);
-			_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+			_textRecords.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		}
 	}
 	
@@ -366,7 +366,7 @@ public class ProprietoryClassifiedInstancesRepository implements IClassifiedInst
 			String instance2OntClass = "<"+instanceName + ">	<" + ontoClassInfo.getOntClassName() + ">";
 			System.out.println("I2C: " + instance2OntClass);
 			_textRecords.append("C	" + instance2OntClass);
-			_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+			_textRecords.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 			for (IConcept2OntClassMapping concept2OntClassMappingPair : classifiedInstanceInfo.getConcept2OntClassMappingPairs()) {
 				
 				if (concept2OntClassMappingPair.isMappedConcept()) {
@@ -379,15 +379,15 @@ public class ProprietoryClassifiedInstancesRepository implements IClassifiedInst
 					System.out.println("C2C: " + concept.getConceptName() + " " + ontoClassInfo2.getOntClassName());
 					String concept2OntClass = "               <" + concept.getConceptName() + ">	<" + ontoClassInfo2.getOntClassName() + ">";
 					_textRecords.append(concept2OntClass);
-					_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+					_textRecords.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 				}
 			}
-			_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+			_textRecords.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		}
 		
-		_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
-		_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
-		_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		_textRecords.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
+		_textRecords.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
+		_textRecords.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		
 		for (IMatchedOntProperty mappedRelationInfo : _relationName2RPMappingPairMap.values()) {
 
@@ -395,7 +395,7 @@ public class ProprietoryClassifiedInstancesRepository implements IClassifiedInst
 			String propertyName = mappedRelationInfo.getOntPropertyName();
 			String relation2Property = "R	<" + relationName + ">	<" + propertyName + ">";
 			_textRecords.append(relation2Property);
-			_textRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+			_textRecords.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		}
 	}
 	
@@ -422,7 +422,7 @@ public class ProprietoryClassifiedInstancesRepository implements IClassifiedInst
 			jsonBasicRecord.put(MappingInfoSchemaParameter.CLASS_URI, classURI);
 			jsonBasicRecord.put(MappingInfoSchemaParameter.SIMILARITY, similarity);
 			_basicRecords.append(JSONValue.toJSONString(jsonBasicRecord));
-			_basicRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+			_basicRecords.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		}
 		
 		for (IMatchedOntProperty mappedRelationInfo : _relationName2RPMappingPairMap.values()) {
@@ -441,7 +441,7 @@ public class ProprietoryClassifiedInstancesRepository implements IClassifiedInst
 			jsonBasicRecord.put(MappingInfoSchemaParameter.PROPERTY_URI, propertyURI);
 			jsonBasicRecord.put(MappingInfoSchemaParameter.SIMILARITY, String.valueOf(similarity));
 			_basicRecords.append(JSONValue.toJSONString(jsonBasicRecord));
-			_basicRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+			_basicRecords.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		}
 	}
 
@@ -542,7 +542,7 @@ public class ProprietoryClassifiedInstancesRepository implements IClassifiedInst
 				}
 			}
 			_detailRecords.append(jsonDetailRecord.toJSONString());
-			_detailRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+			_detailRecords.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		}
 	}
 	
@@ -582,13 +582,13 @@ public class ProprietoryClassifiedInstancesRepository implements IClassifiedInst
 	}
 	
 	private boolean saveBasicMappingInfo(String fileName){
-		String dirFullPath = RepositoryParameterConfiguration.getMappingBasicInfoDirectoryFullPath();
+		String dirFullPath = FileRepositoryParameterConfiguration.getMappingBasicInfoDirectoryFullPath();
 		String fileFullName = dirFullPath + fileName;
 		return FileAccessor.saveTripleString(fileFullName, _basicRecords.toString());
 	}
 	
 	private boolean saveDetailedMappingInfo(String fileName){
-		String dirFullPath = RepositoryParameterConfiguration.getMappingDetailinfoDirectoryFullPath();
+		String dirFullPath = FileRepositoryParameterConfiguration.getMappingDetailinfoDirectoryFullPath();
 		String fileFullName = dirFullPath + fileName;
 		return FileAccessor.saveTripleString(fileFullName, _detailRecords.toString());
 	}
@@ -602,9 +602,9 @@ public class ProprietoryClassifiedInstancesRepository implements IClassifiedInst
 	private boolean loadRepository(String repositoryName, ClassifiedInstancesRepositoryType infoType) {
 
 		this._repositoryName = repositoryName;
-		String basicInfoDirFullPath = RepositoryParameterConfiguration.getMappingBasicInfoDirectoryFullPath();
+		String basicInfoDirFullPath = FileRepositoryParameterConfiguration.getMappingBasicInfoDirectoryFullPath();
 		String basicInfoFullFileName = basicInfoDirFullPath + _repositoryName;
-		String detailInfoDirFullPath = RepositoryParameterConfiguration.getMappingDetailinfoDirectoryFullPath();
+		String detailInfoDirFullPath = FileRepositoryParameterConfiguration.getMappingDetailinfoDirectoryFullPath();
 		String detailInfoFullFileName = detailInfoDirFullPath + _repositoryName;
 		
 		if (infoType == ClassifiedInstancesRepositoryType.Basic) {

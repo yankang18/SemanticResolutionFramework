@@ -20,7 +20,7 @@ import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.FileAccessor;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter.MappingRelationType;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.exception.NoSuchEntryItemException;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstanceDetailRecord;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMapping;
@@ -50,8 +50,8 @@ public class ManufacturingLexicalMappingRepository implements IManufacturingLexi
 	 */
     private Map<String, Map<String, Map<String, String>>> detailConcept2OntoClassMap;
     
-	private static final String MANUFACTURING_LEXICON_DIRECTROY_FULL_PATH = RepositoryParameterConfiguration.getManufacturingLexiconDirectoryFullPath();
-	private static final String MANUFACTURING_LEXICON_REPOSITORY_NAME = RepositoryParameterConfiguration.MANUFACTURING_LEXICON_NAME;
+	private static final String MANUFACTURING_LEXICON_DIRECTROY_FULL_PATH = FileRepositoryParameterConfiguration.getManufacturingLexiconDirectoryFullPath();
+	private static final String MANUFACTURING_LEXICON_REPOSITORY_NAME = FileRepositoryParameterConfiguration.MANUFACTURING_LEXICON_NAME;
 	private static final String MANUFACTURING_LEXICON_REPOSITORY_FULL_PATH = MANUFACTURING_LEXICON_DIRECTROY_FULL_PATH + MANUFACTURING_LEXICON_REPOSITORY_NAME;
 	private RuleEngine _ruleEngine;
 	
@@ -408,7 +408,7 @@ public class ManufacturingLexicalMappingRepository implements IManufacturingLexi
 			jsonDetailRecord.put(MappingInfoSchemaParameter.CONCEPT_NAME, conceptName);
 			jsonDetailRecord.put(MappingInfoSchemaParameter.MAPPED_ONTOCLASS_LIST, mappedOntoClassDetails);
 			entries.append(jsonDetailRecord.toJSONString());
-			entries.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+			entries.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		}
 		return FileAccessor.saveTripleString(MANUFACTURING_LEXICON_REPOSITORY_FULL_PATH, entries.toString());
 	}

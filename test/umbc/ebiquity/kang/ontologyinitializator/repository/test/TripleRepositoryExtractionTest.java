@@ -7,8 +7,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
-import umbc.ebiquity.kang.ontologyinitializator.repository.factories.InstanceDescriptionModelFactory;
+import umbc.ebiquity.kang.instanceconstructor.model.IInstanceRepository;
+import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelFactory;
+import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceFileRepository;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 
 
 public class TripleRepositoryExtractionTest {
@@ -20,19 +22,25 @@ public class TripleRepositoryExtractionTest {
 	
 	@Test
 	@Ignore
-	public void LoadTriplesFromLocalStorage() throws IOException{ 
+	public void LoadTriplesFromLocalStorage() throws IOException {
 		this.createTripleRepository(true).showTriples();
 	}
-	
-	private IInstanceDescriptionModel createTripleRepository(boolean local) throws IOException{
-		
+
+	private IInstanceDescriptionModel createTripleRepository(boolean local) throws IOException {
+
 		String webSiteURLString = "http://www.aerostarmfg.com";
-//		String webSiteURLString = "http://www.accutrex.com";
+		// String webSiteURLString = "http://www.accutrex.com";
 		URL webSiteURL = new URL(webSiteURLString);
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
-		String tripleRepository = RepositoryParameterConfiguration.getTripleRepositoryDirectoryFullPath();
+		FileRepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
+		String tripleRepository = FileRepositoryParameterConfiguration.getTripleRepositoryDirectoryFullPath();
 		System.out.println("Triple Repo: " + tripleRepository);
-		IInstanceDescriptionModel extractedTripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL, local);
+		IInstanceDescriptionModel extractedTripleStore;
+		if (local) {
+			IInstanceRepository repo = new InstanceFileRepository();
+			extractedTripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL, repo);
+		} else {
+			extractedTripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL);
+		}
 		return extractedTripleStore;
 	}
 }

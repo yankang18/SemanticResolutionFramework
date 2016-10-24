@@ -169,15 +169,15 @@ public class RelationExtractionAlgorithm implements IRelationExtractionAlgorithm
 		for (RelationCluster cluster : mergedRelationClusters) {
 			if (cluster.getRangeSet().size() > 1 && cluster.getDomainSet().size() > 1) {
 				cluster.showDetail();
-				EntityNode representativeRelation = new EntityNode(cluster.computeRepresentativeRelationLabel());
+				EntityNode reptaRelnEntityNode = new EntityNode(cluster.computeRepresentativeRelationLabel());
 				for (String relationLabel : cluster.getRelationMembers()) {
 					EntityNode relationEntityNode = new EntityNode(relationLabel);
 					if (_commonValidator.isValidRelation(relationEntityNode, 20)) {
 						entityGraph.addRelationInferredFromM2NStructure(relationEntityNode);
-						entityGraph.addSpecificRelation2GeneralRelationMap(relationEntityNode, representativeRelation);
+						entityGraph.addSpecificRelation2GeneralRelationMap(relationEntityNode, reptaRelnEntityNode);
 					}
 				}
-				System.out.println("### Cluster: " + representativeRelation.getLabel());
+				System.out.println("### Cluster: " + reptaRelnEntityNode.getLabel());
 				System.out.println("Ranges: " + cluster.getRangeSet());
 				System.out.println("Domains: " + cluster.getDomainSet());
 				System.out.println("Center Word List: " + cluster.getCenterRelationWordList());

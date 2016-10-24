@@ -15,7 +15,7 @@ import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.RuleEngine
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.FileAccessor;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter.MappingRelationType;
 import umbc.ebiquity.kang.ontologyinitializator.repository.exception.NoSuchEntryItemException;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstanceDetailRecord;

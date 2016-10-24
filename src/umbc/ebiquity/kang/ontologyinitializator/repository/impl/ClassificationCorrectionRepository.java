@@ -24,7 +24,7 @@ import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.FileAccessor;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter.MappingRelationType;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrection;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrectionRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstanceDetailRecord;
@@ -36,11 +36,11 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceR
 @Deprecated
 public class ClassificationCorrectionRepository implements IClassificationCorrectionRepository {
 
-	private static final String CLASSIFICATION_CORRECTION_DIRECTROY_FULL_PATH = RepositoryParameterConfiguration.getClassificationCorrectionDirectoryFullPath();
-	private static final String CLASSIFICATION_CORRECTION_REPOSITORY_NAME = RepositoryParameterConfiguration.CLASSIFICATION_CORRECTION_REPOSITORY_NAME;
-	private static final String NEGATIVE_CONCEPT_CLASS_MAPPING_FILE_NAME = RepositoryParameterConfiguration.NEGATIVE_CONCEPT_CLASS_MAPPING;
-	private static final String POSITIVE_CONCEPT_CLASS_MAPPING_FILE_NAME = RepositoryParameterConfiguration.POSITIVE_CONCEPT_CLASS_MAPPING;
-	private static final String CONCEPT_CLASS_MAPPING_FILE_NAME = RepositoryParameterConfiguration.All_CONCEPT_CLASS_MAPPING;
+	private static final String CLASSIFICATION_CORRECTION_DIRECTROY_FULL_PATH = FileRepositoryParameterConfiguration.getClassificationCorrectionDirectoryFullPath();
+	private static final String CLASSIFICATION_CORRECTION_REPOSITORY_NAME = FileRepositoryParameterConfiguration.CLASSIFICATION_CORRECTION_REPOSITORY_NAME;
+	private static final String NEGATIVE_CONCEPT_CLASS_MAPPING_FILE_NAME = FileRepositoryParameterConfiguration.NEGATIVE_CONCEPT_CLASS_MAPPING;
+	private static final String POSITIVE_CONCEPT_CLASS_MAPPING_FILE_NAME = FileRepositoryParameterConfiguration.POSITIVE_CONCEPT_CLASS_MAPPING;
+	private static final String CONCEPT_CLASS_MAPPING_FILE_NAME = FileRepositoryParameterConfiguration.All_CONCEPT_CLASS_MAPPING;
 	private static final String CLASSIFICATION_CORRECTION_REPOSITORY_FULL_PATH = CLASSIFICATION_CORRECTION_DIRECTROY_FULL_PATH + CLASSIFICATION_CORRECTION_REPOSITORY_NAME;
 	private static final String NEGATIVE_CONCEPT_CLASS_MAPPING_FULL_PATH = CLASSIFICATION_CORRECTION_DIRECTROY_FULL_PATH + NEGATIVE_CONCEPT_CLASS_MAPPING_FILE_NAME;
 	private static final String POSITIVE_CONCEPT_CLASS_MAPPING_FULL_PATH = CLASSIFICATION_CORRECTION_DIRECTROY_FULL_PATH + POSITIVE_CONCEPT_CLASS_MAPPING_FILE_NAME; 
@@ -243,25 +243,25 @@ public class ClassificationCorrectionRepository implements IClassificationCorrec
 		StringBuilder correctionRecord = new StringBuilder();
 		for (IClassificationCorrection correction : _classificationCorrectionCollection) {
 			correctionRecord.append(this.createJSONRecordForCorrection(correction));
-			correctionRecord.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+			correctionRecord.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		}
 		
 		StringBuilder negativeMappingRecord = new StringBuilder();
 		for (IInstanceClassificationEvidence negativeMappingSet : _hiddenInstanceMembershipInferenceFacts) {
 			negativeMappingRecord.append(this.createJSONRecordForMapping(negativeMappingSet));
-			negativeMappingRecord.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+			negativeMappingRecord.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		}
 		
 		StringBuilder positiveMappingRecord = new StringBuilder();
 		for (IInstanceClassificationEvidence positiveMappingSet : _explicitInstanceMembershipInferenceFacts) {
 			positiveMappingRecord.append(this.createJSONRecordForMapping(positiveMappingSet));
-			positiveMappingRecord.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+			positiveMappingRecord.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		}
 		
 		StringBuilder allMappingRecord = new StringBuilder();
 		for (IInstanceClassificationEvidence mappingSet : _allInstanceMembershipInferenceFacts) {
 			allMappingRecord.append(this.createJSONRecordForMapping(mappingSet));
-			allMappingRecord.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+			allMappingRecord.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		}
 		
 		boolean correctionSaved = false;

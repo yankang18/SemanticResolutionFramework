@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.Map;
 
 import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
+import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelFactory;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMappingPairLookUpper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.InstanceClassificationAlgorithm;
@@ -15,11 +16,10 @@ import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IInstanceClassificationAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IModelSemanticResolver;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IRelation2PropertyMappingAlgorithm;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ClassifiedInstancesRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ManufacturingLexicalMappingRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
-import umbc.ebiquity.kang.ontologyinitializator.repository.factories.InstanceDescriptionModelFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ProprietoryClassifiedInstancesRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstancesRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRecordsReader;
@@ -35,11 +35,11 @@ public class ProprietaryClassifiedInstanceRepositoriesAutomaticConstructor exten
 	
 	public static void main(String[] args) throws IOException {
 		
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
-		RepositoryParameterConfiguration.CLASSIFIED_INSTANCE_HOST_DIRECTORY = "/Users/yankang/Desktop/Test";
-		RepositoryParameterConfiguration.MANUFACTUIRNG_LEXICON_HOST_DIRECTORY = "/Users/yankang/Desktop/Test";
-		RepositoryParameterConfiguration.CLASSIFICATION_CORRECTION_HOST_DIRECTORY = "/Users/yankang/Desktop/Test";
+		FileRepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop";
+		FileRepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
+		FileRepositoryParameterConfiguration.CLASSIFIED_INSTANCE_HOST_DIRECTORY = "/Users/yankang/Desktop/Test";
+		FileRepositoryParameterConfiguration.MANUFACTUIRNG_LEXICON_HOST_DIRECTORY = "/Users/yankang/Desktop/Test";
+		FileRepositoryParameterConfiguration.CLASSIFICATION_CORRECTION_HOST_DIRECTORY = "/Users/yankang/Desktop/Test";
 		String fileFullPath = "/Users/yankang/Desktop/WebSiteURLs.txt";
 		ProprietaryClassifiedInstanceRepositoriesAutomaticConstructor PCIRAC = new ProprietaryClassifiedInstanceRepositoriesAutomaticConstructor();
 		PCIRAC.loadRecords(fileFullPath);
@@ -63,8 +63,8 @@ public class ProprietaryClassifiedInstanceRepositoriesAutomaticConstructor exten
 			crawlIndicators = webSiteRecrawlFailed;
 		}
 
-		String basicInfoDirectory = RepositoryParameterConfiguration.getMappingBasicInfoDirectoryFullPath();
-		String detailInfoDirectory = RepositoryParameterConfiguration.getMappingDetailinfoDirectoryFullPath();
+		String basicInfoDirectory = FileRepositoryParameterConfiguration.getMappingBasicInfoDirectoryFullPath();
+		String detailInfoDirectory = FileRepositoryParameterConfiguration.getMappingDetailinfoDirectoryFullPath();
 		boolean basicInfoFileExists = FileUtility.exists(basicInfoDirectory);
 		boolean detailInfoFileExists = FileUtility.exists(basicInfoDirectory);
 

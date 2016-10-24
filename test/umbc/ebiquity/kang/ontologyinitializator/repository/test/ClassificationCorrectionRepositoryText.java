@@ -15,7 +15,7 @@ import org.junit.Test;
 
 import com.ibm.icu.impl.Assert;
 
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ClassificationCorrectionRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.InterpretationCorrectionRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
@@ -38,8 +38,8 @@ public class ClassificationCorrectionRepositoryText {
 	
 	@BeforeClass
 	public static void init() throws IOException {
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/Test";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
+		FileRepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/Test";
+		FileRepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
 		
 //		_ontologyRepository = OntologyRepositoryFactory.createOntologyRepository();
 //		_correctionRepository = new ClassificationCorrectionRepository(_ontologyRepository);
@@ -47,11 +47,11 @@ public class ClassificationCorrectionRepositoryText {
 	
 	@Test
 	public void getAggregatedClassificationCorrectoinRepository() throws IOException{
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
-		RepositoryParameterConfiguration.CLASSIFIED_INSTANCE_HOST_DIRECTORY = "/Users/yankang/Desktop/Test_Rule_Naive";
-		RepositoryParameterConfiguration.MANUFACTUIRNG_LEXICON_HOST_DIRECTORY = "/Users/yankang/Desktop/Test_Rule_Naive";
-		RepositoryParameterConfiguration.CLASSIFICATION_CORRECTION_HOST_DIRECTORY = "/Users/yankang/Desktop/Test_Rule_Naive";
+		FileRepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
+		FileRepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
+		FileRepositoryParameterConfiguration.CLASSIFIED_INSTANCE_HOST_DIRECTORY = "/Users/yankang/Desktop/Test_Rule_Naive";
+		FileRepositoryParameterConfiguration.MANUFACTUIRNG_LEXICON_HOST_DIRECTORY = "/Users/yankang/Desktop/Test_Rule_Naive";
+		FileRepositoryParameterConfiguration.CLASSIFICATION_CORRECTION_HOST_DIRECTORY = "/Users/yankang/Desktop/Test_Rule_Naive";
 		IClassificationCorrectionRepository _aggregatedInterpretationCorrectionRepository = InterpretationCorrectionRepositoryFactory.createAggregratedClassificationCorrectionRepository();
 //		_aggregatedInterpretationCorrectionRepository.showRepositoryDetail();
 		_aggregatedInterpretationCorrectionRepository.showMappingInfo();

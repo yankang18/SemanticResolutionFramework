@@ -17,7 +17,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
 
@@ -29,8 +29,8 @@ public class DomainOntologyRepositoryTest {
 	@BeforeClass
 //	@Test
 	public static void init() throws IOException {
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
+		FileRepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop";
+		FileRepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
 		_repo = OntologyRepositoryFactory.createOntologyRepository();
 		
 //		File dir = new File("/Users/yangkang/Desktop/");

@@ -5,7 +5,7 @@ import java.util.Map;
 
 import umbc.ebiquity.kang.instanceconstructor.entityframework.object.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter.MappingRelationType;
 import umbc.ebiquity.kang.ontologyinitializator.repository.exception.NoSuchEntryItemException;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMappingStatistics;
@@ -17,7 +17,7 @@ public class AggregratedManufacturingLexicalMappingRepository extends AbstractRe
 
 	IManufacturingLexicalMappingRecordsAccessor _recordsAccessor;
 	public AggregratedManufacturingLexicalMappingRepository(IManufacturingLexicalMappingRecordsAccessor recordsAccessor) {
-		super(RepositoryParameterConfiguration.getManufacturingLexiconDirectoryFullPath());
+		super(FileRepositoryParameterConfiguration.getManufacturingLexiconDirectoryFullPath());
 		_recordsAccessor = recordsAccessor;
 	}
 

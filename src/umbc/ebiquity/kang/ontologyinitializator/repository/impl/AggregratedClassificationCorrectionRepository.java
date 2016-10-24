@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrection;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrectionRecordParser;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrectionRecordRepository;
@@ -36,7 +36,7 @@ public class AggregratedClassificationCorrectionRepository extends AbstractRepos
 	private Map<OntoClassInfo, List<IConcept2OntClassMapping>> _ontClass_c2cMappings = new HashMap<OntoClassInfo, List<IConcept2OntClassMapping>>();
 
 	public AggregratedClassificationCorrectionRepository(IClassificationCorrectionRecordParser classificationCorrectionRecordParser) {
-		super(RepositoryParameterConfiguration.getInterpretationCorrectionDirectoryFullPath());
+		super(FileRepositoryParameterConfiguration.getInterpretationCorrectionDirectoryFullPath());
 		this._classificationCorrectionRecordParser = classificationCorrectionRecordParser;
 		_classificationCorrectionCollection = new LinkedHashSet<IClassificationCorrection>();
 		_allInstanceMembershipInferenceFacts = new ArrayList<IInstanceClassificationEvidence>();

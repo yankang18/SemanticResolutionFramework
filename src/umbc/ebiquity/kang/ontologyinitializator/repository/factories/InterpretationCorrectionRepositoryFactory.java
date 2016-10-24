@@ -2,7 +2,7 @@ package umbc.ebiquity.kang.ontologyinitializator.repository.factories;
 
 import java.io.IOException;
 
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.AggregratedClassificationCorrectionRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ClassificationCorrectionRecordParser;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ProprietoryClassificationCorrectionRepository;
@@ -20,7 +20,7 @@ public class InterpretationCorrectionRepositoryFactory {
 	}
 
 	public static IClassificationCorrectionRepository createProprietaryClassificationCorrectionRepository(String repositoryName) throws IOException { 
-		String directory = RepositoryParameterConfiguration.getInterpretationCorrectionDirectoryFullPath();
+		String directory = FileRepositoryParameterConfiguration.getInterpretationCorrectionDirectoryFullPath();
 		String fileFullName = directory + repositoryName;
 
 		if (FileUtility.exists(fileFullName)) {

@@ -1,5 +1,6 @@
 package umbc.ebiquity.kang.instanceconstructor.entityframework.impl;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -65,7 +66,9 @@ public class EntityGraph implements IEntityGraphRelationExtractor, IEntityGraphI
 	 */
 	private Map<EntityNode, Map<EntityNode, Set<EntityNode>>> analyzedForwardTermDescendantsMap;
 
-	public EntityGraph(Collection<EntityPath> entityPaths) {
+	private URL url;
+	public EntityGraph(Collection<EntityPath> entityPaths, URL url) { 
+		this.url = url;
 		this.entityPaths = entityPaths;
 		this.commonValidator = new EntityValidator();
 		this.init(); 
@@ -388,8 +391,8 @@ public class EntityGraph implements IEntityGraphRelationExtractor, IEntityGraphI
 	}
 	
 	@Override
-	public URL getWebSiteURL(){
-		return this.entityPathConstructor.getWebSiteURL();
+	public URL getWebSiteURL(){ 
+		return url;
 	}
 
 	public void printForwardTermGraphNodesAfterAnalyzing() {

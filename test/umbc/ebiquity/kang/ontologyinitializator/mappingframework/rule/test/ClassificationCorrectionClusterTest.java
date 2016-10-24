@@ -16,7 +16,7 @@ import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.inter
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.ClassificationCorrectionCluster;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.CorrectionClusterFeatureWrapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.CorrectionDirection;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ClassifiedInstancesRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ClassificationCorrectionRepository;
@@ -38,8 +38,8 @@ public class ClassificationCorrectionClusterTest {
 	
 	@BeforeClass
 	public static void init() throws IOException {
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/kangyan2003/Desktop/";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/kangyan2003/Desktop/Ontology/MSDL-Fullv2.owl";
+		FileRepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/kangyan2003/Desktop/";
+		FileRepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/kangyan2003/Desktop/Ontology/MSDL-Fullv2.owl";
 
 		_ontologyRepository = OntologyRepositoryFactory.createOntologyRepository();
 		_correctionRepository = new ClassificationCorrectionRepository(_ontologyRepository);

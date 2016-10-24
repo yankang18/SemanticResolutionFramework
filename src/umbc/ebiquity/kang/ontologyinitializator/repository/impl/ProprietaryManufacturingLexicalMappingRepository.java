@@ -19,7 +19,7 @@ import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.FileAccessor;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter.MappingRelationType;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.exception.NoSuchEntryItemException;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstanceDetailRecord;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMapping;
@@ -163,7 +163,7 @@ public class ProprietaryManufacturingLexicalMappingRepository implements IManufa
 			jsonDetailRecord.put(MappingInfoSchemaParameter.CONCEPT_NAME, conceptName);
 			jsonDetailRecord.put(MappingInfoSchemaParameter.MAPPED_ONTOCLASS_LIST, mappedOntoClassDetails);
 			entries.append(jsonDetailRecord.toJSONString());
-			entries.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+			entries.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		}
 		return FileAccessor.saveTripleString(this._repositoryFullName, entries.toString());
 	}

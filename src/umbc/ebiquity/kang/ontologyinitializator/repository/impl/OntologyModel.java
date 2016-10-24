@@ -25,7 +25,7 @@ import umbc.csee.ebiquity.ontologymatcher.algorithm.component.OntResourceInfo;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.FileAccessor;
 import umbc.ebiquity.kang.ontologyinitializator.repository.OntologyRepositorySchemaParameter;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
 
 import com.hp.hpl.jena.ontology.OntClass;
@@ -45,10 +45,10 @@ public class OntologyModel implements IOntologyRepository {
 		OntoClass, OntoProperty, GlobalCode
 	}
 	
-	private final String ONTOLOGY_PROPERTY_RECORDS_FILENAME = RepositoryParameterConfiguration.ONTOLOGY_PROPERTY_RECORDS_FILENAME;
-	private final String ONTOLOGY_CLASS_RECORDS_FILENAME = RepositoryParameterConfiguration.ONTOLOGY_CLASS_RECORDS_FILENAME;
-	private final String ONTOLOGY_CODED_CLASS_RECORDS_FILENAME = RepositoryParameterConfiguration.ONTOLOGY_CODED_CLASS_RECORDS_FILENAME;
-	private final String ONTOLOGY_REPOSITORY_DIRECTORY_FULL_PATH = RepositoryParameterConfiguration.getOntologyIndexFilesDirectoryFullPath();
+	private final String ONTOLOGY_PROPERTY_RECORDS_FILENAME = FileRepositoryParameterConfiguration.ONTOLOGY_PROPERTY_RECORDS_FILENAME;
+	private final String ONTOLOGY_CLASS_RECORDS_FILENAME = FileRepositoryParameterConfiguration.ONTOLOGY_CLASS_RECORDS_FILENAME;
+	private final String ONTOLOGY_CODED_CLASS_RECORDS_FILENAME = FileRepositoryParameterConfiguration.ONTOLOGY_CODED_CLASS_RECORDS_FILENAME;
+	private final String ONTOLOGY_REPOSITORY_DIRECTORY_FULL_PATH = FileRepositoryParameterConfiguration.getOntologyIndexFilesDirectoryFullPath();
 	
 	/**
 	 * 
@@ -913,7 +913,7 @@ public class OntologyModel implements IOntologyRepository {
 			ontoClassIndexRecord.put(OntologyRepositorySchemaParameter.GLOBAL_PATH_CODE, globalPathCode);
 			ontoClassIndexRecord.put(OntologyRepositorySchemaParameter.CLASS_URI, classURI);
 			globalPathCode2OntoClassMappingStrBuilder.append(JSONObject.toJSONString(ontoClassIndexRecord)); // add coded class record
-			globalPathCode2OntoClassMappingStrBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR); 
+			globalPathCode2OntoClassMappingStrBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR); 
 			
 			/*
 			 * record information of a onto-class (in the form of JSON)
@@ -927,7 +927,7 @@ public class OntologyModel implements IOntologyRepository {
 			ontoClassRecord.put(OntologyRepositorySchemaParameter.IS_TOP_LEVEL_CLASS, isTopClass);
 			ontoClassRecord.put(OntologyRepositorySchemaParameter.DECLARED_PROPERTY_LIST, ontoPropertyUriList);
 			ontoClassCollectionStrBuilder.append(ontoClassRecord.toJSONString()); // add class record
-			ontoClassCollectionStrBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR); 
+			ontoClassCollectionStrBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR); 
 		}
 		
 		for(String propertURI : propertyURI2OntoPropertyObjectMap.keySet()){
@@ -954,7 +954,7 @@ public class OntologyModel implements IOntologyRepository {
 			ontoPropertyRecord.put(OntologyRepositorySchemaParameter.SUBJECT_RESOURCE_LIST, this.createResourceList(propertyInfo.getSubjectCandidates()));
 			ontoPropertyRecord.put(OntologyRepositorySchemaParameter.OBJECT_RESOURCE_LIST, this.createResourceList(propertyInfo.getObjectCandidates()));
 			ontoPropertyCollectionStrBuilder.append(ontoPropertyRecord.toJSONString()); // add property record
-			ontoPropertyCollectionStrBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+			ontoPropertyCollectionStrBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		}
 		
 		/*

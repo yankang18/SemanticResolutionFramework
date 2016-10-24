@@ -16,15 +16,15 @@ import umbc.ebiquity.kang.ontologyinitializator.mappingframework.evaluation.Abst
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.FileAccessor;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
 
 public class OntologyInitializer {
 
 	public static void main(String[] args) throws IOException {
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/home/yankang/Desktop/";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/home/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
+		FileRepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/home/yankang/Desktop/";
+		FileRepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/home/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
 		IOntologyRepository _ontologyRepository = OntologyRepositoryFactory.createOntologyRepository();
 		
 		String instancefileFullPath = "/home/yankang/Desktop/initialInstances.txt";
@@ -117,7 +117,7 @@ public class OntologyInitializer {
 				jsonBasicRecord.put(MappingInfoSchemaParameter.CLASS_URI, classURI);
 				jsonBasicRecord.put(MappingInfoSchemaParameter.SIMILARITY, similarity);
 				_basicRecords.append(JSONValue.toJSONString(jsonBasicRecord));
-				_basicRecords.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+				_basicRecords.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 			}
 		}
 
@@ -167,7 +167,7 @@ public class OntologyInitializer {
 				records.append(classNS + "   ");
 				records.append(classURI + "   ");
 				records.append(similarity + "   ");
-				records.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+				records.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 			}
 		}
 		

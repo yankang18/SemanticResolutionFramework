@@ -8,7 +8,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ClassifiedInstancesRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ManufacturingLexicalMappingRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
@@ -30,8 +30,8 @@ public class ProprietoryClassifiedInstancesRepositoryTest {
     
 	@BeforeClass
 	public static void LoadDataFromFile() throws IOException {
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontology/MSDL-Fullv2.owl";
+		FileRepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
+		FileRepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontology/MSDL-Fullv2.owl";
 		
 		// String homeURL = "http://www.accutrex.com/";
 		// String homeURL = "http://www.weaverandsons.com/";
@@ -55,7 +55,7 @@ public class ProprietoryClassifiedInstancesRepositoryTest {
 				true
 		);
 		
-		((ProprietoryClassifiedInstancesRepository)_ProperietoryClassifiedInstancesRepository).saveHumanReadableFile(RepositoryParameterConfiguration.getMappingHumanReadableDirectoryFullPath(), new HashSet<String>());
+		((ProprietoryClassifiedInstancesRepository)_ProperietoryClassifiedInstancesRepository).saveHumanReadableFile(FileRepositoryParameterConfiguration.getMappingHumanReadableDirectoryFullPath(), new HashSet<String>());
 	}
 
 	@Ignore

@@ -6,10 +6,10 @@ import java.net.URL;
 import org.junit.Before;
 
 import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelFactory;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ManufacturingLexicalMappingRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
-import umbc.ebiquity.kang.ontologyinitializator.repository.factories.InstanceDescriptionModelFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRecordsReader;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
@@ -22,29 +22,29 @@ public class TSOntoMappingAlgorithmTest {
 	
 	@Before
 	public void Init() throws IOException {
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/kangyan2003/Desktop/";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/kangyan2003/Desktop/Ontology/MSDL-Fullv2.owl";
+		FileRepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/kangyan2003/Desktop/";
+		FileRepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/kangyan2003/Desktop/Ontology/MSDL-Fullv2.owl";
 		ontologyRepository = OntologyRepositoryFactory.createOntologyRepository();
 		MLRepository = ManufacturingLexicalMappingRepositoryFactory.createAggregratedManufacturingLexicalMappingRepository(ontologyRepository);
 
 //		String webSiteURLString = "http://www.accutrex.com";
 		String webSiteURLString = "http://www.princetonind.com";
 		URL webSiteURL = new URL(webSiteURLString);
-		extractedTripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL, false);
+		extractedTripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL);
 		extractedTripleStore.showTriples();
 	}
 
 	public static void main(String[] args) throws IOException {
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/kangyan2003/Desktop/";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/kangyan2003/Desktop/Ontology/MSDL-Fullv2.owl";
+		FileRepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/kangyan2003/Desktop/";
+		FileRepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/kangyan2003/Desktop/Ontology/MSDL-Fullv2.owl";
 //		IOntologyRepository ontologyRepository = OntologyRepositoryFactory.createOntologyRepository();
 //		IManufacturingLexicalMappingRepository MLRepository = ManufacturingLexicalMappingRepositoryFactory.createManufacturingLexiconRepository();
 
-//		String webSiteURLString = "http://www.accutrex.com";
+		String webSiteURLString = "http://www.accutrex.com";
 //		String webSiteURLString = "http://cncmachining.boyermachine.com";
-		String webSiteURLString = "http://www.npcnc.com";
+//		String webSiteURLString = "http://www.npcnc.com";
 		URL webSiteURL = new URL(webSiteURLString);
-		IInstanceDescriptionModel extractedTripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL, false);
+		IInstanceDescriptionModel extractedTripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL);
 		extractedTripleStore.showTriples();
 	}
 	

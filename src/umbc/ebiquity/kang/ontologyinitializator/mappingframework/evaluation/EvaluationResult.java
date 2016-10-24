@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import umbc.ebiquity.kang.ontologyinitializator.repository.FileAccessor;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 
 public class EvaluationResult {
 
@@ -52,11 +52,11 @@ public class EvaluationResult {
 			String recordStr = "instance: <"  + entityLabel + ">, expected class: <" + expectedValue + ">, real class: <" + realValue + ">, score: <" + score +">";
 			if (score < 1.0) {
 				stringBuilder2.append(recordStr);
-				stringBuilder2.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+				stringBuilder2.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 				correctionCount++;
 			} else {
 				stringBuilder1.append(recordStr);
-				stringBuilder1.append(RepositoryParameterConfiguration.LINE_SEPARATOR); 
+				stringBuilder1.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR); 
 			}
 			
 		}
@@ -64,43 +64,43 @@ public class EvaluationResult {
 		
 		for(String unclassifiedInstance : this._unclassifiedInstances){
 			stringBuilder3.append(unclassifiedInstance);
-			stringBuilder3.append(RepositoryParameterConfiguration.LINE_SEPARATOR); 
+			stringBuilder3.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR); 
 		}
 		
 		stringBuilder.append("========= CORRECT CLASSIFIED INSTANCES ===========");
-		stringBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		stringBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		stringBuilder.append(stringBuilder1.toString());
-		stringBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		stringBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		stringBuilder.append("========= INCORRECT CLASSIFIED INSTANCES =========");
-		stringBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		stringBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		stringBuilder.append(stringBuilder2.toString());
-		stringBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		stringBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		stringBuilder.append("========= UNCLASSIFIED INSTANCES =========");
-		stringBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		stringBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		stringBuilder.append(stringBuilder3.toString());
-		stringBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
-		stringBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		stringBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
+		stringBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		stringBuilder.append("========= STASTICS ==========");
-		stringBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		stringBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		stringBuilder.append("Number of All Instances: " + _numberOfAllInstances);
-		stringBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		stringBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		stringBuilder.append("Number of Classified instances: " + _numberOfClassifiedInstances);
-		stringBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
-		stringBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		stringBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
+		stringBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		stringBuilder.append("Overall Score: " + _totalScore);
-		stringBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		stringBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		stringBuilder.append("Overall Of Error: " + _totalError);
-		stringBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
-		stringBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		stringBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
+		stringBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		stringBuilder.append("Recall: " + _recall);
-		stringBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		stringBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		stringBuilder.append("Precision: " + _precision);
-		stringBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		stringBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		stringBuilder.append("Fmeasure: " + _fmeasure);
-		stringBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
-		stringBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		stringBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
+		stringBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		stringBuilder.append("Number Of Correction: " + _numberOfCorrection);
-		stringBuilder.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		stringBuilder.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		stringBuilder.append("Correction Rate: " + _correctionRate);
 		
 		

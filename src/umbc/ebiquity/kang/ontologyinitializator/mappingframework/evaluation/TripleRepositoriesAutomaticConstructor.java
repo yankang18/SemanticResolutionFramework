@@ -13,9 +13,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.FileAccessor;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
-import umbc.ebiquity.kang.ontologyinitializator.repository.factories.InstanceDescriptionModelFactory;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 
 public class TripleRepositoriesAutomaticConstructor extends AbstractWebUrlLoader {
 
@@ -66,7 +66,7 @@ public class TripleRepositoriesAutomaticConstructor extends AbstractWebUrlLoader
 				try {
 					URL webSiteURL = new URL(webSiteURLStr);
 					try {
-						InstanceDescriptionModelFactory.createModel(webSiteURL, false);
+						InstanceDescriptionModelFactory.createModel(webSiteURL);
 						this.recordSuccess(webSiteURL.toString());
 					} catch (MalformedURLException e) {
 						this.recordErrorMsg(webSiteURL.toString(), e.getMessage());
@@ -99,7 +99,7 @@ public class TripleRepositoriesAutomaticConstructor extends AbstractWebUrlLoader
 			String failedMsg = webSiteRecrawlFailedMsg.get(key);
 			String record = key + "," + indicated + "," + failed + "," + "\"" + failedMsg + "\"";
 			records.append(record);
-			records.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+			records.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		}
 		FileAccessor.saveTripleString(fileFathFullName, records.toString());
 	}

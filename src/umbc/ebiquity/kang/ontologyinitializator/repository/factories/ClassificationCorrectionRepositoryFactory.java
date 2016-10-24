@@ -1,7 +1,7 @@
 package umbc.ebiquity.kang.ontologyinitializator.repository.factories;
 
 import java.io.IOException;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.ClassificationCorrectionRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrectionRepository;
 import umbc.ebiquity.kang.ontologyinitializator.utilities.FileUtility;
@@ -10,11 +10,11 @@ import umbc.ebiquity.kang.ontologyinitializator.utilities.FileUtility;
 public class ClassificationCorrectionRepositoryFactory {
 	
 	public static IClassificationCorrectionRepository createRepository() throws IOException { 
-		String directory = RepositoryParameterConfiguration.getClassificationCorrectionDirectoryFullPath();
-		String fileFullName = directory + RepositoryParameterConfiguration.CLASSIFICATION_CORRECTION_REPOSITORY_NAME;
-		String negativeMappingFileFullName = directory + RepositoryParameterConfiguration.NEGATIVE_CONCEPT_CLASS_MAPPING;
-		String positiveMappingFileFullName = directory + RepositoryParameterConfiguration.POSITIVE_CONCEPT_CLASS_MAPPING;
-		String allMappingFileFullName = directory + RepositoryParameterConfiguration.All_CONCEPT_CLASS_MAPPING;
+		String directory = FileRepositoryParameterConfiguration.getClassificationCorrectionDirectoryFullPath();
+		String fileFullName = directory + FileRepositoryParameterConfiguration.CLASSIFICATION_CORRECTION_REPOSITORY_NAME;
+		String negativeMappingFileFullName = directory + FileRepositoryParameterConfiguration.NEGATIVE_CONCEPT_CLASS_MAPPING;
+		String positiveMappingFileFullName = directory + FileRepositoryParameterConfiguration.POSITIVE_CONCEPT_CLASS_MAPPING;
+		String allMappingFileFullName = directory + FileRepositoryParameterConfiguration.All_CONCEPT_CLASS_MAPPING;
 
 		if (FileUtility.exists(fileFullName) && FileUtility.exists(negativeMappingFileFullName) && FileUtility.exists(positiveMappingFileFullName) && FileUtility.exists(allMappingFileFullName) ) {
 			IClassificationCorrectionRepository repository = new ClassificationCorrectionRepository(OntologyRepositoryFactory.createOntologyRepository());

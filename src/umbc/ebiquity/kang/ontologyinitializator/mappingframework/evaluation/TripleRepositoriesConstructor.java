@@ -10,8 +10,8 @@ import java.util.Map;
 import java.util.Set;
 
 import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
-import umbc.ebiquity.kang.ontologyinitializator.repository.factories.InstanceDescriptionModelFactory;
+import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelFactory;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 
 public class TripleRepositoriesConstructor {
 
@@ -28,8 +28,8 @@ public class TripleRepositoriesConstructor {
 			System.out.println();
 			System.out.println("Construct Triple Repository for <" + url.toExternalForm() + ">");
 			try {
-				RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
-				InstanceDescriptionModelFactory.createModel(url, false);
+				FileRepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
+				InstanceDescriptionModelFactory.createModel(url);
 			} catch (IOException e) {
 				_failedWebSiteMap2Cause.put(url, e.getMessage());
 				succeed = false;
@@ -77,8 +77,8 @@ public class TripleRepositoriesConstructor {
 			e.printStackTrace();
 		}
 		
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/kangyan2003/Desktop/";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/kangyan2003/Desktop/Ontology/MSDL-Fullv2.owl";
+		FileRepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/kangyan2003/Desktop/";
+		FileRepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/kangyan2003/Desktop/Ontology/MSDL-Fullv2.owl";
 		
 		
 		TRC.constructTripleRepositories(webURLs, false);

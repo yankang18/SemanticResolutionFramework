@@ -22,16 +22,18 @@ import java.util.Set;
 
 import umbc.ebiquity.kang.instanceconstructor.entityframework.object.Concept;
 import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
+import umbc.ebiquity.kang.instanceconstructor.model.IInstanceRepository;
 import umbc.ebiquity.kang.instanceconstructor.model.InstanceTripleSet;
+import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelFactory;
+import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceFileRepository;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IConcept2OntClassMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IInstanceClassificationAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter.MappingRelationType;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ManufacturingLexicalMappingRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
-import umbc.ebiquity.kang.ontologyinitializator.repository.factories.InstanceDescriptionModelFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.Concept2OntClassMapping;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrectionRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRecordsReader;
@@ -42,10 +44,10 @@ import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
 public class ManufacturingLexicalMappingConstructor extends AbstractWebUrlLoader {
 	
 	public static void main(String[] args) throws IOException {
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/home/yankang/Desktop/";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/home/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
+		FileRepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/home/yankang/Desktop/";
+		FileRepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/home/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
 		String fileFullPath = "/home/yankang/Desktop/WebUrls_TripleStore_forConstructingMLM.txt";
-		RepositoryParameterConfiguration.MANUFACTUIRNG_LEXICON_HOST_DIRECTORY = "/home/yankang/Desktop/MLM";
+		FileRepositoryParameterConfiguration.MANUFACTUIRNG_LEXICON_HOST_DIRECTORY = "/home/yankang/Desktop/MLM";
 		IOntologyRepository _ontologyRepository = OntologyRepositoryFactory.createOntologyRepository();
 		
 		
@@ -95,7 +97,8 @@ public class ManufacturingLexicalMappingConstructor extends AbstractWebUrlLoader
 			boolean recrawl = crawlIndicators.get(webSiteURLStr);
 			if (recrawl) {
 				URL webSiteURL = new URL(webSiteURLStr);
-				IInstanceDescriptionModel tripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL, true);
+				IInstanceRepository repo = new InstanceFileRepository();
+				IInstanceDescriptionModel tripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL, repo);
 				classifyInstances(tripleStore.getInstanceTripleSets(), ontologyRepository.getAllOntClasses());
 			}
 		}

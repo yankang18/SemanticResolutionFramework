@@ -6,7 +6,7 @@ import java.util.Set;
 
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.evaluation.EvaluationRecord.EvaluationRecordType;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstanceDetailRecord;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstancesRepository;
@@ -18,7 +18,7 @@ public class InterpretationEvaluator {
 	public static void main(String[] args) throws IOException {
 		
 //		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop";
+		FileRepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop";
 		IOntologyRepository _ontologyRepository = OntologyRepositoryFactory.createOntologyRepository();
 //		_ontologyRepository.printOntologyInfo();
 		InterpretationEvaluator evaluator = new InterpretationEvaluator(_ontologyRepository);

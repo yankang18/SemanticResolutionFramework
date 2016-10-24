@@ -15,7 +15,7 @@ import umbc.ebiquity.kang.instanceconstructor.entityframework.impl.EntityPathExt
 import umbc.ebiquity.kang.instanceconstructor.entityframework.impl.EntityPathExtractorImpl;
 import umbc.ebiquity.kang.instanceconstructor.entityframework.impl.InstanceConceptSetExtractionAlgorithm;
 import umbc.ebiquity.kang.instanceconstructor.entityframework.impl.RelationExtractionAlgorithm;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.webpageparser.SimplePageTemplatesSplitter;
 import umbc.ebiquity.kang.webpageparser.WebPagePathsImpl;
 import umbc.ebiquity.kang.webpageparser.WebSiteCrawler;
@@ -27,8 +27,8 @@ public class EntityGraphLabelingTest {
 	private WebSiteCrawler crawler ;
 	
 	public static void main(String[] arg) throws Exception{ 
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/kangyan2003/Desktop/";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/kangyan2003/Desktop/Ontology/MSDL-Fullv2.owl";
+		FileRepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/kangyan2003/Desktop/";
+		FileRepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/Users/kangyan2003/Desktop/Ontology/MSDL-Fullv2.owl";
 		
 //		String webSiteURLString = "http://www.astromfg.com";
 //		String webSiteURLString = "http://www.accutrex.com";
@@ -38,7 +38,7 @@ public class EntityGraphLabelingTest {
 		WebSiteCrawler crawler = new WebSiteCrawler(webSiteURL); 
 		crawler.crawl();
 		EntityPathExtractor extractor = new EntityPathExtractor(crawler, new SimplePageTemplatesSplitter());
-		EntityGraph entityGraph = new EntityGraph(extractor.extractor());
+		EntityGraph entityGraph = new EntityGraph(extractor.extractor(), webSiteURL);
 //		entityGraph.printForwardTermGraphNodesAfterAnalyzing();
 //		entityGraph.analyzeEntityGraph();
 //		entityGraph.showInstanceConceptSet();
@@ -75,8 +75,11 @@ public class EntityGraphLabelingTest {
 		webPagePath.construct();
 		EntityPathExtractor extractor = new EntityPathExtractor(crawler, new SimplePageTemplatesSplitter());
 //		EntityPathExtractorImpl extractor = new EntityPathExtractorImpl(crawler, new SimplePageTemplatesSplitter());
-		entityGraph = new EntityGraph(extractor.extractor());
+		entityGraph = new EntityGraph(extractor.extractor(), webSiteURL);
 		entityGraph.printForwardTermGraphNodesAfterAnalyzing();
+		
+		RelationExtractionAlgorithmTest();
+		InstanceConceptSetExtractionAlgorithmTest();
 	}
 	
 	public void RelationExtractionAlgorithmTest(){

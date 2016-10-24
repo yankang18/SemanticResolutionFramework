@@ -11,7 +11,7 @@ import org.json.simple.JSONValue;
 
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstancesAccessor;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
 
@@ -22,7 +22,7 @@ public class AggregratedClassifiedInstanceRepository extends AbstractRepositoryB
 	private IOntologyRepository _ontologyRepository;
 	
 	public AggregratedClassifiedInstanceRepository(IOntologyRepository ontologyRepository){
-		super(RepositoryParameterConfiguration.getMappingBasicInfoDirectoryFullPath());
+		super(FileRepositoryParameterConfiguration.getMappingBasicInfoDirectoryFullPath());
 		_ontologyRepository = ontologyRepository;
 		this.init();
 		this.populate();

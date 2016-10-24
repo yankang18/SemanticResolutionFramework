@@ -7,7 +7,7 @@ import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.util.FileManager;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.OntologyModel;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
 import umbc.ebiquity.kang.ontologyinitializator.utilities.FileUtility;
@@ -16,10 +16,10 @@ public class OntologyRepositoryFactory {
 	
 	public static IOntologyRepository createOntologyRepository() throws IOException {
 		
-		String directory = RepositoryParameterConfiguration.getOntologyIndexFilesDirectoryFullPath();
-		String classRecordsFileFullName = directory + RepositoryParameterConfiguration.ONTOLOGY_CLASS_RECORDS_FILENAME;
-		String propertyRecoredFileFullName = directory + RepositoryParameterConfiguration.ONTOLOGY_PROPERTY_RECORDS_FILENAME;
-		String indexFileFullName = directory + RepositoryParameterConfiguration.ONTOLOGY_CODED_CLASS_RECORDS_FILENAME;
+		String directory = FileRepositoryParameterConfiguration.getOntologyIndexFilesDirectoryFullPath();
+		String classRecordsFileFullName = directory + FileRepositoryParameterConfiguration.ONTOLOGY_CLASS_RECORDS_FILENAME;
+		String propertyRecoredFileFullName = directory + FileRepositoryParameterConfiguration.ONTOLOGY_PROPERTY_RECORDS_FILENAME;
+		String indexFileFullName = directory + FileRepositoryParameterConfiguration.ONTOLOGY_CODED_CLASS_RECORDS_FILENAME;
 		
 		boolean exists1 = FileUtility.exists(classRecordsFileFullName);
 		boolean exists2 = FileUtility.exists(propertyRecoredFileFullName);
@@ -53,9 +53,9 @@ public class OntologyRepositoryFactory {
 	
 	private static IOntologyRepository createRepostory(String ontologyRepositoryDirectoryFullName) throws IOException {
 		
-		String classRecordsFileFullName = ontologyRepositoryDirectoryFullName + RepositoryParameterConfiguration.ONTOLOGY_CLASS_RECORDS_FILENAME;
-		String propertyRecoredFileFullName = ontologyRepositoryDirectoryFullName + RepositoryParameterConfiguration.ONTOLOGY_PROPERTY_RECORDS_FILENAME;
-		String indexFileFullName = ontologyRepositoryDirectoryFullName + RepositoryParameterConfiguration.ONTOLOGY_CODED_CLASS_RECORDS_FILENAME;
+		String classRecordsFileFullName = ontologyRepositoryDirectoryFullName + FileRepositoryParameterConfiguration.ONTOLOGY_CLASS_RECORDS_FILENAME;
+		String propertyRecoredFileFullName = ontologyRepositoryDirectoryFullName + FileRepositoryParameterConfiguration.ONTOLOGY_PROPERTY_RECORDS_FILENAME;
+		String indexFileFullName = ontologyRepositoryDirectoryFullName + FileRepositoryParameterConfiguration.ONTOLOGY_CODED_CLASS_RECORDS_FILENAME;
 		
 		boolean exists1 = FileUtility.exists(classRecordsFileFullName);
 		boolean exists2 = FileUtility.exists(propertyRecoredFileFullName);
@@ -83,7 +83,7 @@ public class OntologyRepositoryFactory {
 			}
 		}
 
-		InputStream instream = FileManager.get().open(RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH);
+		InputStream instream = FileManager.get().open(FileRepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH);
 		Model model = ModelFactory.createDefaultModel();
 		model.read(instream, "");
 		OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM, model);

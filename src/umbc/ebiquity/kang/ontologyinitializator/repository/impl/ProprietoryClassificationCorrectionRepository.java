@@ -23,7 +23,7 @@ import umbc.ebiquity.kang.instanceconstructor.entityframework.object.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.FileAccessor;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter.MappingRelationType;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrection;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrectionRecordParser;
@@ -243,21 +243,21 @@ public class ProprietoryClassificationCorrectionRepository implements IClassific
 		StringBuilder correctionRecord = new StringBuilder();
 		
 		correctionRecord.append(this.createJSONRecordForMetaData());
-		correctionRecord.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+		correctionRecord.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		
 		for (IClassificationCorrection correction : _classificationCorrectionCollection) {
 			correctionRecord.append(this.createJSONRecordForCorrection(correction));
-			correctionRecord.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+			correctionRecord.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		}
 		
 		for (IInstanceClassificationEvidence negativeMappingSet : _hiddenInstanceMembershipInferenceFacts) {
 			correctionRecord.append(this.createJSONRecordForMapping(negativeMappingSet, MappingInfoSchemaParameter.CORRECTION_RECORD_TYPE_HIDDEN_EVIDENCE));
-			correctionRecord.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+			correctionRecord.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		}
 		
 		for (IInstanceClassificationEvidence positiveMappingSet : _explicitInstanceMembershipInferenceFacts) {
 			correctionRecord.append(this.createJSONRecordForMapping(positiveMappingSet, MappingInfoSchemaParameter.CORRECTION_RECORD_TYPE_EXPLICIT_EVIDENCE));
-			correctionRecord.append(RepositoryParameterConfiguration.LINE_SEPARATOR);
+			correctionRecord.append(FileRepositoryParameterConfiguration.LINE_SEPARATOR);
 		}
 		
 		boolean correctionSaved = false;

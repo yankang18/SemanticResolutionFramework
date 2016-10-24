@@ -12,6 +12,9 @@ import java.util.Set;
 
 import umbc.ebiquity.kang.instanceconstructor.entityframework.object.Concept;
 import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
+import umbc.ebiquity.kang.instanceconstructor.model.IInstanceRepository;
+import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelFactory;
+import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceFileRepository;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMappingPairLookUpper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.CorrectionClusterCodeGenerator;
@@ -33,12 +36,11 @@ import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.Classifica
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.rule.interfaces.ICorrectionRule;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter.MappingRelationType;
-import umbc.ebiquity.kang.ontologyinitializator.repository.RepositoryParameterConfiguration;
+import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ClassifiedInstancesRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.InterpretationCorrectionRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ManufacturingLexicalMappingRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
-import umbc.ebiquity.kang.ontologyinitializator.repository.factories.InstanceDescriptionModelFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.EvaluationCorpus;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.EvaluationCorpusRecordsAccessor;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.MappingDataGateway;
@@ -73,8 +75,8 @@ public class ProprietaryClassifiedInstanceRepositoriesAutomaticCorrector extends
 	private TestType _testType;
 	
 	public static void main(String[] args) throws IOException {
-		RepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/home/yankang/Desktop/";
-		RepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/home/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
+		FileRepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/home/yankang/Desktop/";
+		FileRepositoryParameterConfiguration.ONTOLOGY_OWL_FILE_FULL_PATH = "/home/yankang/Desktop/Ontologies/MSDL-Fullv2.owl";
 		String fileFullPath = "/home/yankang/Desktop/WebSiteURLs.txt";
 		
 //		String dir = "Test_None";
@@ -151,9 +153,9 @@ public class ProprietaryClassifiedInstanceRepositoriesAutomaticCorrector extends
 			crawlIndicators = webSiteRecrawlFailed;
 		}
 		
-		RepositoryParameterConfiguration.CLASSIFIED_INSTANCE_HOST_DIRECTORY = _hostDirectory;
-		RepositoryParameterConfiguration.MANUFACTUIRNG_LEXICON_HOST_DIRECTORY = _hostDirectory;
-		RepositoryParameterConfiguration.CLASSIFICATION_CORRECTION_HOST_DIRECTORY = _hostDirectory;
+		FileRepositoryParameterConfiguration.CLASSIFIED_INSTANCE_HOST_DIRECTORY = _hostDirectory;
+		FileRepositoryParameterConfiguration.MANUFACTUIRNG_LEXICON_HOST_DIRECTORY = _hostDirectory;
+		FileRepositoryParameterConfiguration.CLASSIFICATION_CORRECTION_HOST_DIRECTORY = _hostDirectory;
 		boolean applyMappingRule = false;
 		boolean applyCorrections = false;
 
@@ -188,8 +190,8 @@ public class ProprietaryClassifiedInstanceRepositoriesAutomaticCorrector extends
 					// RepositoryParameterConfiguration.getMappingHumanReadableDirectoryFullPath()
 					// + repositoryName;
 					String evaluationCorpusFileFullName = _goldenStandardRepositoriesDir + repositoryName;
-					String basicInfoFileFullName = RepositoryParameterConfiguration.getMappingBasicInfoDirectoryFullPath() + repositoryName;
-					String detailInfoFileFullName = RepositoryParameterConfiguration.getMappingDetailinfoDirectoryFullPath()
+					String basicInfoFileFullName = FileRepositoryParameterConfiguration.getMappingBasicInfoDirectoryFullPath() + repositoryName;
+					String detailInfoFileFullName = FileRepositoryParameterConfiguration.getMappingDetailinfoDirectoryFullPath()
 							+ repositoryName;
 
 					System.out.println("1" + evaluationCorpusFileFullName);
@@ -240,8 +242,8 @@ public class ProprietaryClassifiedInstanceRepositoriesAutomaticCorrector extends
 //		proprietoryClassifiedInstancesRepository = ClassifiedInstancesRepositoryFactory.createProprietoryClassifiedInstancesRepository(
 //				webSiteURL, _ontologyRepository, true, applyMappingRule, false);
 		
-		String basicInfoDirectory = RepositoryParameterConfiguration.getMappingBasicInfoDirectoryFullPath();
-		String detailInfoDirectory = RepositoryParameterConfiguration.getMappingDetailinfoDirectoryFullPath();
+		String basicInfoDirectory = FileRepositoryParameterConfiguration.getMappingBasicInfoDirectoryFullPath();
+		String detailInfoDirectory = FileRepositoryParameterConfiguration.getMappingDetailinfoDirectoryFullPath();
 		String basicInfoFileFullName = basicInfoDirectory + repositoryName;
 		String detailInfoFileFullName = detailInfoDirectory + repositoryName;
 		boolean basicInfoFileExists = FileUtility.exists(basicInfoFileFullName);
@@ -272,7 +274,8 @@ public class ProprietaryClassifiedInstanceRepositoriesAutomaticCorrector extends
 				IManufacturingLexicalMappingRecordsReader aggregratedManufacturingLexicalMappingRepository = ManufacturingLexicalMappingRepositoryFactory
 		                .createAggregratedManufacturingLexicalMappingRepository(_ontologyRepository);
 				
-				IInstanceDescriptionModel tripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL, true);
+				IInstanceRepository repo = new InstanceFileRepository();
+				IInstanceDescriptionModel tripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL, repo);
 				
 				// Create Relation-Property Mapping Algorithm Object
 				IRelation2PropertyMappingAlgorithm relation2PropertymMappingAlgorithm = new Relation2PropertyMappingAlgorithm(
