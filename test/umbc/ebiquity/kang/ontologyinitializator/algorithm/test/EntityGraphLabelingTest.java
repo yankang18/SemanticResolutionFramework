@@ -69,10 +69,10 @@ public class EntityGraphLabelingTest {
 		String webSiteURLString = "http://www.accutrex.com";
 		URL webSiteURL = new URL(webSiteURLString);
 		WebSiteCrawler crawler = new WebSiteCrawler(webSiteURL, 1);
-		List<WebPage> webPages = crawler.crawl();
+//		List<WebPage> webPages = crawler.crawl();
 		
-		WebPagePathsImpl webPagePath = new WebPagePathsImpl(webPages.get(0));  
-		webPagePath.construct();
+//		WebPagePathsImpl webPagePath = new WebPagePathsImpl(webPages.get(0));  
+//		webPagePath.construct();
 		EntityPathExtractor extractor = new EntityPathExtractor(crawler, new SimplePageTemplatesSplitter());
 //		EntityPathExtractorImpl extractor = new EntityPathExtractorImpl(crawler, new SimplePageTemplatesSplitter());
 		entityGraph = new EntityGraph(extractor.extractor(), webSiteURL);

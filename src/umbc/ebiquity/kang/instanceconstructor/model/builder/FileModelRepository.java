@@ -20,7 +20,7 @@ import org.json.simple.JSONValue;
 
 import umbc.ebiquity.kang.instanceconstructor.entityframework.object.Concept;
 import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
-import umbc.ebiquity.kang.instanceconstructor.model.IInstanceRepository;
+import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModelRepository;
 import umbc.ebiquity.kang.instanceconstructor.model.InstanceDescriptionModel;
 import umbc.ebiquity.kang.instanceconstructor.model.InstanceTripleSet;
 import umbc.ebiquity.kang.instanceconstructor.model.Triple;
@@ -29,7 +29,7 @@ import umbc.ebiquity.kang.instanceconstructor.model.Triple.PredicateType;
 import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter;
 
-public class InstanceFileRepository implements IInstanceRepository {
+public class FileModelRepository implements IInstanceDescriptionModelRepository {
 
 	private String tripleFullPath;
 	
@@ -43,6 +43,7 @@ public class InstanceFileRepository implements IInstanceRepository {
 	
 	private void init() {
 		tripleFullPath = FileRepositoryParameterConfiguration.getTripleRepositoryDirectoryFullPath();
+		System.out.println("Full Path: " + tripleFullPath);
 		theWholeTripleSet = new LinkedHashSet<Triple>();
 		numberOfTriples = 0;
 		numberOfRelations = 0;
@@ -54,16 +55,13 @@ public class InstanceFileRepository implements IInstanceRepository {
 		init();
 		boolean hasTriples = false;
 		StringBuilder triplesStringBuilder = new StringBuilder();
-		/*
-		 * create data record for meta-data
-		 */
+		// create data record for meta-data
 		Map<String, String> metaDataRecord = new LinkedHashMap<String, String>();
 		metaDataRecord.put(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE, MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE_META_DATA);
 		metaDataRecord.put(MappingInfoSchemaParameter.TRIPLE_STORE_URI, model.getSourceURL().toString());
 		metaDataRecord.put(MappingInfoSchemaParameter.TRIPLE_STORE_NUMBER_OF_TRIPLES, String.valueOf(numberOfTriples));
 		metaDataRecord.put(MappingInfoSchemaParameter.TRIPLE_STORE_NUMBER_OF_RELATIONS, String.valueOf(numberOfRelations));
-		triplesStringBuilder.append(JSONValue.toJSONString(metaDataRecord));
-		triplesStringBuilder.append(MappingInfoSchemaParameter.LINE_SEPARATOR);
+		addRecord(triplesStringBuilder, metaDataRecord);
 
 		for (InstanceTripleSet instanceTripleSet : model.getInstanceTripleSets()) {
 			hasTriples = true;
@@ -81,7 +79,7 @@ public class InstanceFileRepository implements IInstanceRepository {
 					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_PREDICATE, relationLabel);
 					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_OBJECT, valueLabel);
 
-					String predicateTypeStr = "";
+					String predicateTypeStr;
 					if (Triple.BuiltinPredicateSet.contains(relationLabel)) {
 						predicateTypeStr = PredicateType.Builtin.toString();
 					} else {
@@ -91,16 +89,13 @@ public class InstanceFileRepository implements IInstanceRepository {
 					tripleRecord.put(MappingInfoSchemaParameter.NORMALIZED_TRIPLE_OBJECT, "");
 					tripleRecord.put(MappingInfoSchemaParameter.NORMALIZED_TRIPLE_SUBJECT, "");
 					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_PREDICATE_TYPE, predicateTypeStr);
-					triplesStringBuilder.append(JSONValue.toJSONString(tripleRecord));
-					triplesStringBuilder.append(MappingInfoSchemaParameter.LINE_SEPARATOR);
+					addRecord(triplesStringBuilder, tripleRecord);
 					numberOfTriples++;
 				}
 			}
 
 			for (String relationLabel : instance2ConceptSetMap.keySet()) {
-				/*
-				 * create data records for class-concept mappings
-				 */
+				// create data records for class-concept mappings
 				Map<String, String> tripleRecord = new LinkedHashMap<String, String>();
 				for (Concept concept : instance2ConceptSetMap.get(relationLabel)) {
 					tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE,
@@ -128,8 +123,7 @@ public class InstanceFileRepository implements IInstanceRepository {
 					 */
 					String isFromInstance = String.valueOf(concept.isFromInstance());
 					tripleRecord.put(MappingInfoSchemaParameter.IS_FROM_INSTANCE, isFromInstance);
-					triplesStringBuilder.append(JSONValue.toJSONString(tripleRecord));
-					triplesStringBuilder.append(MappingInfoSchemaParameter.LINE_SEPARATOR);
+					addRecord(triplesStringBuilder, tripleRecord);
 					numberOfTriples++;
 				}
 			}
@@ -137,9 +131,7 @@ public class InstanceFileRepository implements IInstanceRepository {
 
 		for (Triple triple : model.getRelationTypeTriple()) {
 			hasTriples = true;
-			/*
-			 * create data records for relation-to-property mappings
-			 */
+			// create data records for relation-to-property mappings
 			Map<String, String> tripleRecord = new LinkedHashMap<String, String>();
 			tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE,
 					MappingInfoSchemaParameter.TRIPLE_RECORD_TYPE_RELATION_DEFINITION);
@@ -157,8 +149,7 @@ public class InstanceFileRepository implements IInstanceRepository {
 			tripleRecord.put(MappingInfoSchemaParameter.NORMALIZED_TRIPLE_OBJECT, "");
 			tripleRecord.put(MappingInfoSchemaParameter.NORMALIZED_TRIPLE_SUBJECT, "");
 			tripleRecord.put(MappingInfoSchemaParameter.TRIPLE_PREDICATE_TYPE, predicateTypeStr);
-			triplesStringBuilder.append(JSONValue.toJSONString(tripleRecord));
-			triplesStringBuilder.append(MappingInfoSchemaParameter.LINE_SEPARATOR);
+			addRecord(triplesStringBuilder, tripleRecord);
 			numberOfTriples++;
 			numberOfRelations++;
 		}
@@ -171,6 +162,11 @@ public class InstanceFileRepository implements IInstanceRepository {
 			return this.saveTripleString(fileFullName, triplesStringBuilder.toString());
 		}
 		return true;
+	}
+
+	private void addRecord(StringBuilder triplesStringBuilder, Map<String, String> metaDataRecord) {
+		triplesStringBuilder.append(JSONValue.toJSONString(metaDataRecord));
+		triplesStringBuilder.append(MappingInfoSchemaParameter.LINE_SEPARATOR);
 	}
 
 	@Override

@@ -14,9 +14,9 @@ import umbc.csee.ebiquity.ontologymatcher.algorithm.component.OntPropertyInfo;
 import umbc.csee.ebiquity.ontologymatcher.algorithm.component.OntResourceInfo;
 import umbc.csee.ebiquity.ontologymatcher.algorithm.component.MSMResult.SubMapping;
 import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
-import umbc.ebiquity.kang.instanceconstructor.model.IInstanceRepository;
+import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModelRepository;
 import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelFactory;
-import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceFileRepository;
+import umbc.ebiquity.kang.instanceconstructor.model.builder.FileModelRepository;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Relation2PropertyMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Relation2PropertyMappingAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IRelation2PropertyMapper;
@@ -39,7 +39,7 @@ public class Relation2OntPropertyMappingTest {
 		
 		String webSiteURLString = "http://www.numericalconcepts.com";
 		URL webSiteURL = new URL(webSiteURLString);
-		IInstanceRepository repo = new InstanceFileRepository();
+		IInstanceDescriptionModelRepository repo = new FileModelRepository();
 		extractedTripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL, repo);
 	}
 	

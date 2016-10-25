@@ -23,7 +23,7 @@ import umbc.ebiquity.kang.webpageparser.LeafNode;
 
 public class InstanceDescriptionModelBuilderImpl implements IInstanceDescriptionModelBuilder {
 
-	private IReadOnlyEntityGraph entityGraph;
+//	private IReadOnlyEntityGraph entityGraph;
 	private EntityValidator entityValidator = new EntityValidator();
 
 	InstanceDescriptionModelBuilderImpl() {
@@ -33,7 +33,7 @@ public class InstanceDescriptionModelBuilderImpl implements IInstanceDescription
 	public IInstanceDescriptionModel build(IReadOnlyEntityGraph entityGraph) {
 		System.out.println("EXTRACTING TRIPLE STORE ...");
 		Set<Triple> tripleSet = new HashSet<Triple>();
-		List<EntityPath> entityPathList = new ArrayList<EntityPath>(this.entityGraph.getEntityPaths());
+		List<EntityPath> entityPathList = new ArrayList<EntityPath>(entityGraph.getEntityPaths());
 		Collections.sort(entityPathList, new EntityPathSorterByLeafNodeText());
 
 		/*
@@ -49,7 +49,7 @@ public class InstanceDescriptionModelBuilderImpl implements IInstanceDescription
 			/*
 			 * skip the situation when the leaf entity node is relation
 			 */
-			if(!entityValidator.isValidEntityNode(firstEntityNode) || this.entityGraph.isRelation(leafNode)){
+			if(!entityValidator.isValidEntityNode(firstEntityNode) || entityGraph.isRelation(leafNode)){
 				continue;
 			}
 			List<Entity> entityList = new ArrayList<Entity>(entityPath.getEntities());
@@ -68,7 +68,7 @@ public class InstanceDescriptionModelBuilderImpl implements IInstanceDescription
 					/*
 					 * 
 					 */
-					if (this.entityGraph.isRelation(entity)) {
+					if (entityGraph.isRelation(entity)) {
 						relationNode = new EntityNode(entity);
 						lookingForRelation = false;
 						lookingForInstance = true;
@@ -77,7 +77,7 @@ public class InstanceDescriptionModelBuilderImpl implements IInstanceDescription
 					}
 				}
 				if (lookingForInstance) {
-					if (!this.entityGraph.isRelation(entity)) {
+					if (!entityGraph.isRelation(entity)) {
 						/*
 						 * 
 						 */
@@ -120,6 +120,6 @@ public class InstanceDescriptionModelBuilderImpl implements IInstanceDescription
 			triple.setPredicateType(PredicateType.Builtin);
 			tripleSet.add(triple);
 		}
-		return new InstanceDescriptionModel(tripleSet, this.entityGraph.getWebSiteURL());
+		return new InstanceDescriptionModel(tripleSet, entityGraph.getWebSiteURL());
 	}
 }

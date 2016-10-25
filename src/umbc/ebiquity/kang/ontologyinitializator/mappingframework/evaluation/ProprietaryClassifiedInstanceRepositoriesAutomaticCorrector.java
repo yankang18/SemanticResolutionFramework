@@ -12,9 +12,9 @@ import java.util.Set;
 
 import umbc.ebiquity.kang.instanceconstructor.entityframework.object.Concept;
 import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
-import umbc.ebiquity.kang.instanceconstructor.model.IInstanceRepository;
+import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModelRepository;
 import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelFactory;
-import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceFileRepository;
+import umbc.ebiquity.kang.instanceconstructor.model.builder.FileModelRepository;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMappingPairLookUpper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.CorrectionClusterCodeGenerator;
@@ -274,7 +274,7 @@ public class ProprietaryClassifiedInstanceRepositoriesAutomaticCorrector extends
 				IManufacturingLexicalMappingRecordsReader aggregratedManufacturingLexicalMappingRepository = ManufacturingLexicalMappingRepositoryFactory
 		                .createAggregratedManufacturingLexicalMappingRepository(_ontologyRepository);
 				
-				IInstanceRepository repo = new InstanceFileRepository();
+				IInstanceDescriptionModelRepository repo = new FileModelRepository();
 				IInstanceDescriptionModel tripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL, repo);
 				
 				// Create Relation-Property Mapping Algorithm Object

@@ -1,7 +1,7 @@
 package umbc.ebiquity.kang.instanceconstructor.model;
 
 
-public interface IInstanceRepository {
+public interface IInstanceDescriptionModelRepository {
 
 	public boolean save(IInstanceDescriptionModel model, String repositoryFullName);
 

@@ -28,7 +28,7 @@ public interface WebPage {
 
 	CrawlerUrl getPageURL();
 
-	void load() throws IOException; 
+	void load() throws IOException;
 
 	Document getWebPageDocument();
 
@@ -42,8 +42,8 @@ public interface WebPage {
 
 	String getBaseURL();
 
-	void analyzeWebPage();   
+	void analyzeWebPage();
 
-//	String getPageURLString();     
+	// String getPageURLString();
 
 }
