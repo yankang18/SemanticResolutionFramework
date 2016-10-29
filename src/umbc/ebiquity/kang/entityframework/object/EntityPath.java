@@ -9,11 +9,6 @@ import umbc.ebiquity.kang.webpageparser.impl.WebPageImpl;
 import umbc.ebiquity.kang.webpageparser.impl.WebPathPath;
 import umbc.ebiquity.kang.webpageparser.impl.LeafNode.LeafType;
 
-/***
- * 
- * @author kangyan2003
- * 
- */
 public class EntityPath {
 
 	private WebPathPath path;
@@ -47,14 +42,6 @@ public class EntityPath {
 	public int getNumberOfEntities() {
 		return this.entityPath.size();
 	}
-
-//	public void setWebPage(WebPageImpl webPage) {
-//		this.webPage = webPage;
-//	}
-//
-//	public WebPageImpl getWebPage() {
-//		return webPage;
-//	}
 
 	public LeafNode getLeafNode() {
 		return leafNode;

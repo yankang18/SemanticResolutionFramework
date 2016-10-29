@@ -6,7 +6,7 @@ import java.net.URL;
 import org.junit.Before;
 
 import umbc.ebiquity.kang.instanceconstructor.IInstanceDescriptionModel;
-import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelFactory;
+import umbc.ebiquity.kang.instanceconstructor.builder.InstanceDescriptionModelFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ManufacturingLexicalMappingRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;

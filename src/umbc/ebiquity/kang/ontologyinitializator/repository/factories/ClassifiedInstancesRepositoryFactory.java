@@ -5,9 +5,9 @@ import java.net.URL;
 
 import umbc.ebiquity.kang.instanceconstructor.IInstanceDescriptionModel;
 import umbc.ebiquity.kang.instanceconstructor.IInstanceDescriptionModelRepository;
+import umbc.ebiquity.kang.instanceconstructor.builder.InstanceDescriptionModelConstructionHelper;
+import umbc.ebiquity.kang.instanceconstructor.builder.InstanceDescriptionModelFactory;
 import umbc.ebiquity.kang.instanceconstructor.impl.FileModelRepository;
-import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelConstructionHelper;
-import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelFactory;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMappingPairLookUpper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.CorrectionClusterCodeGenerator;

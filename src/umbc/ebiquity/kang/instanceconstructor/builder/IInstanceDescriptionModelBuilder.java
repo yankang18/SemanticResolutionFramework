@@ -1,4 +1,4 @@
-package umbc.ebiquity.kang.instanceconstructor.model.builder;
+package umbc.ebiquity.kang.instanceconstructor.builder;
 
 import umbc.ebiquity.kang.entityframework.IEntityGraph;
 import umbc.ebiquity.kang.instanceconstructor.IInstanceDescriptionModel;

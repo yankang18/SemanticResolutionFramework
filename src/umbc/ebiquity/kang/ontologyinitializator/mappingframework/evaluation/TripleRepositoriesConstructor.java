@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import umbc.ebiquity.kang.instanceconstructor.IInstanceDescriptionModel;
-import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelFactory;
+import umbc.ebiquity.kang.instanceconstructor.builder.InstanceDescriptionModelFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 
 public class TripleRepositoriesConstructor {
