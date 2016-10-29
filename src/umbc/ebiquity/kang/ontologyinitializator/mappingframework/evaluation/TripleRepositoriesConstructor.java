@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
+import umbc.ebiquity.kang.instanceconstructor.IInstanceDescriptionModel;
 import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 
@@ -29,7 +29,7 @@ public class TripleRepositoriesConstructor {
 			System.out.println("Construct Triple Repository for <" + url.toExternalForm() + ">");
 			try {
 				FileRepositoryParameterConfiguration.REPOSITORIES_DIRECTORY_FULL_PATH = "/Users/yankang/Desktop/";
-				InstanceDescriptionModelFactory.createModel(url);
+				InstanceDescriptionModelFactory.construct(url);
 			} catch (IOException e) {
 				_failedWebSiteMap2Cause.put(url, e.getMessage());
 				succeed = false;

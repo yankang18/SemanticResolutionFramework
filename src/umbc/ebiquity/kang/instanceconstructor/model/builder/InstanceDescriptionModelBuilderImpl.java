@@ -7,19 +7,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import umbc.ebiquity.kang.instanceconstructor.entityframework.IReadOnlyEntityGraph;
-import umbc.ebiquity.kang.instanceconstructor.entityframework.object.Concept;
-import umbc.ebiquity.kang.instanceconstructor.entityframework.object.Entity;
-import umbc.ebiquity.kang.instanceconstructor.entityframework.object.EntityNode;
-import umbc.ebiquity.kang.instanceconstructor.entityframework.object.EntityPath;
-import umbc.ebiquity.kang.instanceconstructor.entityframework.object.EntityPathSorterByLeafNodeText;
-import umbc.ebiquity.kang.instanceconstructor.entityframework.object.EntityValidator;
-import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
-import umbc.ebiquity.kang.instanceconstructor.model.InstanceDescriptionModel;
-import umbc.ebiquity.kang.instanceconstructor.model.Triple;
-import umbc.ebiquity.kang.instanceconstructor.model.Triple.BuiltinType;
-import umbc.ebiquity.kang.instanceconstructor.model.Triple.PredicateType;
-import umbc.ebiquity.kang.webpageparser.LeafNode;
+import umbc.ebiquity.kang.entityframework.IEntityGraph;
+import umbc.ebiquity.kang.entityframework.object.Concept;
+import umbc.ebiquity.kang.entityframework.object.Entity;
+import umbc.ebiquity.kang.entityframework.object.EntityNode;
+import umbc.ebiquity.kang.entityframework.object.EntityPath;
+import umbc.ebiquity.kang.entityframework.object.EntityPathSorterByLeafNodeText;
+import umbc.ebiquity.kang.entityframework.object.EntityValidator;
+import umbc.ebiquity.kang.instanceconstructor.IInstanceDescriptionModel;
+import umbc.ebiquity.kang.instanceconstructor.impl.InstanceDescriptionModel;
+import umbc.ebiquity.kang.instanceconstructor.impl.Triple;
+import umbc.ebiquity.kang.instanceconstructor.impl.Triple.BuiltinType;
+import umbc.ebiquity.kang.instanceconstructor.impl.Triple.PredicateType;
+import umbc.ebiquity.kang.webpageparser.impl.LeafNode;
 
 public class InstanceDescriptionModelBuilderImpl implements IInstanceDescriptionModelBuilder {
 
@@ -30,7 +30,7 @@ public class InstanceDescriptionModelBuilderImpl implements IInstanceDescription
 	}
 
 	@Override
-	public IInstanceDescriptionModel build(IReadOnlyEntityGraph entityGraph) {
+	public IInstanceDescriptionModel build(IEntityGraph entityGraph) {
 		System.out.println("EXTRACTING TRIPLE STORE ...");
 		Set<Triple> tripleSet = new HashSet<Triple>();
 		List<EntityPath> entityPathList = new ArrayList<EntityPath>(entityGraph.getEntityPaths());

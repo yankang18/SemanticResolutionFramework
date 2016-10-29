@@ -9,7 +9,7 @@ import java.util.Collection;
 
 import org.junit.Test;
 
-import umbc.ebiquity.kang.instanceconstructor.entityframework.object.Concept;
+import umbc.ebiquity.kang.entityframework.object.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingBasicInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingDetailInfo;

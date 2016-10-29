@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import umbc.ebiquity.kang.instanceconstructor.entityframework.object.Concept;
+import umbc.ebiquity.kang.entityframework.object.Concept;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.SimilarityAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IConcept2OntClassMappingPairLookUpper;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;

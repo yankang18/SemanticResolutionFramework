@@ -5,7 +5,7 @@ import java.net.URL;
 
 import org.junit.Before;
 
-import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
+import umbc.ebiquity.kang.instanceconstructor.IInstanceDescriptionModel;
 import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ManufacturingLexicalMappingRepositoryFactory;
@@ -30,7 +30,7 @@ public class TSOntoMappingAlgorithmTest {
 //		String webSiteURLString = "http://www.accutrex.com";
 		String webSiteURLString = "http://www.princetonind.com";
 		URL webSiteURL = new URL(webSiteURLString);
-		extractedTripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL);
+		extractedTripleStore = InstanceDescriptionModelFactory.construct(webSiteURL);
 		extractedTripleStore.showTriples();
 	}
 
@@ -44,7 +44,7 @@ public class TSOntoMappingAlgorithmTest {
 //		String webSiteURLString = "http://cncmachining.boyermachine.com";
 //		String webSiteURLString = "http://www.npcnc.com";
 		URL webSiteURL = new URL(webSiteURLString);
-		IInstanceDescriptionModel extractedTripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL);
+		IInstanceDescriptionModel extractedTripleStore = InstanceDescriptionModelFactory.construct(webSiteURL);
 		extractedTripleStore.showTriples();
 	}
 	

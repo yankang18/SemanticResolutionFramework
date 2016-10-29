@@ -20,8 +20,8 @@ import umbc.csee.ebiquity.ontologymatcher.algorithm.component.SimilarityMatrixLa
 import umbc.csee.ebiquity.ontologymatcher.algorithm.component.MSMResult.SubMapping;
 import umbc.csee.ebiquity.ontologymatcher.algorithm.component.OntPropertyInfo.OntPropertyType;
 import umbc.csee.ebiquity.ontologymatcher.config.AlgorithmMode;
-import umbc.ebiquity.kang.instanceconstructor.entityframework.object.EntityValidator;
-import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
+import umbc.ebiquity.kang.entityframework.object.EntityValidator;
+import umbc.ebiquity.kang.instanceconstructor.IInstanceDescriptionModel;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.SimilarityAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.SimilarityAlgorithm.SimilarityType;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IMappingAlgorithmComponent;

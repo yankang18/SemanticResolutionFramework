@@ -10,11 +10,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import umbc.ebiquity.kang.instanceconstructor.entityframework.object.Concept;
-import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
-import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModelRepository;
+import umbc.ebiquity.kang.entityframework.object.Concept;
+import umbc.ebiquity.kang.instanceconstructor.IInstanceDescriptionModel;
+import umbc.ebiquity.kang.instanceconstructor.IInstanceDescriptionModelRepository;
+import umbc.ebiquity.kang.instanceconstructor.impl.FileModelRepository;
+import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelConstructionHelper;
 import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelFactory;
-import umbc.ebiquity.kang.instanceconstructor.model.builder.FileModelRepository;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMappingPairLookUpper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.CorrectionClusterCodeGenerator;
@@ -275,7 +276,7 @@ public class ProprietaryClassifiedInstanceRepositoriesAutomaticCorrector extends
 		                .createAggregratedManufacturingLexicalMappingRepository(_ontologyRepository);
 				
 				IInstanceDescriptionModelRepository repo = new FileModelRepository();
-				IInstanceDescriptionModel tripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL, repo);
+				IInstanceDescriptionModel tripleStore = InstanceDescriptionModelConstructionHelper.createModel(webSiteURL, repo);
 				
 				// Create Relation-Property Mapping Algorithm Object
 				IRelation2PropertyMappingAlgorithm relation2PropertymMappingAlgorithm = new Relation2PropertyMappingAlgorithm(

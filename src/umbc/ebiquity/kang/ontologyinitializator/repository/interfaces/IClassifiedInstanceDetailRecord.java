@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import umbc.csee.ebiquity.ontologymatcher.algorithm.component.OntPropertyInfo;
-import umbc.ebiquity.kang.instanceconstructor.model.InstanceTripleSet;
+import umbc.ebiquity.kang.instanceconstructor.impl.InstanceTripleSet;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.MatchedOntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.impl.MatchedOntProperty;

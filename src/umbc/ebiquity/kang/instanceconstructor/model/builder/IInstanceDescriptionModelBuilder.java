@@ -1,7 +1,7 @@
 package umbc.ebiquity.kang.instanceconstructor.model.builder;
 
-import umbc.ebiquity.kang.instanceconstructor.entityframework.IReadOnlyEntityGraph;
-import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
+import umbc.ebiquity.kang.entityframework.IEntityGraph;
+import umbc.ebiquity.kang.instanceconstructor.IInstanceDescriptionModel;
 
 public interface IInstanceDescriptionModelBuilder {
 
@@ -11,8 +11,8 @@ public interface IInstanceDescriptionModelBuilder {
 	 * the entity paths)
 	 * 
 	 * @param entityGraph
-	 * @return an instance of the TripleStore
+	 * @return an instance of the Instance Description Model
 	 */
-	IInstanceDescriptionModel build(IReadOnlyEntityGraph entityGraph);
+	IInstanceDescriptionModel build(IEntityGraph entityGraph);
 
 }

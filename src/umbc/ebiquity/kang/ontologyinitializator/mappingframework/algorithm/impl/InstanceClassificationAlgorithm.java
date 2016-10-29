@@ -11,9 +11,9 @@ import java.util.Map;
 import java.util.Set;
 
 import umbc.csee.ebiquity.ontologymatcher.algorithm.component.OntPropertyInfo;
-import umbc.ebiquity.kang.instanceconstructor.entityframework.object.Concept;
-import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
-import umbc.ebiquity.kang.instanceconstructor.model.InstanceTripleSet;
+import umbc.ebiquity.kang.entityframework.object.Concept;
+import umbc.ebiquity.kang.instanceconstructor.IInstanceDescriptionModel;
+import umbc.ebiquity.kang.instanceconstructor.impl.InstanceTripleSet;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IBestMatchedOntClassFinder;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IConcept2OntClassMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IConcept2OntClassMappingPairPruner;

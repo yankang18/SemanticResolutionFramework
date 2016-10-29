@@ -1,25 +1,20 @@
 package umbc.ebiquity.kang.ontologyinitializator.algorithm.test;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collection;
-import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import umbc.ebiquity.kang.instanceconstructor.entityframework.IRelationExtractionAlgorithm;
-import umbc.ebiquity.kang.instanceconstructor.entityframework.impl.EntityGraph;
-import umbc.ebiquity.kang.instanceconstructor.entityframework.impl.EntityPathExtractor;
-import umbc.ebiquity.kang.instanceconstructor.entityframework.impl.EntityPathExtractorImpl;
-import umbc.ebiquity.kang.instanceconstructor.entityframework.impl.InstanceConceptSetExtractionAlgorithm;
-import umbc.ebiquity.kang.instanceconstructor.entityframework.impl.RelationExtractionAlgorithm;
+import umbc.ebiquity.kang.entityframework.IEntityGraph;
+import umbc.ebiquity.kang.entityframework.IEntityPathExtractor;
+import umbc.ebiquity.kang.entityframework.IRelationExtractionAlgorithm;
+import umbc.ebiquity.kang.entityframework.impl.EntityGraph;
+import umbc.ebiquity.kang.entityframework.impl.EntityPathExtractor;
+import umbc.ebiquity.kang.entityframework.impl.InstanceConceptSetExtractionAlgorithm;
+import umbc.ebiquity.kang.entityframework.impl.RelationExtractionAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
-import umbc.ebiquity.kang.webpageparser.SimplePageTemplatesSplitter;
-import umbc.ebiquity.kang.webpageparser.WebPagePathsImpl;
-import umbc.ebiquity.kang.webpageparser.WebSiteCrawler;
-import umbc.ebiquity.kang.webpageparser.interfaces.WebPage;
+import umbc.ebiquity.kang.webpageparser.Crawler;
+import umbc.ebiquity.kang.webpageparser.impl.SimplePageTemplatesSplitter;
+import umbc.ebiquity.kang.webpageparser.impl.WebSiteCrawler;
 
 public class EntityGraphLabelingTest {
 	
@@ -34,11 +29,11 @@ public class EntityGraphLabelingTest {
 //		String webSiteURLString = "http://www.accutrex.com";
 //		String webSiteURLString = "http://www.lincolnparkboring.com";
 		String webSiteURLString = "http://www.princetonind.com";
-		URL webSiteURL = new URL(webSiteURLString);
-		WebSiteCrawler crawler = new WebSiteCrawler(webSiteURL); 
+		URL webSiteURL = new URL(webSiteURLString); 
+		Crawler crawler = WebSiteCrawler.createCrawler(webSiteURL); 
 		crawler.crawl();
-		EntityPathExtractor extractor = new EntityPathExtractor(crawler, new SimplePageTemplatesSplitter());
-		EntityGraph entityGraph = new EntityGraph(extractor.extractor(), webSiteURL);
+		IEntityPathExtractor extractor = EntityPathExtractor.create(crawler);
+		IEntityGraph entityGraph = EntityGraph.create(webSiteURL, extractor.extractor());
 //		entityGraph.printForwardTermGraphNodesAfterAnalyzing();
 //		entityGraph.analyzeEntityGraph();
 //		entityGraph.showInstanceConceptSet();
@@ -68,15 +63,15 @@ public class EntityGraphLabelingTest {
 	public void InitializeEntityGraphTest() throws Exception {  
 		String webSiteURLString = "http://www.accutrex.com";
 		URL webSiteURL = new URL(webSiteURLString);
-		WebSiteCrawler crawler = new WebSiteCrawler(webSiteURL, 1);
+		Crawler crawler = WebSiteCrawler.createCrawler(webSiteURL, 1);
 //		List<WebPage> webPages = crawler.crawl();
 		
 //		WebPagePathsImpl webPagePath = new WebPagePathsImpl(webPages.get(0));  
 //		webPagePath.construct();
-		EntityPathExtractor extractor = new EntityPathExtractor(crawler, new SimplePageTemplatesSplitter());
+		IEntityPathExtractor extractor = EntityPathExtractor.create(crawler);
 //		EntityPathExtractorImpl extractor = new EntityPathExtractorImpl(crawler, new SimplePageTemplatesSplitter());
-		entityGraph = new EntityGraph(extractor.extractor(), webSiteURL);
-		entityGraph.printForwardTermGraphNodesAfterAnalyzing();
+		entityGraph = (EntityGraph) EntityGraph.create(webSiteURL, extractor.extractor());
+//		entityGraph.printForwardTermGraphNodesAfterAnalyzing();
 		
 		RelationExtractionAlgorithmTest();
 		InstanceConceptSetExtractionAlgorithmTest();

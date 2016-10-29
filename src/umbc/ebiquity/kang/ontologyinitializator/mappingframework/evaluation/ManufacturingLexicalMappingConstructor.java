@@ -20,12 +20,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import umbc.ebiquity.kang.instanceconstructor.entityframework.object.Concept;
-import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
-import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModelRepository;
-import umbc.ebiquity.kang.instanceconstructor.model.InstanceTripleSet;
+import umbc.ebiquity.kang.entityframework.object.Concept;
+import umbc.ebiquity.kang.instanceconstructor.IInstanceDescriptionModel;
+import umbc.ebiquity.kang.instanceconstructor.IInstanceDescriptionModelRepository;
+import umbc.ebiquity.kang.instanceconstructor.impl.FileModelRepository;
+import umbc.ebiquity.kang.instanceconstructor.impl.InstanceTripleSet;
+import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelConstructionHelper;
 import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelFactory;
-import umbc.ebiquity.kang.instanceconstructor.model.builder.FileModelRepository;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IConcept2OntClassMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.IInstanceClassificationAlgorithm;
@@ -74,7 +75,6 @@ public class ManufacturingLexicalMappingConstructor extends AbstractWebUrlLoader
 		this.Concept2RelatedConceptMap = new HashMap<Concept, List<Concept2OntClassMapping>>();
 		this.concept2OntClassMap = new HashSet<Concept2OntClassMapping>();
 		this.concept2OntClassMap2 = new HashSet<Concept2OntClassMapping>();
-//		this.concept2OntClassMap3 = new HashSet<Concept2OntClassMapping>();
 	}
 	
 	
@@ -97,13 +97,11 @@ public class ManufacturingLexicalMappingConstructor extends AbstractWebUrlLoader
 			boolean recrawl = crawlIndicators.get(webSiteURLStr);
 			if (recrawl) {
 				URL webSiteURL = new URL(webSiteURLStr);
-				IInstanceDescriptionModelRepository repo = new FileModelRepository();
-				IInstanceDescriptionModel tripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL, repo);
+				IInstanceDescriptionModel tripleStore = InstanceDescriptionModelConstructionHelper.createModel(webSiteURL, new FileModelRepository());
 				classifyInstances(tripleStore.getInstanceTripleSets(), ontologyRepository.getAllOntClasses());
 			}
 		}
 		this.inferClassforUnMappedConcept();
-//		this.addPreDefinedLexicalMapping();
 	}
 	
 	public void classifyInstances(Collection<InstanceTripleSet> instanceTripleSets, Collection<OntoClassInfo> ontClasses) {

@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import umbc.ebiquity.kang.instanceconstructor.entityframework.object.Concept;
-import umbc.ebiquity.kang.instanceconstructor.model.InstanceTripleSet;
+import umbc.ebiquity.kang.entityframework.object.Concept;
+import umbc.ebiquity.kang.instanceconstructor.impl.InstanceTripleSet;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.MatchedOntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter.MappingRelationType;

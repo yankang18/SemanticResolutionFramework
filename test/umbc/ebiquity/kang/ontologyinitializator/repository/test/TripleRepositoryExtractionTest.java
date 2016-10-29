@@ -6,10 +6,11 @@ import java.net.URL;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
-import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModelRepository;
+import umbc.ebiquity.kang.instanceconstructor.IInstanceDescriptionModel;
+import umbc.ebiquity.kang.instanceconstructor.IInstanceDescriptionModelRepository;
+import umbc.ebiquity.kang.instanceconstructor.impl.FileModelRepository;
+import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelConstructionHelper;
 import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelFactory;
-import umbc.ebiquity.kang.instanceconstructor.model.builder.FileModelRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
 
 
@@ -37,9 +38,9 @@ public class TripleRepositoryExtractionTest {
 		IInstanceDescriptionModel extractedTripleStore;
 		if (local) {
 			IInstanceDescriptionModelRepository repo = new FileModelRepository();
-			extractedTripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL, repo);
+			extractedTripleStore = InstanceDescriptionModelConstructionHelper.createModel(webSiteURL, repo);
 		} else {
-			extractedTripleStore = InstanceDescriptionModelFactory.createModel(webSiteURL);
+			extractedTripleStore = InstanceDescriptionModelFactory.construct(webSiteURL);
 		}
 		return extractedTripleStore;
 	}

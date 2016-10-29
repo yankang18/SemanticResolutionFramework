@@ -66,7 +66,7 @@ public class TripleRepositoriesAutomaticConstructor extends AbstractWebUrlLoader
 				try {
 					URL webSiteURL = new URL(webSiteURLStr);
 					try {
-						InstanceDescriptionModelFactory.createModel(webSiteURL);
+						InstanceDescriptionModelFactory.construct(webSiteURL);
 						this.recordSuccess(webSiteURL.toString());
 					} catch (MalformedURLException e) {
 						this.recordErrorMsg(webSiteURL.toString(), e.getMessage());

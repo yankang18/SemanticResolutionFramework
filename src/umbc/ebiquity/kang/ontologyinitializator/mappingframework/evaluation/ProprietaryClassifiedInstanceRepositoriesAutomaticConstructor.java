@@ -5,7 +5,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
-import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
+import umbc.ebiquity.kang.instanceconstructor.IInstanceDescriptionModel;
+import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelConstructionHelper;
 import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelFactory;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMappingPairLookUpper;
@@ -83,7 +84,7 @@ public class ProprietaryClassifiedInstanceRepositoriesAutomaticConstructor exten
 					URL webSiteURL = new URL(webSiteURLStr);
 					String repositoryName = FileUtility.convertURL2FileName(webSiteURL);
 					System.out.println("Annotate Repository: " + repositoryName);
-					boolean existTripleRepository = InstanceDescriptionModelFactory.instanceDescriptionModelConstructed(webSiteURL);
+					boolean existTripleRepository = InstanceDescriptionModelConstructionHelper.isConstructed(webSiteURL);
 					
 					if(!existTripleRepository){
 						continue;

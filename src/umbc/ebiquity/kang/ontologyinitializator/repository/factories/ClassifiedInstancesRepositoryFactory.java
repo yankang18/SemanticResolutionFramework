@@ -3,10 +3,11 @@ package umbc.ebiquity.kang.ontologyinitializator.repository.factories;
 import java.io.IOException;
 import java.net.URL;
 
-import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModel;
-import umbc.ebiquity.kang.instanceconstructor.model.IInstanceDescriptionModelRepository;
+import umbc.ebiquity.kang.instanceconstructor.IInstanceDescriptionModel;
+import umbc.ebiquity.kang.instanceconstructor.IInstanceDescriptionModelRepository;
+import umbc.ebiquity.kang.instanceconstructor.impl.FileModelRepository;
+import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelConstructionHelper;
 import umbc.ebiquity.kang.instanceconstructor.model.builder.InstanceDescriptionModelFactory;
-import umbc.ebiquity.kang.instanceconstructor.model.builder.FileModelRepository;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMapper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.Concept2OntClassMappingPairLookUpper;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.impl.CorrectionClusterCodeGenerator;
@@ -89,7 +90,7 @@ public class ClassifiedInstancesRepositoryFactory {
 				// create Instance Description Model of a web site
 				// move this out of this class
 				IInstanceDescriptionModelRepository repo = new FileModelRepository();
-				IInstanceDescriptionModel IDM = InstanceDescriptionModelFactory.createModel(webSiteURL, repo);
+				IInstanceDescriptionModel IDM = InstanceDescriptionModelConstructionHelper.createModel(webSiteURL, repo);
 				
 				// Create Relation-Property Mapping Algorithm Object
 				IRelation2PropertyMappingAlgorithm relation2PropertymMappingAlgorithm = new Relation2PropertyMappingAlgorithm(
