@@ -111,15 +111,19 @@ public class EntityPathExtractorImpl implements IEntityPathExtractor {
 			// continue;
 			// }
 
-			// TODO: also should check if there is any CSS applied to this leaf
-			// node.
-			LeafNode leafNode = new LeafNode(LeafType.Term, textualDescription);
+//			// TODO: also should check if there is any CSS applied to this leaf
+//			// node.
+//			LeafNode leafNode = new LeafNode(LeafType.Term, textualDescription);
 
 			// If the last node has no textual description, skip this Web Page
 			// Path
 			if (TextProcessingUtils.isStringEmpty(textualDescription)) {
 				continue;
 			}
+			
+			// TODO: also should check if there is any CSS applied to this leaf
+			// node.
+			LeafNode leafNode = new LeafNode(LeafType.Term, textualDescription);
 
 			// System.out.println("-> path: " + pathID + " ... ");
 			// System.out.println("-> leaf node: with tag [" + tagName + "] with
