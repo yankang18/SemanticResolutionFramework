@@ -3,7 +3,7 @@ package umbc.ebiquity.kang.ontologyinitializator.similarity.impl;
 import java.util.List;
 import umbc.ebiquity.kang.ontologyinitializator.similarity.interfaces.ILabelSimilarity;
 import umbc.ebiquity.kang.ontologyinitializator.similarity.interfaces.IWordListSimilarity;
-import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
+import umbc.ebiquity.kang.textprocessing.util.TextProcessingUtils;
 
 public class SimpleLabelSimilarity implements ILabelSimilarity {
 	

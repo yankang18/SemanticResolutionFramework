@@ -1,5 +1,6 @@
 package umbc.ebiquity.kang.entityframework.impl;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,25 +15,33 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 
+import umbc.ebiquity.kang.entityframework.IEntityPathExtractor;
 import umbc.ebiquity.kang.entityframework.object.Entity;
 import umbc.ebiquity.kang.entityframework.object.EntityPath;
 import umbc.ebiquity.kang.entityframework.object.Entity.TermType;
-import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
-import umbc.ebiquity.kang.webpageparser.Crawler;
-import umbc.ebiquity.kang.webpageparser.WebPage;
-import umbc.ebiquity.kang.webpageparser.impl.HTMLTags;
-import umbc.ebiquity.kang.webpageparser.impl.LeafNode;
-import umbc.ebiquity.kang.webpageparser.impl.SimplePageTemplatesSplitter;
-import umbc.ebiquity.kang.webpageparser.impl.WebPageImpl;
-import umbc.ebiquity.kang.webpageparser.impl.WebPageNode;
-import umbc.ebiquity.kang.webpageparser.impl.WebPagePathsImpl;
-import umbc.ebiquity.kang.webpageparser.impl.WebPathPath;
-import umbc.ebiquity.kang.webpageparser.impl.LeafNode.LeafType;
+import umbc.ebiquity.kang.textprocessing.util.TextProcessingUtils;
+import umbc.ebiquity.kang.websiteparser.ICrawler;
+import umbc.ebiquity.kang.websiteparser.IWebPage;
+import umbc.ebiquity.kang.websiteparser.IWebPageNode;
+import umbc.ebiquity.kang.websiteparser.IWebPagePath;
+import umbc.ebiquity.kang.websiteparser.impl.SimplePageTemplatesSplitter;
+import umbc.ebiquity.kang.websiteparser.impl.WebPageImpl;
+import umbc.ebiquity.kang.websiteparser.impl.WebPageNode;
+import umbc.ebiquity.kang.websiteparser.impl.WebPathPath;
+import umbc.ebiquity.kang.websiteparser.object.HTMLTags;
+import umbc.ebiquity.kang.websiteparser.object.LeafNode;
+import umbc.ebiquity.kang.websiteparser.object.LeafNode.LeafType;
+import umbc.ebiquity.kang.websiteparser.support.IWebPageParsedPathsHolder;
+import umbc.ebiquity.kang.websiteparser.support.IWebSiteParsedPathsHolder;
+import umbc.ebiquity.kang.websiteparser.support.impl.DefaultWebPagePathsParser;
 
-public class EntityPathExtractorImpl {
+public class EntityPathExtractorImpl implements IEntityPathExtractor {
+	
+	// TODO: need to add a logger here
+	
 	private Collection<WebPathPath> templatePaths;
 	private List<EntityPath> termPaths;
-	private Collection<WebPagePathsImpl> webPages;
+	private List<IWebPageParsedPathsHolder> webPages;
 	private SimplePageTemplatesSplitter templatesSplitter;
 //	 private String webSiteHomeUrl;
 	private int numWebpage = 0;
@@ -40,60 +49,52 @@ public class EntityPathExtractorImpl {
 
 	private URL webSiteURL;
 
-	public EntityPathExtractorImpl(Collection<WebPagePathsImpl> webPagePaths, SimplePageTemplatesSplitter templatesSplitter){
-		this.webPages = webPagePaths;
+	public static IEntityPathExtractor create(IWebSiteParsedPathsHolder parsedPathsHolder) throws IOException {
+		return new EntityPathExtractorImpl(parsedPathsHolder, null);
+	}
+
+	EntityPathExtractorImpl(IWebSiteParsedPathsHolder parsedPathsHolder, SimplePageTemplatesSplitter templatesSplitter) {
+		this.webPages = parsedPathsHolder.getWebPageParsedPathHolders();
+		this.webSiteURL = parsedPathsHolder.getWebSiteURL();
 		this.templatesSplitter = templatesSplitter;
 		this.termPaths = new ArrayList<EntityPath>();
 	}
 	
-	public EntityPathExtractorImpl(Collection<WebPagePathsImpl> webPagePaths){
-		this.webPages = new ArrayList<WebPagePathsImpl>(webPagePaths);
-		this.termPaths = new ArrayList<EntityPath>();
-	}
-
 	public List<EntityPath> extract() {
 		System.out.println("Constructing Entity Paths ...");
-		if (this.templatesSplitter != null) {
+//		if (this.templatesSplitter != null) {
 //			templatePaths = templatesSplitter.splitPageTemplates(webPages);
-		} else {
-			templatePaths = new HashSet<WebPathPath>();
-		}
+//		} 
 		numWebpage = webPages.size();
-		for (WebPagePathsImpl webPage : webPages) {
+		for (IWebPageParsedPathsHolder webPage : webPages) {
 			webPageIndex++;
 			termPaths.addAll(this.constructEntityPaths(webPage, webPageIndex));
 		}
 		return termPaths;
 	}
 
-	private Collection<EntityPath> constructEntityPaths(WebPagePathsImpl webPage, int webPageIndex) {
+	private Collection<EntityPath> constructEntityPaths(IWebPageParsedPathsHolder webPage, int webPageIndex) {
 		// System.out.println("-------------------------------------------------------------------------------------------------");
 		// System.out.println(" <" + webPage.getPageURLString() + ">... ");
 
 		List<EntityPath> entityPaths = new ArrayList<EntityPath>();
 		Set<String> visitedWebPagePaths = new HashSet<String>();
 		Map<String, EntityPath> constructedEntityPaths = new HashMap<String, EntityPath>();
-		List<WebPathPath> webPagePaths = webPage.listWebTagPathsWithTextContent();
+		List<IWebPagePath> webPagePaths = webPage.listWebTagPathsWithTextContent();
 		int size = webPagePaths.size();
 		for (int pathIndex = 0; pathIndex < size; pathIndex++) {
-			WebPathPath webPagePath = webPagePaths.get(pathIndex);
+			IWebPagePath webPagePath = webPagePaths.get(pathIndex);
 			// System.out.println(" <" + pathIndex + ">... ");
 
+			if(skipPath(webPagePath)){
+				continue;
+			}
+			
 			String pathID = webPagePath.getPathID();
 			Collection<Entity> allEntities = new ArrayList<Entity>();
 
-			/*
-			 * skip template path
-			 */
-			// if (templatePaths.contains(webPagePath)) {
-			// System.out.println("-> Skiped template path: " + pathID);
-			// continue;
-			// }
-
-			/*
-			 * Skip Web Page Path that has already been visited. In other words,
-			 * the Term Path of this Web Page Path has already been created.
-			 */
+			// Skip Web Page Path that has already been visited. In other words,
+			// the Term Path of this Web Page Path has already been created.
 			if (visitedWebPagePaths.contains(pathID)) {
 				continue;
 			} else {
@@ -103,7 +104,7 @@ public class EntityPathExtractorImpl {
 			/*
 			 * Get the last node (leaf node) in the Web Page Path
 			 */
-			WebPageNode lastNode = webPagePath.getLastNode();
+			IWebPageNode lastNode = webPagePath.getLastNode();
 			String tagName = lastNode.getTag();
 			String textualDescription = lastNode.getFullContent();
 			String nodePattern = lastNode.getNodePattern();
@@ -146,14 +147,14 @@ public class EntityPathExtractorImpl {
 			/*
 			 * Step 2: search the topics from the regional area of current node.
 			 */
-			WebPageNode structureNode = this.getContainerStructureNode(lastNode);
+			IWebPageNode structureNode = this.getContainerStructureNode(lastNode);
 			Collection<Entity> regionalTopics = new ArrayList<Entity>();
 			pathLevel = this.getRegionalTopics(structureNode, pathIndex, webPagePaths, pathLevel, webPageIndex, regionalTopics);
 
 			/*
 			 * Step 3: search the topics from the ancestors of current node.
 			 */
-			WebPageNode parentNode = structureNode.getParent();
+			IWebPageNode parentNode = structureNode.getParent();
 			pathLevel++;
 			Collection<Entity> globalTopics = this.getTopicsFromAncestors(parentNode, pathIndex, webPagePaths, pathLevel, webPageIndex);
 
@@ -199,10 +200,27 @@ public class EntityPathExtractorImpl {
 		return entityPaths;
 	}
 
-	private Collection<Entity> getTopicsFromAncestors(WebPageNode node, int structureNodeResidePathIndex, List<WebPathPath> webPagePaths,
+	/**
+	 * determine if the give path should be skipped or not.
+	 * 
+	 * @param webPagePath
+	 *            the web page path
+	 * @return true if this path should be skipped
+	 */
+	private boolean skipPath(IWebPagePath webPagePath) {
+		if (templatesSplitter == null) {
+			return false;
+		} else if (templatePaths.contains(webPagePath)) {
+			System.out.println("-> Skiped template path: " + webPagePath.getPathID());
+			return true;
+		}
+		return false;
+	}
+
+	private List<Entity> getTopicsFromAncestors(IWebPageNode node, int structureNodeResidePathIndex, List<IWebPagePath> webPagePaths,
 			int pathLevel, int webPageIndex) {
 
-		Collection<Entity> topics = new ArrayList<Entity>();
+		List<Entity> topics = new ArrayList<Entity>();
 		if (node == null) {
 			return topics;
 		}
@@ -226,14 +244,14 @@ public class EntityPathExtractorImpl {
 		 * Step 3: search the topics from siblings of the structure container.
 		 * Topics found here should have relatively lower score.
 		 */
-		WebPageNode structureNode = this.getContainerStructureNode(node);
+		IWebPageNode structureNode = this.getContainerStructureNode(node);
 		if (structureNode == null) {
 			return topics;
 		}
 		// System.out.println("-> <structure node:" +
 		// structureNode.getPrefixPathID() + structureNode.getTag() + ">");
 		pathLevel++;
-		Collection<Entity> regionalTopics = new ArrayList<Entity>();
+		List<Entity> regionalTopics = new ArrayList<Entity>();
 		// Collection<Term> regionalTopics =
 		// this.getRegionalTopics(structureNode, structureNodeResidePathIndex,
 		// webPagePaths, pathLevel);
@@ -247,9 +265,9 @@ public class EntityPathExtractorImpl {
 		/*
 		 * Step 4: search the topics from the ancestors of current node.
 		 */
-		WebPageNode parentNode = structureNode.getParent();
+		IWebPageNode parentNode = structureNode.getParent();
 		pathLevel++;
-		Collection<Entity> ancestorTopics = this.getTopicsFromAncestors(parentNode, structureNodeResidePathIndex, webPagePaths, pathLevel,
+		List<Entity> ancestorTopics = this.getTopicsFromAncestors(parentNode, structureNodeResidePathIndex, webPagePaths, pathLevel,
 				webPageIndex);
 		int numOfAncestorTopics = ancestorTopics.size();
 		if (numOfAncestorTopics != 0) {
@@ -284,7 +302,7 @@ public class EntityPathExtractorImpl {
 	 * @param structureNode
 	 * @return
 	 */
-	private Collection<Entity> getLocalTopics(WebPageNode node, int pathLevel, int webPageIndex) {
+	private Collection<Entity> getLocalTopics(IWebPageNode node, int pathLevel, int webPageIndex) {
 
 		Collection<Entity> topics = new ArrayList<Entity>();
 		// /*
@@ -296,7 +314,7 @@ public class EntityPathExtractorImpl {
 			/*
 			 * search row (tr) this data column (td) resides in
 			 */
-			WebPageNode tableRowNode = node;
+			IWebPageNode tableRowNode = node;
 			while (tableRowNode != null && !"tr".equals(tableRowNode.getTag().toLowerCase())) {
 				tableRowNode = tableRowNode.getParent();
 			}
@@ -363,7 +381,7 @@ public class EntityPathExtractorImpl {
 	 * @param pathLevel
 	 * @return
 	 */
-	private int getRegionalTopics(WebPageNode structureNode, int structureNodeResidePathIndex, List<WebPathPath> webPagePaths, int pathLevel,
+	private int getRegionalTopics(IWebPageNode structureNode, int structureNodeResidePathIndex, List<IWebPagePath> webPagePaths, int pathLevel,
 			int webPageIndex, Collection<Entity> topics) {
 
 		// System.out.println("-> getRegionalTopics of: " +
@@ -375,13 +393,13 @@ public class EntityPathExtractorImpl {
 		boolean onlyHeaderTag = false;
 		for (int i = structureNodeResidePathIndex - 1; i >= 0; i--) {
 
-			WebPathPath path = webPagePaths.get(i);
+			IWebPagePath path = webPagePaths.get(i);
 
 			/*
 			 * first to make sure we are searching siblings of structure node.
 			 */
 			if (path.getPathID().startsWith(structureNode.getPrefixPathID())) {
-				WebPageNode node = path.getNode(structureNode.getPrefixPathID());
+				IWebPageNode node = path.getNode(structureNode.getPrefixPathID());
 
 				/*
 				 * to check if this sibling node has the same pattern as the
@@ -473,7 +491,7 @@ public class EntityPathExtractorImpl {
 	 * @param node
 	 * @return
 	 */
-	private Collection<Entity> extractTopics(WebPageNode node) {
+	private Collection<Entity> extractTopics(IWebPageNode node) {
 
 		// TODO: should also consider css files
 		Collection<Entity> entities = new LinkedHashSet<Entity>();
@@ -829,14 +847,14 @@ public class EntityPathExtractorImpl {
 		return conceptSentence.replaceAll("\\s+", " ");
 	}
 
-	private WebPageNode getContainerStructureNode(WebPageNode node) {
+	private IWebPageNode getContainerStructureNode(IWebPageNode node) {
 
 		if (HTMLTags.getListTags().contains(node.getTag())) {
 			// search node with tag "ol" or "ul"
 			if (node.getTag().toLowerCase().equals("li")) {
 				// node with tag "li"
 				// WebPageNode containerNode = node.getParent();
-				WebPageNode containerNode = node;
+				IWebPageNode containerNode = node;
 				while (containerNode != null && !node.getParent().getTag().toLowerCase().equals("ol")
 						&& !node.getParent().getTag().toLowerCase().equals("ul")) {
 					containerNode = containerNode.getParent();
@@ -854,7 +872,7 @@ public class EntityPathExtractorImpl {
 			if (!node.getTag().toLowerCase().equals("table")) {
 
 				// WebPageNode containerNode = node.getParent();
-				WebPageNode containerNode = node;
+				IWebPageNode containerNode = node;
 				while (containerNode != null && !containerNode.getTag().toLowerCase().equals("table")) {
 					containerNode = containerNode.getParent();
 				}
@@ -878,5 +896,7 @@ public class EntityPathExtractorImpl {
 	public Collection<EntityPath> getEntityPaths() {
 		return this.termPaths;
 	}
+
+
 
 }

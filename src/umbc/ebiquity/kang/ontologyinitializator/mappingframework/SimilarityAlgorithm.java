@@ -18,7 +18,7 @@ import umbc.csee.ebiquity.ontologymatcher.algorithm.component.MSMLabelSimilarity
 import umbc.csee.ebiquity.ontologymatcher.config.AlgorithmMode.MAP_CARDINALITY;
 import umbc.ebiquity.kang.entityframework.object.Concept;
 import umbc.ebiquity.kang.entityframework.object.EntityNode;
-import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
+import umbc.ebiquity.kang.textprocessing.util.TextProcessingUtils;
 
 public class SimilarityAlgorithm {
 	

@@ -2,7 +2,7 @@ package umbc.ebiquity.kang.entityframework.object;
 
 import java.util.Comparator;
 
-import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
+import umbc.ebiquity.kang.textprocessing.util.TextProcessingUtils;
 
 public class EntityPathSorterByLeafNodeText implements Comparator<EntityPath>{
 

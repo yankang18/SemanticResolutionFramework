@@ -5,7 +5,7 @@ import umbc.ebiquity.kang.ontologyinitializator.ontology.OntoClassInfo;
 import umbc.ebiquity.kang.ontologyinitializator.repository.MappingInfoSchemaParameter.MappingRelationType;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMapping;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceClassificationEvidence;
-import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
+import umbc.ebiquity.kang.textprocessing.util.TextProcessingUtils;
 
 
 public class Concept2OntClassMapping implements Comparable<Concept2OntClassMapping>, IConcept2OntClassMapping {

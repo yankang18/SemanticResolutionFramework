@@ -33,7 +33,7 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyR
 import umbc.ebiquity.kang.ontologyinitializator.similarity.impl.OrderedWordListSimilarity;
 import umbc.ebiquity.kang.ontologyinitializator.similarity.impl.SimpleLabelSimilarity;
 import umbc.ebiquity.kang.ontologyinitializator.similarity.interfaces.ILabelSimilarity;
-import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
+import umbc.ebiquity.kang.textprocessing.util.TextProcessingUtils;
 
 public class Relation2PropertyMappingAlgorithm implements IRelation2PropertyMappingAlgorithm, IMappingAlgorithmComponent {
 	

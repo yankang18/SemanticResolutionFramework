@@ -1,6 +1,6 @@
 package umbc.ebiquity.kang.entityframework.object;
 
-import umbc.ebiquity.kang.webpageparser.impl.Link;
+import umbc.ebiquity.kang.websiteparser.object.Link;
 
 public class Entity {
 

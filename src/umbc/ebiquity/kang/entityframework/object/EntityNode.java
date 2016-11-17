@@ -1,7 +1,7 @@
 package umbc.ebiquity.kang.entityframework.object;
 
-import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
-import umbc.ebiquity.kang.webpageparser.impl.LeafNode;
+import umbc.ebiquity.kang.textprocessing.util.TextProcessingUtils;
+import umbc.ebiquity.kang.websiteparser.object.LeafNode;
 
 public class EntityNode {
 	

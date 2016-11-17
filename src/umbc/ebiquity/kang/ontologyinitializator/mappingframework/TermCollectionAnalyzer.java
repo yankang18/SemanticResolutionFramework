@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
-import umbc.ebiquity.kang.textprocessing.impl.CombinationInOrderPhraseExtractor;
-import umbc.ebiquity.kang.textprocessing.interfaces.IPhraseExtractor;
+import umbc.ebiquity.kang.textprocessing.phraseextractor.IPhraseExtractor;
+import umbc.ebiquity.kang.textprocessing.phraseextractor.impl.CombinationInOrderPhraseExtractor;
+import umbc.ebiquity.kang.textprocessing.util.TextProcessingUtils;
 
 public class TermCollectionAnalyzer {
 

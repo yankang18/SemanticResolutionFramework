@@ -14,9 +14,9 @@ import umbc.ebiquity.kang.ontologyinitializator.mappingframework.Phrase;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.SubString;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.algorithm.interfaces.ILexicalFeatureExtractor;
 import umbc.ebiquity.kang.ontologyinitializator.repository.test.POSTest;
-import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
-import umbc.ebiquity.kang.textprocessing.impl.SequenceInReversedOrderPhraseExtractor;
-import umbc.ebiquity.kang.textprocessing.interfaces.IPhraseExtractor;
+import umbc.ebiquity.kang.textprocessing.phraseextractor.IPhraseExtractor;
+import umbc.ebiquity.kang.textprocessing.phraseextractor.impl.SequenceInReversedOrderPhraseExtractor;
+import umbc.ebiquity.kang.textprocessing.util.TextProcessingUtils;
 
 public class SimpleLexicalFeatureExtractor implements ILexicalFeatureExtractor {
 

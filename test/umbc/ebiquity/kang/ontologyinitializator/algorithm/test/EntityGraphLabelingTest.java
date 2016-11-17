@@ -12,9 +12,9 @@ import umbc.ebiquity.kang.entityframework.impl.EntityPathExtractor;
 import umbc.ebiquity.kang.entityframework.impl.InstanceConceptSetExtractionAlgorithm;
 import umbc.ebiquity.kang.entityframework.impl.RelationExtractionAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
-import umbc.ebiquity.kang.webpageparser.Crawler;
-import umbc.ebiquity.kang.webpageparser.impl.SimplePageTemplatesSplitter;
-import umbc.ebiquity.kang.webpageparser.impl.WebSiteCrawler;
+import umbc.ebiquity.kang.websiteparser.ICrawler;
+import umbc.ebiquity.kang.websiteparser.impl.WebSiteCrawler;
+import umbc.ebiquity.kang.websiteparser.impl.WebSiteCrawlerFactory;
 
 public class EntityGraphLabelingTest {
 	
@@ -30,10 +30,10 @@ public class EntityGraphLabelingTest {
 //		String webSiteURLString = "http://www.lincolnparkboring.com";
 		String webSiteURLString = "http://www.princetonind.com";
 		URL webSiteURL = new URL(webSiteURLString); 
-		Crawler crawler = WebSiteCrawler.createCrawler(webSiteURL); 
+		ICrawler crawler = WebSiteCrawlerFactory.createCrawler(webSiteURL); 
 		crawler.crawl();
 		IEntityPathExtractor extractor = EntityPathExtractor.create(crawler);
-		IEntityGraph entityGraph = EntityGraph.create(webSiteURL, extractor.extractor());
+		IEntityGraph entityGraph = EntityGraph.create(webSiteURL, extractor.extract());
 //		entityGraph.printForwardTermGraphNodesAfterAnalyzing();
 //		entityGraph.analyzeEntityGraph();
 //		entityGraph.showInstanceConceptSet();
@@ -63,14 +63,14 @@ public class EntityGraphLabelingTest {
 	public void InitializeEntityGraphTest() throws Exception {  
 		String webSiteURLString = "http://www.accutrex.com";
 		URL webSiteURL = new URL(webSiteURLString);
-		Crawler crawler = WebSiteCrawler.createCrawler(webSiteURL, 1);
+		ICrawler crawler = WebSiteCrawlerFactory.createCrawler(webSiteURL, 1);
 //		List<WebPage> webPages = crawler.crawl();
 		
 //		WebPagePathsImpl webPagePath = new WebPagePathsImpl(webPages.get(0));  
 //		webPagePath.construct();
 		IEntityPathExtractor extractor = EntityPathExtractor.create(crawler);
 //		EntityPathExtractorImpl extractor = new EntityPathExtractorImpl(crawler, new SimplePageTemplatesSplitter());
-		entityGraph = (EntityGraph) EntityGraph.create(webSiteURL, extractor.extractor());
+		entityGraph = (EntityGraph) EntityGraph.create(webSiteURL, extractor.extract());
 //		entityGraph.printForwardTermGraphNodesAfterAnalyzing();
 		
 		RelationExtractionAlgorithmTest();

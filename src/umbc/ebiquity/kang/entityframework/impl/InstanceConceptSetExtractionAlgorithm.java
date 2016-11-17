@@ -11,8 +11,8 @@ import umbc.ebiquity.kang.entityframework.IInstanceConceptSetExtractionAlgorithm
 import umbc.ebiquity.kang.entityframework.object.Concept;
 import umbc.ebiquity.kang.entityframework.object.EntityNode;
 import umbc.ebiquity.kang.ontologyinitializator.mappingframework.LongestCommonPhraseAnalyzer;
-import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
-import umbc.ebiquity.kang.textprocessing.stemmer.PluralStemmer;
+import umbc.ebiquity.kang.textprocessing.stemmer.impl.PluralStemmer;
+import umbc.ebiquity.kang.textprocessing.util.TextProcessingUtils;
 
 public class InstanceConceptSetExtractionAlgorithm implements IInstanceConceptSetExtractionAlgorithm{
 	

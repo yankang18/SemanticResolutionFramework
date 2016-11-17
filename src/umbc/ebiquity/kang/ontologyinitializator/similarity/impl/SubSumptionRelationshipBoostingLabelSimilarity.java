@@ -6,7 +6,7 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.QGramsDistance;
 import uk.ac.shef.wit.simmetrics.tokenisers.TokeniserQGram2Extended;
 import umbc.ebiquity.kang.ontologyinitializator.similarity.interfaces.ILabelSimilarity;
 import umbc.ebiquity.kang.ontologyinitializator.similarity.interfaces.IWordListSimilarity;
-import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
+import umbc.ebiquity.kang.textprocessing.util.TextProcessingUtils;
 
 public class SubSumptionRelationshipBoostingLabelSimilarity implements ILabelSimilarity {
 	

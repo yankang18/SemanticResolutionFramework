@@ -20,8 +20,8 @@ import umbc.ebiquity.kang.ontologyinitializator.similarity.impl.SimpleLabelSimil
 import umbc.ebiquity.kang.ontologyinitializator.similarity.impl.CardinalitySensitiveSetSimilarity;
 import umbc.ebiquity.kang.ontologyinitializator.similarity.interfaces.ISetSimilarity;
 import umbc.ebiquity.kang.ontologyinitializator.similarity.interfaces.IWordListSimilarity;
-import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
-import umbc.ebiquity.kang.textprocessing.impl.SequenceInReversedOrderPhraseExtractor;
+import umbc.ebiquity.kang.textprocessing.phraseextractor.impl.SequenceInReversedOrderPhraseExtractor;
+import umbc.ebiquity.kang.textprocessing.util.TextProcessingUtils;
 
 public class RelationCluster {
 	 

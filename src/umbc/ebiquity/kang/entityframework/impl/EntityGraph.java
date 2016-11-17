@@ -22,8 +22,8 @@ import umbc.ebiquity.kang.entityframework.object.Entity;
 import umbc.ebiquity.kang.entityframework.object.EntityNode;
 import umbc.ebiquity.kang.entityframework.object.EntityPath;
 import umbc.ebiquity.kang.entityframework.object.EntityValidator;
-import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
-import umbc.ebiquity.kang.webpageparser.impl.LeafNode;
+import umbc.ebiquity.kang.textprocessing.util.TextProcessingUtils;
+import umbc.ebiquity.kang.websiteparser.object.LeafNode;
 
 public class EntityGraph implements IEntityGraphRelationExtractor, IEntityGraphInstanceConceptsExtractor {
 

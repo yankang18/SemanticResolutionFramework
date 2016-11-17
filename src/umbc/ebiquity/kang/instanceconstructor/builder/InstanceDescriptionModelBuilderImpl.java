@@ -19,7 +19,7 @@ import umbc.ebiquity.kang.instanceconstructor.impl.InstanceDescriptionModel;
 import umbc.ebiquity.kang.instanceconstructor.impl.Triple;
 import umbc.ebiquity.kang.instanceconstructor.impl.Triple.BuiltinType;
 import umbc.ebiquity.kang.instanceconstructor.impl.Triple.PredicateType;
-import umbc.ebiquity.kang.webpageparser.impl.LeafNode;
+import umbc.ebiquity.kang.websiteparser.object.LeafNode;
 
 public class InstanceDescriptionModelBuilderImpl implements IInstanceDescriptionModelBuilder {
 

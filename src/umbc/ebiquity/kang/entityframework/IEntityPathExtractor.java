@@ -1,11 +1,9 @@
 package umbc.ebiquity.kang.entityframework;
 
-import java.net.URL;
-import java.util.Collection;
+import java.util.List;
 
 import umbc.ebiquity.kang.entityframework.object.EntityPath;
 
 public interface IEntityPathExtractor {
-	public Collection<EntityPath> extractor();
-	public URL getWebSiteURL();
+	List<EntityPath> extract();
 }

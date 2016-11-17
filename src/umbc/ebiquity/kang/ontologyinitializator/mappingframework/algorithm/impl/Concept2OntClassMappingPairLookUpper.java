@@ -16,7 +16,7 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.impl.Concept2OntClass
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMappingStatistics;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufacturingLexicalMappingRecordsReader;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
-import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
+import umbc.ebiquity.kang.textprocessing.util.TextProcessingUtils;
 
 public class Concept2OntClassMappingPairLookUpper implements IConcept2OntClassMappingPairLookUpper {
 

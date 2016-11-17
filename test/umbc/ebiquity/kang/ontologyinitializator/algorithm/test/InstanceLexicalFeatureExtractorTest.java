@@ -16,7 +16,7 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.factories.ClassifiedI
 import umbc.ebiquity.kang.ontologyinitializator.repository.factories.OntologyRepositoryFactory;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstancesAccessor;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
-import umbc.ebiquity.kang.textprocessing.impl.SequenceInReversedOrderPhraseExtractor;
+import umbc.ebiquity.kang.textprocessing.phraseextractor.impl.SequenceInReversedOrderPhraseExtractor;
 
 public class InstanceLexicalFeatureExtractorTest {
 

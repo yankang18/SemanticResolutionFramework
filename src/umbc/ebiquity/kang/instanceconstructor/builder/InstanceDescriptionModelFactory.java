@@ -6,12 +6,15 @@ import java.net.URL;
 import umbc.ebiquity.kang.entityframework.IEntityGraph;
 import umbc.ebiquity.kang.entityframework.IEntityPathExtractor;
 import umbc.ebiquity.kang.entityframework.impl.EntityGraph;
-import umbc.ebiquity.kang.entityframework.impl.EntityPathExtractor;
+import umbc.ebiquity.kang.entityframework.impl.EntityPathExtractorImpl;
 import umbc.ebiquity.kang.instanceconstructor.IInstanceDescriptionModel;
 import umbc.ebiquity.kang.instanceconstructor.impl.FileModelRepository;
 import umbc.ebiquity.kang.ontologyinitializator.utilities.FileUtility;
-import umbc.ebiquity.kang.webpageparser.Crawler;
-import umbc.ebiquity.kang.webpageparser.impl.WebSiteCrawler;
+import umbc.ebiquity.kang.websiteparser.ICrawledWebSite;
+import umbc.ebiquity.kang.websiteparser.impl.WebSiteCrawlerFactory;
+import umbc.ebiquity.kang.websiteparser.support.IPathFocusedWebSiteParser;
+import umbc.ebiquity.kang.websiteparser.support.IWebSiteParsedPathsHolder;
+import umbc.ebiquity.kang.websiteparser.support.impl.PathFocusedWebSiteParserFactory;
 
 public class InstanceDescriptionModelFactory {
 
@@ -22,12 +25,13 @@ public class InstanceDescriptionModelFactory {
 
 	public static IInstanceDescriptionModel construct(URL webSiteURL, String modelName) throws IOException {
 
-		Crawler crawler = WebSiteCrawler.createCrawler(webSiteURL);
-		crawler.crawl();
-
+		ICrawledWebSite website = WebSiteCrawlerFactory.createCrawler(webSiteURL).crawl();
+		IPathFocusedWebSiteParser parser = PathFocusedWebSiteParserFactory.createParser(website);
+		IWebSiteParsedPathsHolder webSitePathHolder = parser.parse();
+		
 		// extract Entity Paths and create Entity Graph
-		IEntityPathExtractor extractor = EntityPathExtractor.create(crawler);
-		IEntityGraph entityGraph = EntityGraph.create(webSiteURL, extractor.extractor());
+		IEntityPathExtractor extractor = EntityPathExtractorImpl.create(webSitePathHolder);
+		IEntityGraph entityGraph = EntityGraph.create(webSiteURL, extractor.extract());
 		entityGraph.labelEntityGraph();
 
 		// extract triples from the Entity Graph
@@ -41,6 +45,6 @@ public class InstanceDescriptionModelFactory {
 		URL webSiteURL = new URL(webSiteURLString);
 		IInstanceDescriptionModel extractedTripleStore = InstanceDescriptionModelFactory.construct(webSiteURL);
 		FileModelRepository repo = new FileModelRepository();
-		repo.save(extractedTripleStore, "testRepo");
+		repo.save(extractedTripleStore, "testRepo5");
 	}
 }

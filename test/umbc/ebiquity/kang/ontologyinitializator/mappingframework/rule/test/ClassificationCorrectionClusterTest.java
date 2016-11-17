@@ -26,7 +26,7 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceC
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IInstanceRecord;
 import umbc.ebiquity.kang.ontologyinitializator.testdata.FakeDataCreator;
-import umbc.ebiquity.kang.textprocessing.impl.SequenceInReversedOrderPhraseExtractor;
+import umbc.ebiquity.kang.textprocessing.phraseextractor.impl.SequenceInReversedOrderPhraseExtractor;
 
 
 public class ClassificationCorrectionClusterTest {

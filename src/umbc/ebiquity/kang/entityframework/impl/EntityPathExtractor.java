@@ -19,22 +19,22 @@ import umbc.ebiquity.kang.entityframework.IEntityPathExtractor;
 import umbc.ebiquity.kang.entityframework.object.Entity;
 import umbc.ebiquity.kang.entityframework.object.EntityPath;
 import umbc.ebiquity.kang.entityframework.object.Entity.TermType;
-import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
-import umbc.ebiquity.kang.webpageparser.Crawler;
-import umbc.ebiquity.kang.webpageparser.WebPage;
-import umbc.ebiquity.kang.webpageparser.impl.HTMLTags;
-import umbc.ebiquity.kang.webpageparser.impl.LeafNode;
-import umbc.ebiquity.kang.webpageparser.impl.SimplePageTemplatesSplitter;
-import umbc.ebiquity.kang.webpageparser.impl.WebPageImpl;
-import umbc.ebiquity.kang.webpageparser.impl.WebPageNode;
-import umbc.ebiquity.kang.webpageparser.impl.WebPathPath;
-import umbc.ebiquity.kang.webpageparser.impl.LeafNode.LeafType;
+import umbc.ebiquity.kang.textprocessing.util.TextProcessingUtils;
+import umbc.ebiquity.kang.websiteparser.ICrawledWebSite;
+import umbc.ebiquity.kang.websiteparser.ICrawler;
+import umbc.ebiquity.kang.websiteparser.IWebPage;
+import umbc.ebiquity.kang.websiteparser.impl.SimplePageTemplatesSplitter;
+import umbc.ebiquity.kang.websiteparser.impl.WebPageImpl;
+import umbc.ebiquity.kang.websiteparser.impl.WebPageNode;
+import umbc.ebiquity.kang.websiteparser.impl.WebPathPath;
+import umbc.ebiquity.kang.websiteparser.object.HTMLTags;
+import umbc.ebiquity.kang.websiteparser.object.LeafNode;
+import umbc.ebiquity.kang.websiteparser.object.LeafNode.LeafType;
 
 public class EntityPathExtractor implements IEntityPathExtractor {
-	
 	private Collection<WebPathPath> templatePaths;
-	private Collection<EntityPath> termPaths;
-	private Collection<WebPage> webPages;
+	private List<EntityPath> termPaths;
+	private List<IWebPage> webPages;
 	private SimplePageTemplatesSplitter templatesSplitter;
 //	private String webSiteHomeUrl;
 	private int numWebpage = 0;
@@ -42,22 +42,23 @@ public class EntityPathExtractor implements IEntityPathExtractor {
 	
 	private URL webSiteURL;
 	
-	public static IEntityPathExtractor create(Crawler crawler) throws IOException { 
+	public static IEntityPathExtractor create(ICrawler crawler) throws IOException { 
 		return new EntityPathExtractor(crawler, new SimplePageTemplatesSplitter());
 	}
 
-	EntityPathExtractor(Crawler crawler, SimplePageTemplatesSplitter templatesSplitter) throws IOException{ 
-		this.webSiteURL = crawler.getWebSiteURL();
-		this.webPages = crawler.getCrawledWebPages();
+	EntityPathExtractor(ICrawler crawler, SimplePageTemplatesSplitter templatesSplitter) throws IOException{ 
+		ICrawledWebSite crawledWebSite = crawler.getCrawledWebSite();
+		this.webSiteURL = crawledWebSite.getWebSiteURL();
+		this.webPages = crawler.getCrawledWebSite().getWebPages();
 		this.templatesSplitter = templatesSplitter;
 		this.termPaths = new ArrayList<EntityPath>();
 	}
 	
-	public Collection<EntityPath> listInstancePaths(){
-		return this.termPaths;
-	}
+//	public Collection<EntityPath> listInstancePaths(){
+//		return this.termPaths;
+//	}
 
-	public Collection<EntityPath> extractor() {
+	public List<EntityPath> extract() {
 		System.out.println("Constructing Entity Paths ...");
 		if (this.templatesSplitter != null) {
 			templatePaths = templatesSplitter.splitPageTemplates(webPages);
@@ -65,7 +66,7 @@ public class EntityPathExtractor implements IEntityPathExtractor {
 			templatePaths = new HashSet<WebPathPath>();
 		}
 		numWebpage = webPages.size();
-		for (WebPage webPage : webPages) {
+		for (IWebPage webPage : webPages) {
 			webPageIndex++;
 			termPaths.addAll(this.constructEntityPaths(webPage, webPageIndex));
 		}
@@ -95,10 +96,11 @@ public class EntityPathExtractor implements IEntityPathExtractor {
 		return termPaths;
 	}
 	
-	public Collection<EntityPath> constructEntityPaths(WebPage webPage, int webPageIndex) {
+	public Collection<EntityPath> constructEntityPaths(IWebPage webPage, int webPageIndex) {
 //		System.out.println("-------------------------------------------------------------------------------------------------");
 		System.out.println(" <" + webPage.getPageURLAsString() + ">... ");
 		
+		Set<EntityPath> entityPaths = new LinkedHashSet<EntityPath>();
 		Set<String> visitedWebPagePaths = new HashSet<String>();
 		Map<String, EntityPath> constructedEntityPaths = new HashMap<String, EntityPath>();
 		List<WebPathPath> webPagePaths = webPage.listWebTagPathsWithTextContent();
@@ -184,22 +186,22 @@ public class EntityPathExtractor implements IEntityPathExtractor {
 			pathLevel++;
 			Collection<Entity> globalTopics = this.getTopicsFromAncestors(parentNode, pathIndex, webPagePaths, pathLevel, webPageIndex);
 			
-//			System.out.println("# leaf node topics:");
-//			for (Entity topic : leafNodeTopics) {
-//				System.out.println("        " + topic.getEntityLabel());
-//			}
-//			System.out.println("# local topics:");
-//			for (Entity topic : localTopics) {
-//				System.out.println("        " + topic.getEntityLabel());
-//			}
-//			System.out.println("# regional topics:");
-//			for (Entity topic : regionalTopics) {
-//				System.out.println("        " + topic.getEntityLabel());
-//			}
-//			System.out.println("# ancestor topics:");
-//			for (Entity topic : globalTopics) {
-//				System.out.println("        " + topic.getEntityLabel());
-//			}
+			// System.out.println("# leaf node topics:");
+			// for (Entity topic : leafNodeTopics) {
+			// System.out.println(" " + topic.getEntityLabel());
+			// }
+			// System.out.println("# local topics:");
+			// for (Entity topic : localTopics) {
+			// System.out.println(" " + topic.getEntityLabel());
+			// }
+			// System.out.println("# regional topics:");
+			// for (Entity topic : regionalTopics) {
+			// System.out.println(" " + topic.getEntityLabel());
+			// }
+			// System.out.println("# ancestor topics:");
+			// for (Entity topic : globalTopics) {
+			// System.out.println(" " + topic.getEntityLabel());
+			// }
 			
 //			allEntities.addAll(leafNodeTopics);
 			allEntities.addAll(localTopics);
@@ -211,18 +213,23 @@ public class EntityPathExtractor implements IEntityPathExtractor {
 			 */
 			EntityPath termPath = new EntityPath(webPagePath, leafNode);
 			termPath.addEntities(allEntities);
-			webPage.addEntityPath(termPath);
+//			webPage.addEntityPath(termPath);
+			entityPaths.add(termPath); 
 			constructedEntityPaths.put(pathID, termPath);
-//			System.out.print("# All topics: ");
-//			for(Entity topic : allEntities) {
-//				System.out.print(" {" + topic.getEntityLabel() + "} ");
-//			}
-//			System.out.println("]");
-//			System.out.println("<" + pathIndex + " of " + size + ">");
-//			System.out.println("webpage <" + this.webPageIndex + " of " + this.numWebpage + ">");
+			
+			
+			
+			// System.out.print("# All topics: ");
+			// for(Entity topic : allEntities) {
+			// System.out.print(" {" + topic.getEntityLabel() + "} ");
+			// }
+			// System.out.println("]");
+			// System.out.println("<" + pathIndex + " of " + size + ">");
+			// System.out.println("webpage <" + this.webPageIndex + " of " +
+			// this.numWebpage + ">");
 		}
-		
-		return webPage.getEntityPaths();
+		return entityPaths;
+//		return webPage.getEntityPaths();
 	}
 	
 	
@@ -893,10 +900,10 @@ public class EntityPathExtractor implements IEntityPathExtractor {
 		}
 	}
 
-	@Override
-	public URL getWebSiteURL() {
-		return webSiteURL;
-	}
+//	@Override
+//	public URL getWebSiteURL() {
+//		return webSiteURL;
+//	}
 	
 
 }

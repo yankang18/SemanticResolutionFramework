@@ -28,7 +28,7 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.impl.MatchedOntProper
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassificationCorrectionRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IConcept2OntClassMapping;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
-import umbc.ebiquity.kang.textprocessing.TextProcessingUtils;
+import umbc.ebiquity.kang.textprocessing.util.TextProcessingUtils;
 
 public class InstanceClassificationAlgorithm implements IInstanceClassificationAlgorithm,  IMappingAlgorithmComponent {
 	

@@ -40,7 +40,7 @@ import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IManufactu
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IOntologyRepository;
 import umbc.ebiquity.kang.ontologyinitializator.repository.interfaces.IClassifiedInstancesRepository;
 import umbc.ebiquity.kang.ontologyinitializator.utilities.FileUtility;
-import umbc.ebiquity.kang.textprocessing.impl.SequenceInReversedOrderPhraseExtractor;
+import umbc.ebiquity.kang.textprocessing.phraseextractor.impl.SequenceInReversedOrderPhraseExtractor;
 
 public class ClassifiedInstancesRepositoryFactory {
 
