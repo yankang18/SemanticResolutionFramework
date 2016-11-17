@@ -9,7 +9,7 @@ import java.util.Set;
 import org.jsoup.nodes.Document;
 
 import umbc.ebiquity.kang.entityframework.object.EntityPath;
-import umbc.ebiquity.kang.websiteparser.impl.WebPathPath;
+import umbc.ebiquity.kang.websiteparser.impl.WebPagePath;
 import umbc.ebiquity.kang.websiteparser.object.CrawlerUrl;
 
 public interface IWebPage {
@@ -32,7 +32,7 @@ public interface IWebPage {
 
 	Document getWebPageDocument();
 
-	List<WebPathPath> listWebTagPathsWithTextContent();
+	List<WebPagePath> listWebTagPathsWithTextContent();
 
 //	void addEntityPath(EntityPath termPath);
 //

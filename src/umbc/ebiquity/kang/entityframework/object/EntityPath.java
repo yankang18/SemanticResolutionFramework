@@ -5,15 +5,12 @@ import java.util.Collection;
 import java.util.List;
 
 import umbc.ebiquity.kang.websiteparser.IWebPagePath;
-import umbc.ebiquity.kang.websiteparser.impl.WebPageImpl;
-import umbc.ebiquity.kang.websiteparser.impl.WebPathPath;
 import umbc.ebiquity.kang.websiteparser.object.LeafNode;
 import umbc.ebiquity.kang.websiteparser.object.LeafNode.LeafType;
 
 public class EntityPath {
 
 	private IWebPagePath path;
-	private WebPageImpl webPage;
 	private Collection<Entity> entityPath;
 	private LeafNode leafNode;
 	private String topDownPathString;

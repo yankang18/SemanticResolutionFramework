@@ -3,7 +3,7 @@ package umbc.ebiquity.kang.websiteparser.support.impl;
 import java.util.List;
 
 import umbc.ebiquity.kang.websiteparser.IWebPagePath;
-import umbc.ebiquity.kang.websiteparser.impl.WebPathPath;
+import umbc.ebiquity.kang.websiteparser.impl.WebPagePath;
 import umbc.ebiquity.kang.websiteparser.object.CrawlerUrl;
 import umbc.ebiquity.kang.websiteparser.support.IWebPageParsedPathsHolder;
 

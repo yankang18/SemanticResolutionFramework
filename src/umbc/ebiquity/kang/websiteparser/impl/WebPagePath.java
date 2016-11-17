@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import umbc.ebiquity.kang.textprocessing.util.TextProcessingUtils;
 import umbc.ebiquity.kang.websiteparser.IWebPagePath;
 
-public class WebPathPath implements IWebPagePath {
+public class WebPagePath implements IWebPagePath {
 
 	private String pathId;
 	private LinkedList<WebPageNode> nodeList;
@@ -15,7 +15,7 @@ public class WebPathPath implements IWebPagePath {
 	private boolean isPathIdCreated = false;
 	private String pathPattern;
 	
-	public WebPathPath(){
+	public WebPagePath(){
 		pathId = null;
 		nodeList = new LinkedList<WebPageNode>();
 	}
@@ -56,8 +56,8 @@ public class WebPathPath implements IWebPagePath {
 	}
 	
 	@Override
-	public WebPathPath clone(){
-		WebPathPath newPath = new WebPathPath();
+	public WebPagePath clone(){
+		WebPagePath newPath = new WebPagePath();
 		newPath.setPathID(this.getPathID());
 		newPath.setClonedNodes(this.getClonedNodes());
 		return newPath;
@@ -156,6 +156,14 @@ public class WebPathPath implements IWebPagePath {
 		return nodeList.get(nodeList.size() - 2);
 	}
 	
+	public void setHost(String host) {
+		this.host = host;
+	}
+
+	public String getHost() {
+		return host;
+	}
+	
 	@Override
 	public int hashCode(){
 		return this.getPathPattern().hashCode();
@@ -164,15 +172,7 @@ public class WebPathPath implements IWebPagePath {
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
-		WebPathPath webPagePath = (WebPathPath) obj;
+		WebPagePath webPagePath = (WebPagePath) obj;
 		return this.getPathPattern().equals(webPagePath.getPathPattern());
-	}
-
-	public void setHost(String host) {
-		this.host = host;
-	}
-
-	public String getHost() {
-		return host;
 	}
 }

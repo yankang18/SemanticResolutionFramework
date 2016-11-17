@@ -12,14 +12,14 @@ import umbc.ebiquity.kang.websiteparser.IWebPage;
 
 public class SimplePageTemplatesSplitter{
 	
-	public Collection<WebPathPath> splitPageTemplates(Collection<IWebPage> originalWebPages) {
-		Map<String, WebPathPath> webSitePaths = new LinkedHashMap<String, WebPathPath>();
+	public Collection<WebPagePath> splitPageTemplates(Collection<IWebPage> originalWebPages) {
+		Map<String, WebPagePath> webSitePaths = new LinkedHashMap<String, WebPagePath>();
 		Map<String, Integer> webPagePathCounter = new LinkedHashMap<String, Integer>();
 		Map<String, List<String>> webPagePathProvenances = new LinkedHashMap<String, List<String>>();
 		Set<String> baseUrls = new HashSet<String>();
 		int numOfPages = originalWebPages.size();
 		for (IWebPage webPage : originalWebPages) {
-			Map<String, WebPathPath> webPagePaths = new LinkedHashMap<String, WebPathPath>();
+			Map<String, WebPagePath> webPagePaths = new LinkedHashMap<String, WebPagePath>();
 			//count # of base urls
 			String baseUrl = webPage.getBaseURL();
 			if(!baseUrls.contains(baseUrl)){
@@ -28,7 +28,7 @@ public class SimplePageTemplatesSplitter{
 			webPage.analyzeWebPage();
 			
 			// record paths (eliminate duplicated paths) of each web.
-			for (WebPathPath path : webPage.listWebTagPathsWithTextContent()) {
+			for (WebPagePath path : webPage.listWebTagPathsWithTextContent()) {
 				if (!webPagePaths.containsKey(path.getPathPattern())) {
 					webPagePaths.put(path.getPathPattern(), path);
 				}
@@ -36,7 +36,7 @@ public class SimplePageTemplatesSplitter{
 			
 			// record the occurrence of paths across web pages and the
 			// provenance of each path
-			for (WebPathPath path : webPagePaths.values()) {
+			for (WebPagePath path : webPagePaths.values()) {
 				
 				if (webSitePaths.containsKey(path.getPathPattern())) {
 					int pathOccurence = webPagePathCounter.get(path.getPathPattern());
@@ -56,10 +56,10 @@ public class SimplePageTemplatesSplitter{
 		int numOfBaseUrls = baseUrls.size();
 //		System.out.println("### number of base urls: " + numOfBaseUrls);
 //		System.out.println("### number of pages: " + numOfPages);
-		Collection<WebPathPath> templateWebPagePaths = new ArrayList<WebPathPath>();
+		Collection<WebPagePath> templateWebPagePaths = new ArrayList<WebPagePath>();
 		for (String key : webSitePaths.keySet()) {
 			int counter = webPagePathCounter.get(key);
-			WebPathPath path = webSitePaths.get(key);
+			WebPagePath path = webSitePaths.get(key);
 //			System.out.println("** " + counter + " " + key);
 //			System.out.println("** Path ID " + path.getPathID());
 			

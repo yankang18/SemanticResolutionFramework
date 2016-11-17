@@ -45,6 +45,6 @@ public class InstanceDescriptionModelFactory {
 		URL webSiteURL = new URL(webSiteURLString);
 		IInstanceDescriptionModel extractedTripleStore = InstanceDescriptionModelFactory.construct(webSiteURL);
 		FileModelRepository repo = new FileModelRepository();
-		repo.save(extractedTripleStore, "testRepo5");
+		repo.save(extractedTripleStore, "testRepo6");
 	}
 }

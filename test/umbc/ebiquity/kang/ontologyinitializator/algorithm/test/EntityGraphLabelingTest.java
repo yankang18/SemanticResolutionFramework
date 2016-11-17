@@ -12,9 +12,13 @@ import umbc.ebiquity.kang.entityframework.impl.EntityPathExtractor;
 import umbc.ebiquity.kang.entityframework.impl.InstanceConceptSetExtractionAlgorithm;
 import umbc.ebiquity.kang.entityframework.impl.RelationExtractionAlgorithm;
 import umbc.ebiquity.kang.ontologyinitializator.repository.FileRepositoryParameterConfiguration;
+import umbc.ebiquity.kang.websiteparser.ICrawledWebSite;
 import umbc.ebiquity.kang.websiteparser.ICrawler;
 import umbc.ebiquity.kang.websiteparser.impl.WebSiteCrawler;
 import umbc.ebiquity.kang.websiteparser.impl.WebSiteCrawlerFactory;
+import umbc.ebiquity.kang.websiteparser.support.IPathFocusedWebSiteParser;
+import umbc.ebiquity.kang.websiteparser.support.IWebSiteParsedPathsHolder;
+import umbc.ebiquity.kang.websiteparser.support.impl.PathFocusedWebSiteParserFactory;
 
 public class EntityGraphLabelingTest {
 	
@@ -31,8 +35,10 @@ public class EntityGraphLabelingTest {
 		String webSiteURLString = "http://www.princetonind.com";
 		URL webSiteURL = new URL(webSiteURLString); 
 		ICrawler crawler = WebSiteCrawlerFactory.createCrawler(webSiteURL); 
-		crawler.crawl();
-		IEntityPathExtractor extractor = EntityPathExtractor.create(crawler);
+		ICrawledWebSite website = crawler.crawl();
+		IPathFocusedWebSiteParser parser = PathFocusedWebSiteParserFactory.createParser(website);
+		IWebSiteParsedPathsHolder webSitePathHolder = parser.parse();
+		IEntityPathExtractor extractor = EntityPathExtractor.create(webSitePathHolder);
 		IEntityGraph entityGraph = EntityGraph.create(webSiteURL, extractor.extract());
 //		entityGraph.printForwardTermGraphNodesAfterAnalyzing();
 //		entityGraph.analyzeEntityGraph();
@@ -64,11 +70,14 @@ public class EntityGraphLabelingTest {
 		String webSiteURLString = "http://www.accutrex.com";
 		URL webSiteURL = new URL(webSiteURLString);
 		ICrawler crawler = WebSiteCrawlerFactory.createCrawler(webSiteURL, 1);
-//		List<WebPage> webPages = crawler.crawl();
+		
+ 		ICrawledWebSite website = crawler.crawl();
+		IPathFocusedWebSiteParser parser = PathFocusedWebSiteParserFactory.createParser(website);
+		IWebSiteParsedPathsHolder webSitePathHolder = parser.parse();
 		
 //		WebPagePathsImpl webPagePath = new WebPagePathsImpl(webPages.get(0));  
 //		webPagePath.construct();
-		IEntityPathExtractor extractor = EntityPathExtractor.create(crawler);
+		IEntityPathExtractor extractor = EntityPathExtractor.create(webSitePathHolder);
 //		EntityPathExtractorImpl extractor = new EntityPathExtractorImpl(crawler, new SimplePageTemplatesSplitter());
 		entityGraph = (EntityGraph) EntityGraph.create(webSiteURL, extractor.extract());
 //		entityGraph.printForwardTermGraphNodesAfterAnalyzing();

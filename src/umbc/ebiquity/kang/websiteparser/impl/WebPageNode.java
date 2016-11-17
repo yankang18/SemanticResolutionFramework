@@ -21,7 +21,7 @@ public class WebPageNode implements IWebPageNode{
 //	private String tag;
 	private WebPageNode parent;
 	private WebPageNode child;
-	private WebPathPath residePath;
+	private WebPagePath residePath;
 	
 	private WebTagNodeType nodeType;
 	private String prefixPathID;
@@ -239,7 +239,7 @@ public class WebPageNode implements IWebPageNode{
 		return parent;
 	}
 
-	public void setResidePath(WebPathPath residePath) {
+	public void setResidePath(WebPagePath residePath) {
 		this.residePath = residePath;
 	}
 
@@ -247,7 +247,7 @@ public class WebPageNode implements IWebPageNode{
 		return residePath.getPathID();
 	}
 	
-	public WebPathPath getResidePath() {
+	public WebPagePath getResidePath() {
 		return residePath;
 	}
 

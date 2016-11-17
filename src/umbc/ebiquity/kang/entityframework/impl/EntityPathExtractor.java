@@ -20,172 +20,137 @@ import umbc.ebiquity.kang.entityframework.object.Entity;
 import umbc.ebiquity.kang.entityframework.object.EntityPath;
 import umbc.ebiquity.kang.entityframework.object.Entity.TermType;
 import umbc.ebiquity.kang.textprocessing.util.TextProcessingUtils;
-import umbc.ebiquity.kang.websiteparser.ICrawledWebSite;
 import umbc.ebiquity.kang.websiteparser.ICrawler;
 import umbc.ebiquity.kang.websiteparser.IWebPage;
+import umbc.ebiquity.kang.websiteparser.IWebPageNode;
+import umbc.ebiquity.kang.websiteparser.IWebPagePath;
 import umbc.ebiquity.kang.websiteparser.impl.SimplePageTemplatesSplitter;
 import umbc.ebiquity.kang.websiteparser.impl.WebPageImpl;
 import umbc.ebiquity.kang.websiteparser.impl.WebPageNode;
-import umbc.ebiquity.kang.websiteparser.impl.WebPathPath;
+import umbc.ebiquity.kang.websiteparser.impl.WebPagePath;
 import umbc.ebiquity.kang.websiteparser.object.HTMLTags;
 import umbc.ebiquity.kang.websiteparser.object.LeafNode;
 import umbc.ebiquity.kang.websiteparser.object.LeafNode.LeafType;
+import umbc.ebiquity.kang.websiteparser.support.IWebPageParsedPathsHolder;
+import umbc.ebiquity.kang.websiteparser.support.IWebSiteParsedPathsHolder;
+import umbc.ebiquity.kang.websiteparser.support.impl.DefaultWebPagePathsParser;
 
 public class EntityPathExtractor implements IEntityPathExtractor {
-	private Collection<WebPathPath> templatePaths;
+	
+	// TODO: need to add a logger here
+	
+	private Collection<WebPagePath> templatePaths;
 	private List<EntityPath> termPaths;
-	private List<IWebPage> webPages;
+	private List<IWebPageParsedPathsHolder> webPages;
 	private SimplePageTemplatesSplitter templatesSplitter;
-//	private String webSiteHomeUrl;
+//	 private String webSiteHomeUrl;
 	private int numWebpage = 0;
 	private int webPageIndex = 0;
-	
+
 	private URL webSiteURL;
-	
-	public static IEntityPathExtractor create(ICrawler crawler) throws IOException { 
-		return new EntityPathExtractor(crawler, new SimplePageTemplatesSplitter());
+
+	public static IEntityPathExtractor create(IWebSiteParsedPathsHolder parsedPathsHolder) throws IOException {
+		return new EntityPathExtractor(parsedPathsHolder, null);
 	}
 
-	EntityPathExtractor(ICrawler crawler, SimplePageTemplatesSplitter templatesSplitter) throws IOException{ 
-		ICrawledWebSite crawledWebSite = crawler.getCrawledWebSite();
-		this.webSiteURL = crawledWebSite.getWebSiteURL();
-		this.webPages = crawler.getCrawledWebSite().getWebPages();
+	EntityPathExtractor(IWebSiteParsedPathsHolder parsedPathsHolder, SimplePageTemplatesSplitter templatesSplitter) {
+		this.webPages = parsedPathsHolder.getWebPageParsedPathHolders();
+		this.webSiteURL = parsedPathsHolder.getWebSiteURL();
 		this.templatesSplitter = templatesSplitter;
 		this.termPaths = new ArrayList<EntityPath>();
 	}
 	
-//	public Collection<EntityPath> listInstancePaths(){
-//		return this.termPaths;
-//	}
-
 	public List<EntityPath> extract() {
 		System.out.println("Constructing Entity Paths ...");
-		if (this.templatesSplitter != null) {
-			templatePaths = templatesSplitter.splitPageTemplates(webPages);
-		} else {
-			templatePaths = new HashSet<WebPathPath>();
-		}
-		numWebpage = webPages.size();
-		for (IWebPage webPage : webPages) {
-			webPageIndex++;
-			termPaths.addAll(this.constructEntityPaths(webPage, webPageIndex));
-		}
-		return termPaths;
-	}
-	
-	/**
-	 * FOR TEST ONLY
-	 * 
-	 * @param webPages
-	 * @return
-	 */
-	public Collection<EntityPath> constructEntityPaths(Collection<WebPageImpl> webPages) {
-		Collection<EntityPath> termPaths = new ArrayList<EntityPath>();
-		if (this.templatesSplitter != null) {
+//		if (this.templatesSplitter != null) {
 //			templatePaths = templatesSplitter.splitPageTemplates(webPages);
-		} else {
-			templatePaths = new HashSet<WebPathPath>();
-		}
+//		} 
 		numWebpage = webPages.size();
-		for (WebPageImpl webPage : webPages) {
+		for (IWebPageParsedPathsHolder webPage : webPages) {
 			webPageIndex++;
 			termPaths.addAll(this.constructEntityPaths(webPage, webPageIndex));
 		}
-		
-		
 		return termPaths;
 	}
-	
-	public Collection<EntityPath> constructEntityPaths(IWebPage webPage, int webPageIndex) {
-//		System.out.println("-------------------------------------------------------------------------------------------------");
-		System.out.println(" <" + webPage.getPageURLAsString() + ">... ");
-		
-		Set<EntityPath> entityPaths = new LinkedHashSet<EntityPath>();
+
+	private Collection<EntityPath> constructEntityPaths(IWebPageParsedPathsHolder webPage, int webPageIndex) {
+		// System.out.println("-------------------------------------------------------------------------------------------------");
+		// System.out.println(" <" + webPage.getPageURLString() + ">... ");
+
+		List<EntityPath> entityPaths = new ArrayList<EntityPath>();
 		Set<String> visitedWebPagePaths = new HashSet<String>();
 		Map<String, EntityPath> constructedEntityPaths = new HashMap<String, EntityPath>();
-		List<WebPathPath> webPagePaths = webPage.listWebTagPathsWithTextContent();
+		List<IWebPagePath> webPagePaths = webPage.listWebTagPathsWithTextContent();
 		int size = webPagePaths.size();
 		for (int pathIndex = 0; pathIndex < size; pathIndex++) {
-			WebPathPath webPagePath = webPagePaths.get(pathIndex);
-//			System.out.println(" <" + pathIndex + ">... ");
+			IWebPagePath webPagePath = webPagePaths.get(pathIndex);
+			// System.out.println(" <" + pathIndex + ">... ");
+
+			if(skipPath(webPagePath)){
+				continue;
+			}
 			
-			String pathID = webPagePath.getPathID(); 
+			String pathID = webPagePath.getPathID();
 			Collection<Entity> allEntities = new ArrayList<Entity>();
-			
-			/*
-			 * skip template path
-			 */
-//			if (templatePaths.contains(webPagePath)) {
-//				System.out.println("-> Skiped template path: " + pathID);
-//				continue;
-//			}
-			
-			/*
-			 * Skip Web Page Path that has already been visited. In other words,
-			 * the Term Path of this Web Page Path has already been created.
-			 */
+
+			// Skip Web Page Path that has already been visited. In other words,
+			// the Term Path of this Web Page Path has already been created.
 			if (visitedWebPagePaths.contains(pathID)) {
 				continue;
 			} else {
 				visitedWebPagePaths.add(pathID);
 			}
-			
-			/*
-			 * Get the last node (leaf node) in the Web Page Path
-			 */
-			WebPageNode lastNode = webPagePath.getLastNode();
+
+			 // Get the last node (leaf node) in the Web Page Path
+			IWebPageNode lastNode = webPagePath.getLastNode();
 			String tagName = lastNode.getTag();
 			String textualDescription = lastNode.getFullContent();
 			String nodePattern = lastNode.getNodePattern();
-			
-			
-			/*
-			 * 
-			 */
-//			if(!"text".equalsIgnoreCase(tagName)){
-//				continue;
-//			}
-			
-			// TODO: also should check if there is any CSS applied to this leaf node.
+
+			// if(!"text".equalsIgnoreCase(tagName)){
+			// continue;
+			// }
+
+			// TODO: also should check if there is any CSS applied to this leaf
+			// node.
 			LeafNode leafNode = new LeafNode(LeafType.Term, textualDescription);
-			
-			/*
-			 * If the last node has no textual description, skip this Web Page Path
-			 */
-			if(TextProcessingUtils.isStringEmpty(textualDescription)){
+
+			// If the last node has no textual description, skip this Web Page
+			// Path
+			if (TextProcessingUtils.isStringEmpty(textualDescription)) {
 				continue;
 			}
-			
-//			System.out.println("-> path: " + pathID + " ... ");
-//			System.out.println("-> leaf node: with tag [" + tagName + "] with content [" + textualDescription + "]");
-//			System.out.println("->            with pattern [" + nodePattern +"]");
-			
+
+			// System.out.println("-> path: " + pathID + " ... ");
+			// System.out.println("-> leaf node: with tag [" + tagName + "] with
+			// content [" + textualDescription + "]");
+			// System.out.println("-> with pattern [" + nodePattern +"]");
+
 			int pathLevel = 1;
-			
+
 			/*
 			 * Step 1: search the topics from the local area of current node.
 			 * Topics found here should have higher score, since they are
 			 * located in the same structure container with the possible
 			 * instances.
 			 */
-			pathLevel ++;
+			pathLevel++;
 			Collection<Entity> localTopics = this.getLocalTopics(lastNode, pathLevel, webPageIndex);
-			
-			
+
 			/*
-			 * Step 2: search the topics from the regional area of current node. 
+			 * Step 2: search the topics from the regional area of current node.
 			 */
-			WebPageNode structureNode = this.getContainerStructureNode(lastNode);
-			Collection<Entity> regionalTopics  = new ArrayList<Entity>();
+			IWebPageNode structureNode = this.getContainerStructureNode(lastNode);
+			Collection<Entity> regionalTopics = new ArrayList<Entity>();
 			pathLevel = this.getRegionalTopics(structureNode, pathIndex, webPagePaths, pathLevel, webPageIndex, regionalTopics);
-			
+
 			/*
-			 *  Step 3: search the topics from the ancestors of current node.
+			 * Step 3: search the topics from the ancestors of current node.
 			 */
-			WebPageNode parentNode = structureNode.getParent();
+			IWebPageNode parentNode = structureNode.getParent();
 			pathLevel++;
 			Collection<Entity> globalTopics = this.getTopicsFromAncestors(parentNode, pathIndex, webPagePaths, pathLevel, webPageIndex);
-			
+
 			// System.out.println("# leaf node topics:");
 			// for (Entity topic : leafNodeTopics) {
 			// System.out.println(" " + topic.getEntityLabel());
@@ -202,23 +167,19 @@ public class EntityPathExtractor implements IEntityPathExtractor {
 			// for (Entity topic : globalTopics) {
 			// System.out.println(" " + topic.getEntityLabel());
 			// }
-			
-//			allEntities.addAll(leafNodeTopics);
+
+			// allEntities.addAll(leafNodeTopics);
 			allEntities.addAll(localTopics);
 			allEntities.addAll(regionalTopics);
 			allEntities.addAll(globalTopics);
-			
+
 			/*
 			 * 
 			 */
-			EntityPath termPath = new EntityPath(webPagePath, leafNode);
-			termPath.addEntities(allEntities);
-//			webPage.addEntityPath(termPath);
-			entityPaths.add(termPath); 
-			constructedEntityPaths.put(pathID, termPath);
-			
-			
-			
+			EntityPath entityPath = new EntityPath(webPagePath, leafNode);
+			entityPath.addEntities(allEntities);
+			entityPaths.add(entityPath);
+			constructedEntityPaths.put(pathID, entityPath);
 			// System.out.print("# All topics: ");
 			// for(Entity topic : allEntities) {
 			// System.out.print(" {" + topic.getEntityLabel() + "} ");
@@ -228,28 +189,44 @@ public class EntityPathExtractor implements IEntityPathExtractor {
 			// System.out.println("webpage <" + this.webPageIndex + " of " +
 			// this.numWebpage + ">");
 		}
+
 		return entityPaths;
-//		return webPage.getEntityPaths();
 	}
-	
-	
-	private Collection<Entity> getTopicsFromAncestors(WebPageNode node, int structureNodeResidePathIndex,
-			List<WebPathPath> webPagePaths, int pathLevel, int webPageIndex) {
-		
-		Collection<Entity> topics = new ArrayList<Entity>();
-		if(node == null) {
+
+	/**
+	 * determine if the give path should be skipped or not.
+	 * 
+	 * @param webPagePath
+	 *            the web page path
+	 * @return true if this path should be skipped
+	 */
+	private boolean skipPath(IWebPagePath webPagePath) {
+		if (templatesSplitter == null) {
+			return false;
+		} else if (templatePaths.contains(webPagePath)) {
+			System.out.println("-> Skiped template path: " + webPagePath.getPathID());
+			return true;
+		}
+		return false;
+	}
+
+	private List<Entity> getTopicsFromAncestors(IWebPageNode node, int structureNodeResidePathIndex, List<IWebPagePath> webPagePaths,
+			int pathLevel, int webPageIndex) {
+
+		List<Entity> topics = new ArrayList<Entity>();
+		if (node == null) {
 			return topics;
 		}
-		
-//		System.out.println("-> getTopicsFromAncestors of: " + node.getPrefixPathID() + node.getTag());
-		
-		
+
+		// System.out.println("-> getTopicsFromAncestors of: " +
+		// node.getPrefixPathID() + node.getTag());
+
 		/*
 		 * Step 2: search the topics inside the structure container. Topics
 		 * found here should have higher score, since they are located in the
 		 * same structure container with the possible instances.
 		 */
-		pathLevel ++;
+		pathLevel++;
 		Collection<Entity> localTopics = this.getLocalTopics(node, pathLevel, webPageIndex);
 		int numOfLocalTopics = localTopics.size();
 		if (numOfLocalTopics != 0) {
@@ -260,45 +237,49 @@ public class EntityPathExtractor implements IEntityPathExtractor {
 		 * Step 3: search the topics from siblings of the structure container.
 		 * Topics found here should have relatively lower score.
 		 */
-		WebPageNode structureNode = this.getContainerStructureNode(node);
-		if(structureNode == null){
+		IWebPageNode structureNode = this.getContainerStructureNode(node);
+		if (structureNode == null) {
 			return topics;
 		}
-//		System.out.println("-> <structure node:" + structureNode.getPrefixPathID() + structureNode.getTag() + ">");
+		// System.out.println("-> <structure node:" +
+		// structureNode.getPrefixPathID() + structureNode.getTag() + ">");
 		pathLevel++;
-		Collection<Entity> regionalTopics  = new ArrayList<Entity>();
-//		Collection<Term> regionalTopics = this.getRegionalTopics(structureNode, structureNodeResidePathIndex, webPagePaths, pathLevel);
-		pathLevel = this.getRegionalTopics(structureNode, structureNodeResidePathIndex, webPagePaths, pathLevel,webPageIndex, regionalTopics);
+		List<Entity> regionalTopics = new ArrayList<Entity>();
+		// Collection<Term> regionalTopics =
+		// this.getRegionalTopics(structureNode, structureNodeResidePathIndex,
+		// webPagePaths, pathLevel);
+		pathLevel = this.getRegionalTopics(structureNode, structureNodeResidePathIndex, webPagePaths, pathLevel, webPageIndex,
+				regionalTopics);
 		int numOfRegionalTopics = regionalTopics.size();
 		if (numOfRegionalTopics != 0) {
 			topics.addAll(regionalTopics);
 		}
-		
+
 		/*
-		 *  Step 4: search the topics from the ancestors of current node.
+		 * Step 4: search the topics from the ancestors of current node.
 		 */
-		WebPageNode parentNode = structureNode.getParent();
+		IWebPageNode parentNode = structureNode.getParent();
 		pathLevel++;
-		Collection<Entity> ancestorTopics = this.getTopicsFromAncestors(parentNode, structureNodeResidePathIndex, webPagePaths, pathLevel, webPageIndex);
+		List<Entity> ancestorTopics = this.getTopicsFromAncestors(parentNode, structureNodeResidePathIndex, webPagePaths, pathLevel,
+				webPageIndex);
 		int numOfAncestorTopics = ancestorTopics.size();
-		if(numOfAncestorTopics != 0){
+		if (numOfAncestorTopics != 0) {
 			topics.addAll(ancestorTopics);
 		}
 		return topics;
-	} 
-
+	}
 
 	/***
 	 * 
 	 * @param leafNode
 	 * @return
 	 */
-	private Collection<Entity> getLeafNodeTopics(WebPageNode leafNode, int pathLevel, int webPageIndex){
+	private Collection<Entity> getLeafNodeTopics(WebPageNode leafNode, int pathLevel, int webPageIndex) {
 		Collection<Entity> topics = new ArrayList<Entity>();
 		for (WebPageNode childNode : leafNode.listChildren()) {
 			Collection<Entity> returnedTopics = this.extractTopics(childNode);
 			if (returnedTopics.size() > 0) {
-				for(Entity term : returnedTopics){
+				for (Entity term : returnedTopics) {
 					term.setScore(10);
 					term.setLevel(pathLevel);
 					term.setWebPageIndex(webPageIndex);
@@ -308,25 +289,25 @@ public class EntityPathExtractor implements IEntityPathExtractor {
 		}
 		return topics;
 	}
-	
+
 	/***
 	 * 
 	 * @param structureNode
 	 * @return
 	 */
-	private Collection<Entity> getLocalTopics(WebPageNode node, int pathLevel, int webPageIndex) {
-		
+	private Collection<Entity> getLocalTopics(IWebPageNode node, int pathLevel, int webPageIndex) {
+
 		Collection<Entity> topics = new ArrayList<Entity>();
-//		/*
-//		 * if current node corresponds to a data column of a table (Currently,
-//		 * only search table for possible topics).
-//		 */
+		// /*
+		// * if current node corresponds to a data column of a table (Currently,
+		// * only search table for possible topics).
+		// */
 		if ("td".equals(node.getTag().toLowerCase())) {
-			
+
 			/*
 			 * search row (tr) this data column (td) resides in
 			 */
-			WebPageNode tableRowNode = node;
+			IWebPageNode tableRowNode = node;
 			while (tableRowNode != null && !"tr".equals(tableRowNode.getTag().toLowerCase())) {
 				tableRowNode = tableRowNode.getParent();
 			}
@@ -361,7 +342,7 @@ public class EntityPathExtractor implements IEntityPathExtractor {
 					Entity term = extractTermFromUnitElement(firstTdElement);
 					if (term != null) {
 						term.setLevel(pathLevel);
-						
+
 						// here assume the first column contains header
 						term.setScore(7.0);
 						term.setWebPageIndex(webPageIndex);
@@ -371,20 +352,20 @@ public class EntityPathExtractor implements IEntityPathExtractor {
 				}
 			}
 		}
-		
+
 		/*
 		 * TEST
 		 */
-//		for (Entity term : topics) {
-//			System.out.print("{L} "+term.getEntityLabel() + " ");
-//		}
-//		if (topics.size() > 0) {
-//			System.out.println();
-//		}
-		
+		// for (Entity term : topics) {
+		// System.out.print("{L} "+term.getEntityLabel() + " ");
+		// }
+		// if (topics.size() > 0) {
+		// System.out.println();
+		// }
+
 		return topics;
 	}
-	
+
 	/***
 	 * 
 	 * @param structureNode
@@ -393,38 +374,42 @@ public class EntityPathExtractor implements IEntityPathExtractor {
 	 * @param pathLevel
 	 * @return
 	 */
-	private int getRegionalTopics(WebPageNode structureNode, int structureNodeResidePathIndex, List<WebPathPath> webPagePaths,
-			int pathLevel, int webPageIndex, Collection<Entity> topics) {
+	private int getRegionalTopics(IWebPageNode structureNode, int structureNodeResidePathIndex, List<IWebPagePath> webPagePaths, int pathLevel,
+			int webPageIndex, Collection<Entity> topics) {
 
-//		System.out.println("-> getRegionalTopics of: " + structureNode.getPrefixPathID() + "|" + structureNode.getTag());
-//		Collection<Term> topics = new ArrayList<Term>();
+		// System.out.println("-> getRegionalTopics of: " +
+		// structureNode.getPrefixPathID() + "|" + structureNode.getTag());
+		// Collection<Term> topics = new ArrayList<Term>();
 
 		int headerTagInteger = 0;
 		boolean headerTagFound = false;
 		boolean onlyHeaderTag = false;
 		for (int i = structureNodeResidePathIndex - 1; i >= 0; i--) {
 
-			WebPathPath path = webPagePaths.get(i);
-			
+			IWebPagePath path = webPagePaths.get(i);
+
 			/*
 			 * first to make sure we are searching siblings of structure node.
 			 */
 			if (path.getPathID().startsWith(structureNode.getPrefixPathID())) {
-				WebPageNode node = path.getNode(structureNode.getPrefixPathID());
-				
+				IWebPageNode node = path.getNode(structureNode.getPrefixPathID());
+
 				/*
 				 * to check if this sibling node has the same pattern as the
 				 * structure node. If they have the same pattern, ignore this
 				 * sibling and continue searching.
 				 */
-				if(node == null) continue;
+				if (node == null)
+					continue;
 				if (!structureNode.getNodePattern().equals(node.getNodePattern())) {
 					/*
 					 * TEST
 					 */
-//					System.out.println("  - Structure Node pattern: " + structureNode.getNodePattern());
-//					System.out.println("  - Node pattern: " + node.getNodePattern());
-//					
+					// System.out.println(" - Structure Node pattern: " +
+					// structureNode.getNodePattern());
+					// System.out.println(" - Node pattern: " +
+					// node.getNodePattern());
+					//
 					/*
 					 * (i) We always search concepts contained in header tags
 					 * (e.g., h1, h2,...). (ii) After the first time we have
@@ -460,7 +445,7 @@ public class EntityPathExtractor implements IEntityPathExtractor {
 									topic.setScore(HTMLTags.getScoreForHeaderTag(topic.getWrappingTag()));
 									topic.setLevel(pathLevel);
 									topic.setWebPageIndex(webPageIndex);
-									pathLevel ++;
+									pathLevel++;
 								} else {
 									topic.setScore(6.0);
 									topic.setLevel(pathLevel);
@@ -481,16 +466,16 @@ public class EntityPathExtractor implements IEntityPathExtractor {
 				break;
 			}
 		}
-		
+
 		/*
 		 * TEST
 		 */
-//		for (Entity term : topics) {
-//			System.out.print("{R} "+term.getEntityLabel() + " ");
-//		}
-//		if (topics.size() > 0) {
-//			System.out.println();
-//		}
+		// for (Entity term : topics) {
+		// System.out.print("{R} "+term.getEntityLabel() + " ");
+		// }
+		// if (topics.size() > 0) {
+		// System.out.println();
+		// }
 		return pathLevel;
 	}
 
@@ -499,7 +484,7 @@ public class EntityPathExtractor implements IEntityPathExtractor {
 	 * @param node
 	 * @return
 	 */
-	private Collection<Entity> extractTopics(WebPageNode node) {
+	private Collection<Entity> extractTopics(IWebPageNode node) {
 
 		// TODO: should also consider css files
 		Collection<Entity> entities = new LinkedHashSet<Entity>();
@@ -508,9 +493,9 @@ public class EntityPathExtractor implements IEntityPathExtractor {
 		String nodeTag = node.getTag().toLowerCase();
 		if (HTMLTags.getListTags().contains(nodeTag)) {
 			// return empty topic collection
-//			System.out.println(nodeTag + " is contained in list tags");
+			// System.out.println(nodeTag + " is contained in list tags");
 			return entities;
-			
+
 		} else if (HTMLTags.getTableTags().contains(nodeTag)) {
 			// TODO: more sophisticated approach should be taken
 			return entities;
@@ -524,22 +509,22 @@ public class EntityPathExtractor implements IEntityPathExtractor {
 			}
 
 		} else if (HTMLTags.getBlockTags().contains(nodeTag)) {
-//			String content = node.getFullContent();
-//			if (!TextProcessingUtils.isStringEmpty(content)) {
-//				Entity topic = new Entity(content);
-//				topic.setWrappingTag(nodeTag);
-//				entities.add(topic);
-//			}
+			// String content = node.getFullContent();
+			// if (!TextProcessingUtils.isStringEmpty(content)) {
+			// Entity topic = new Entity(content);
+			// topic.setWrappingTag(nodeTag);
+			// entities.add(topic);
+			// }
 		}
-//		else if ("img".equals(nodeTag)) {
-//			String content = node.getFullContent();
-//			if (!TextProcessingUtils.isStringEmpty(content)) {
-//				Term topic = new Term(content);
-//				topic.setWrappingTag(nodeTag);
-//				concepts.add(topic);
-//			}
-//			
-//		} 
+		// else if ("img".equals(nodeTag)) {
+		// String content = node.getFullContent();
+		// if (!TextProcessingUtils.isStringEmpty(content)) {
+		// Term topic = new Term(content);
+		// topic.setWrappingTag(nodeTag);
+		// concepts.add(topic);
+		// }
+		//
+		// }
 		else if ("a".equals(nodeTag)) {
 
 			boolean topicFound = false;
@@ -554,18 +539,18 @@ public class EntityPathExtractor implements IEntityPathExtractor {
 						// need add reference of <a>
 						entities.add(topic);
 					}
-				} 
-//				else if ("img".equals(tagName)) {
-//					Term term = this.extractTermFromImageElement(element);
-//					if (term != null) {
-//						System.out.println("   image tag: " + element.tagName());
-//						concepts.add(term);
-//					}
-//				}
+				}
+				// else if ("img".equals(tagName)) {
+				// Term term = this.extractTermFromImageElement(element);
+				// if (term != null) {
+				// System.out.println(" image tag: " + element.tagName());
+				// concepts.add(term);
+				// }
+				// }
 			}
 
 			if (!topicFound) {
-				String conceptContent = node.getFullContent(); 
+				String conceptContent = node.getFullContent();
 				if (!TextProcessingUtils.isStringEmpty(conceptContent)) {
 					Entity topic = new Entity(conceptContent);
 					topic.setWrappingTag(nodeTag);
@@ -575,152 +560,151 @@ public class EntityPathExtractor implements IEntityPathExtractor {
 			}
 
 		} else if (HTMLTags.getTopicTags().contains(nodeTag)) {
-			
-			String conceptContent = node.getFullContent(); 
+
+			String conceptContent = node.getFullContent();
 			if (!TextProcessingUtils.isStringEmpty(conceptContent)) {
 				Entity topic = new Entity(conceptContent);
 				topic.setWrappingTag(nodeTag);
 				entities.add(topic);
 			}
 
-		} 
-//      else if ("td".equals(nodeTag)) {
-//			// WebPageNode lastNode = node.getResidePath().getLastNode();
-//			System.out.println("   td tag: " + nodeTag);
-//			Term term = extractTermFromUnitElement(node.getWrappedElement());
-//			if (term != null) {
-//				concepts.add(term);
-//			}
-//
-//		}
+		}
+		// else if ("td".equals(nodeTag)) {
+		// // WebPageNode lastNode = node.getResidePath().getLastNode();
+		// System.out.println(" td tag: " + nodeTag);
+		// Term term = extractTermFromUnitElement(node.getWrappedElement());
+		// if (term != null) {
+		// concepts.add(term);
+		// }
+		//
+		// }
 		else if ("span".equals(nodeTag)) {
 
 			String textContent = node.getFullContent();
 			Element element = node.getWrappedElement();
 
-//			System.out.println(" Block element tag:  " + element.tagName());
-			if(this.isUpperCase(textContent)){
+			// System.out.println(" Block element tag: " + element.tagName());
+			if (this.isUpperCase(textContent)) {
 				Entity topic = new Entity(textContent);
 				topic.setWrappingTag(element.tagName());
 				entities.add(topic);
 				return entities;
 			}
 			/*
-			 *  if contains table, return empty concept collection
+			 * if contains table, return empty concept collection
 			 */
 			for (String tag : HTMLTags.getTableTags()) {
 				if (element.select(tag).size() > 0) {
-//					System.out.println("   element contains table tags");
+					// System.out.println(" element contains table tags");
 					return entities;
 				}
 			}
 
 			/*
-			 *  if contains list, return empty concept collection
+			 * if contains list, return empty concept collection
 			 */
 			for (String tag : HTMLTags.getListTags()) {
 				if (element.select(tag).size() > 0) {
-//					System.out.println("   element contains list tags");
+					// System.out.println(" element contains list tags");
 					return entities;
 				}
 			}
 
 			/*
-			 *  if contains form-related tags, return empty concept collection
+			 * if contains form-related tags, return empty concept collection
 			 */
 			for (String tag : HTMLTags.getFormTags()) {
 				if (element.select(tag).size() > 0) {
-//					System.out.println("   element contains eliminated tags");
+					// System.out.println(" element contains eliminated tags");
 					return entities;
 				}
 			}
-			
+
 			for (Element containedElement : element.select("*")) {
 
 				String tagName = containedElement.tagName().toLowerCase();
 				if (HTMLTags.getTopicTags().contains(tagName)) {
 					String conceptContent = TextProcessingUtils.escapeSpecial(containedElement.text());
 					if (!TextProcessingUtils.isStringEmpty(conceptContent)) {
-//						System.out.println("   topic tag: " + tagName);
+						// System.out.println(" topic tag: " + tagName);
 						Entity topic = new Entity(conceptContent);
 						topic.setWrappingTag(tagName);
 						entities.add(topic);
 					}
 				}
-				
-//				if ("img".equals(tagName)) {
-//					Term term = this.extractTermFromImageElement(containedElement);
-//					if (term != null) {
-//						System.out.println("   image tag: " + tagName);
-//						concepts.add(term);
-//					}
-//				}
+
+				// if ("img".equals(tagName)) {
+				// Term term =
+				// this.extractTermFromImageElement(containedElement);
+				// if (term != null) {
+				// System.out.println(" image tag: " + tagName);
+				// concepts.add(term);
+				// }
+				// }
 
 				if ("a".equals(tagName)) {
 					String conceptContent = TextProcessingUtils.escapeSpecial(containedElement.text());
-//					System.out.println("   link tag: " + conceptContent);
+					// System.out.println(" link tag: " + conceptContent);
 					if (!TextProcessingUtils.isStringEmpty(conceptContent) && this.isUpperCase(conceptContent)) {
 						Entity topic = new Entity(conceptContent);
 						topic.setWrappingTag(tagName);
 						entities.add(topic);
-					} 
-//					else {
-//						for (Element imgElement : containedElement.select("img")) {
-//							Term term = this.extractTermFromImageElement(imgElement);
-//							if (term != null) {
-//								concepts.add(term);
-//							}
-//						}
-//						
-//						for (Element imgElement : containedElement.select("IMG")) {
-//							Term term = this.extractTermFromImageElement(imgElement);
-//							if (term != null) {
-//								concepts.add(term);
-//							}
-//						}
-//					}
+					}
+					// else {
+					// for (Element imgElement : containedElement.select("img"))
+					// {
+					// Term term = this.extractTermFromImageElement(imgElement);
+					// if (term != null) {
+					// concepts.add(term);
+					// }
+					// }
+					//
+					// for (Element imgElement : containedElement.select("IMG"))
+					// {
+					// Term term = this.extractTermFromImageElement(imgElement);
+					// if (term != null) {
+					// concepts.add(term);
+					// }
+					// }
+					// }
 				}
-				
+
 			}
 
-//			if (concepts.size() == 0 && !"".equals(textContent.trim())) {
-//				// If current element contains text except but have no topic
-//				// (from topic tag), extract the possible concept sentence from
-//				// this text as the concept (There are many possible strategies.
-//				// e.g., extract last sentence or extract certain
-//				// amount of words from the text).
-//				String conceptSentence = this.extractConceptSentence(textContent.trim());
-//				Term topic = new Term(conceptSentence);
-//				topic.setWrappingTag(nodeTag);
-//				concepts.add(topic);
-//				return concepts;
-//			}
-			
+			// if (concepts.size() == 0 && !"".equals(textContent.trim())) {
+			// // If current element contains text except but have no topic
+			// // (from topic tag), extract the possible concept sentence from
+			// // this text as the concept (There are many possible strategies.
+			// // e.g., extract last sentence or extract certain
+			// // amount of words from the text).
+			// String conceptSentence =
+			// this.extractConceptSentence(textContent.trim());
+			// Term topic = new Term(conceptSentence);
+			// topic.setWrappingTag(nodeTag);
+			// concepts.add(topic);
+			// return concepts;
+			// }
+
 		}
-		
+
 		// <span>, <font>
 		return entities;
 	}
-	
-	
-	private boolean isUpperCase(String s)
-	{
-		for (int i=0; i<s.length(); i++)
-		{
-			if (Character.isLowerCase(s.charAt(i)))
-			{
+
+	private boolean isUpperCase(String s) {
+		for (int i = 0; i < s.length(); i++) {
+			if (Character.isLowerCase(s.charAt(i))) {
 				return false;
 			}
 		}
 		return true;
 	}
-	
-	
+
 	private boolean hasOnlyOneTextNode(Element element) {
 		int numberOfTextNode = 0;
 		for (Node child : element.childNodes()) {
 			if (child instanceof TextNode) {
-				if(!TextProcessingUtils.isStringEmpty(((TextNode) child).text())){
+				if (!TextProcessingUtils.isStringEmpty(((TextNode) child).text())) {
 					numberOfTextNode++;
 				}
 			} else if (child instanceof Element) {
@@ -736,17 +720,17 @@ public class EntityPathExtractor implements IEntityPathExtractor {
 
 		return true;
 	}
-	
+
 	private boolean hasOnlyOneElementNode(Element element) {
 		int numberOfElementNode = 0;
 		for (Node child : element.childNodes()) {
 			if (child instanceof TextNode) {
-				if(!TextProcessingUtils.isStringEmpty(((TextNode) child).text())){
+				if (!TextProcessingUtils.isStringEmpty(((TextNode) child).text())) {
 					return false;
 				}
 			} else if (child instanceof Element) {
 				if (!"br".equals(((Element) child).tagName().toLowerCase())) {
-					numberOfElementNode ++;
+					numberOfElementNode++;
 				}
 			}
 		}
@@ -755,7 +739,7 @@ public class EntityPathExtractor implements IEntityPathExtractor {
 		}
 		return true;
 	}
-	
+
 	private Entity extractTermFromUnitElement(Element element) {
 		Entity term = null;
 		if (this.hasOnlyOneTextNode(element)) {
@@ -810,9 +794,9 @@ public class EntityPathExtractor implements IEntityPathExtractor {
 
 		return term;
 	}
-	
+
 	private Entity extractTermFromImageElement(Element img) {
-		
+
 		String imgName = img.attr("alt");
 		String imgAlt = img.attr("title");
 		Entity term = null;
@@ -856,47 +840,44 @@ public class EntityPathExtractor implements IEntityPathExtractor {
 		return conceptSentence.replaceAll("\\s+", " ");
 	}
 
-	
-	private WebPageNode getContainerStructureNode(WebPageNode node) {
+	private IWebPageNode getContainerStructureNode(IWebPageNode node) {
 
-		if(HTMLTags.getListTags().contains(node.getTag())){
+		if (HTMLTags.getListTags().contains(node.getTag())) {
 			// search node with tag "ol" or "ul"
-			if(node.getTag().toLowerCase().equals("li")){
+			if (node.getTag().toLowerCase().equals("li")) {
 				// node with tag "li"
-//				WebPageNode containerNode = node.getParent();
-				WebPageNode containerNode = node;
-				while (containerNode != null 
-						&& !node.getParent().getTag().toLowerCase().equals("ol") 
+				// WebPageNode containerNode = node.getParent();
+				IWebPageNode containerNode = node;
+				while (containerNode != null && !node.getParent().getTag().toLowerCase().equals("ol")
 						&& !node.getParent().getTag().toLowerCase().equals("ul")) {
 					containerNode = containerNode.getParent();
 				}
 				return containerNode;
-				
+
 			} else {
 				// node with tag "ol" or "ul"
 				return node;
 			}
-			
-		} else if (HTMLTags.getTableTags().contains(node.getTag())){
-			
+
+		} else if (HTMLTags.getTableTags().contains(node.getTag())) {
+
 			// search node with tag "table"
 			if (!node.getTag().toLowerCase().equals("table")) {
 
-//				WebPageNode containerNode = node.getParent();
-				WebPageNode containerNode = node;
-				while (containerNode != null 
-						&& !containerNode.getTag().toLowerCase().equals("table")){
+				// WebPageNode containerNode = node.getParent();
+				IWebPageNode containerNode = node;
+				while (containerNode != null && !containerNode.getTag().toLowerCase().equals("table")) {
 					containerNode = containerNode.getParent();
 				}
 				return containerNode;
-				
+
 			} else {
 				return node;
 			}
-			
+
 		} else {
 			return node;
-//			return node.getParent();
+			// return node.getParent();
 		}
 	}
 
@@ -905,5 +886,10 @@ public class EntityPathExtractor implements IEntityPathExtractor {
 //		return webSiteURL;
 //	}
 	
+	public Collection<EntityPath> getEntityPaths() {
+		return this.termPaths;
+	}
+
+
 
 }

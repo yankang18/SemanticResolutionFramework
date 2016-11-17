@@ -48,7 +48,7 @@ public class WebPageImpl implements IWebPage {
 	private List<IWebPage> predecessorList;
 	private List<IWebPage> descendantList;
 	private Map<String, String> externalLinks;
-	private List<WebPathPath> webPagePathList;
+	private List<WebPagePath> webPagePathList;
 	private boolean loaded;
 	private boolean linksExtracted;
 	private UrlValidator urlValidator;
@@ -66,7 +66,7 @@ public class WebPageImpl implements IWebPage {
 //		this.externalLinks = new ArrayList<String>();
 		this.externalLinks = new LinkedHashMap<String, String>();
 		this.tagCounterMapper = new HashMap<String, Integer>();
-		this.webPagePathList = new ArrayList<WebPathPath>();
+		this.webPagePathList = new ArrayList<WebPagePath>();
 		this.entityPaths = new LinkedHashSet<EntityPath>();
 		this.webPageTopics = new LinkedHashSet<String>();
 		String[] schemes = { "http", "https" };
@@ -169,7 +169,7 @@ public class WebPageImpl implements IWebPage {
 //			System.out.println("## " + childTagName);
 			if (!HTMLTags.getEliminatedTags().contains(childTagName) 
 					&& !HTMLTags.getIgnoredTags().contains(childTagName)){
-				WebPathPath path = new WebPathPath();
+				WebPagePath path = new WebPagePath();
 				this.webPagePathList.add(path);
 				path.setHost(this.getPageURLAsString());
 				WebPageNode webPageNode = this.createWebPageNode(child);
@@ -180,7 +180,7 @@ public class WebPageImpl implements IWebPage {
 		}
 	}
 	
-	private void appendWebPagePathNode(WebPathPath path, Element element) {
+	private void appendWebPagePathNode(WebPagePath path, Element element) {
 		
 		if (!this.hasOnlyOneTextNode(element)) {
 			List<Node> childNodeList = element.childNodes();
@@ -190,9 +190,9 @@ public class WebPageImpl implements IWebPage {
 			 * Clone paths before navigating children of current element.
 			 */
 			int numOfPaths = numOfChildrenNode;
-			WebPathPath[] webPagePaths = null;
+			WebPagePath[] webPagePaths = null;
 			if (numOfPaths > 0) {
-				webPagePaths = new WebPathPath[numOfPaths];
+				webPagePaths = new WebPagePath[numOfPaths];
 				
 				/*
 				 * The first path is not cloned but the path that has already
@@ -243,7 +243,7 @@ public class WebPageImpl implements IWebPage {
 						if (textContent != null && !TextProcessingUtils.isStringEmpty(textContent)) {
 							WebPageNode newWebPageNode = this.createWebPageNode(textContent);
 							newWebPageNode.setLeafNode(true);
-							WebPathPath webPagePath = webPagePaths[indexOfPath];
+							WebPagePath webPagePath = webPagePaths[indexOfPath];
 							webPagePath.addNode(newWebPageNode);
 
 							/*
@@ -263,7 +263,7 @@ public class WebPageImpl implements IWebPage {
 //							System.out.println("#### content: " + combinedText);
 							WebPageNode newWebPageNode = this.createWebPageNode(elementNode);
 							newWebPageNode.setLeafNode(true);
-							WebPathPath webPagePath = webPagePaths[indexOfPath];
+							WebPagePath webPagePath = webPagePaths[indexOfPath];
 							webPagePath.addNode(newWebPageNode);
 							if (indexOfPath != 0) {
 //								System.out.println("#### *content: " + combinedText);
@@ -277,7 +277,7 @@ public class WebPageImpl implements IWebPage {
 						if (textContent != null && !TextProcessingUtils.isStringEmpty(textContent)) {
 							WebPageNode newWebPageNode = this.createWebPageNode(textContent);
 							newWebPageNode.setLeafNode(true);
-							WebPathPath webPagePath = webPagePaths[indexOfPath];
+							WebPagePath webPagePath = webPagePaths[indexOfPath];
 							webPagePath.addNode(newWebPageNode);
 							if (indexOfPath != 0) {
 								this.webPagePathList.add(webPagePath);
@@ -291,7 +291,7 @@ public class WebPageImpl implements IWebPage {
 						if (textContent != null && !TextProcessingUtils.isStringEmpty(textContent)) {
 							WebPageNode newWebPageNode = this.createWebPageNode(textContent);
 							newWebPageNode.setLeafNode(true);
-							WebPathPath webPagePath = webPagePaths[indexOfPath];
+							WebPagePath webPagePath = webPagePaths[indexOfPath];
 							webPagePath.addNode(newWebPageNode);
 							if (indexOfPath != 0) {
 								this.webPagePathList.add(webPagePath);
@@ -305,7 +305,7 @@ public class WebPageImpl implements IWebPage {
 							// Here should create a unique number for each newly
 							// created WebPageNode
 							WebPageNode newWebPageNode = this.createWebPageNode(elementNode);
-							WebPathPath webPagePath = webPagePaths[indexOfPath];
+							WebPagePath webPagePath = webPagePaths[indexOfPath];
 							webPagePath.addNode(newWebPageNode);
 							if (indexOfPath != 0) {
 								this.webPagePathList.add(webPagePath);
@@ -325,7 +325,7 @@ public class WebPageImpl implements IWebPage {
 			if (textContent != null && !TextProcessingUtils.isStringEmpty(textContent)) {
 				WebPageNode newWebPageNode = this.createWebPageNode(textContent);
 				newWebPageNode.setLeafNode(true);
-				WebPathPath webPagePath = webPagePaths[indexOfPath];
+				WebPagePath webPagePath = webPagePaths[indexOfPath];
 				webPagePath.addNode(newWebPageNode);
 				if (indexOfPath != 0) {
 					this.webPagePathList.add(webPagePath);
@@ -392,7 +392,7 @@ public class WebPageImpl implements IWebPage {
 	 * get all web page paths
 	 * @return a list of WebPagePath instances
 	 */
-	public List<WebPathPath> listWebTagPaths(){
+	public List<WebPagePath> listWebTagPaths(){
 		return this.webPagePathList;
 	}
 	
@@ -400,13 +400,13 @@ public class WebPageImpl implements IWebPage {
 	 * 
 	 * @return
 	 */
-	public List<WebPathPath> listWebTagPathsWithTextContent() {
+	public List<WebPagePath> listWebTagPathsWithTextContent() {
 		
 		/*
 		 * Note here we use ArrayList that allows duplicate paths.  
 		 */
-		List<WebPathPath> webPagePathsWithLeafContent = new ArrayList<WebPathPath>();
-		for (WebPathPath path : webPagePathList) {
+		List<WebPagePath> webPagePathsWithLeafContent = new ArrayList<WebPagePath>();
+		for (WebPagePath path : webPagePathList) {
 			if (path.containsTextContent() || path.getLastNode().getTag().equals("img")) {
 				webPagePathsWithLeafContent.add(path);
 			}

@@ -27,7 +27,7 @@ import umbc.ebiquity.kang.websiteparser.IWebPagePath;
 import umbc.ebiquity.kang.websiteparser.impl.SimplePageTemplatesSplitter;
 import umbc.ebiquity.kang.websiteparser.impl.WebPageImpl;
 import umbc.ebiquity.kang.websiteparser.impl.WebPageNode;
-import umbc.ebiquity.kang.websiteparser.impl.WebPathPath;
+import umbc.ebiquity.kang.websiteparser.impl.WebPagePath;
 import umbc.ebiquity.kang.websiteparser.object.HTMLTags;
 import umbc.ebiquity.kang.websiteparser.object.LeafNode;
 import umbc.ebiquity.kang.websiteparser.object.LeafNode.LeafType;
@@ -39,7 +39,7 @@ public class EntityPathExtractorImpl implements IEntityPathExtractor {
 	
 	// TODO: need to add a logger here
 	
-	private Collection<WebPathPath> templatePaths;
+	private Collection<WebPagePath> templatePaths;
 	private List<EntityPath> termPaths;
 	private List<IWebPageParsedPathsHolder> webPages;
 	private SimplePageTemplatesSplitter templatesSplitter;
@@ -101,17 +101,12 @@ public class EntityPathExtractorImpl implements IEntityPathExtractor {
 				visitedWebPagePaths.add(pathID);
 			}
 
-			/*
-			 * Get the last node (leaf node) in the Web Page Path
-			 */
+			 // Get the last node (leaf node) in the Web Page Path
 			IWebPageNode lastNode = webPagePath.getLastNode();
 			String tagName = lastNode.getTag();
 			String textualDescription = lastNode.getFullContent();
 			String nodePattern = lastNode.getNodePattern();
 
-			/*
-			 * 
-			 */
 			// if(!"text".equalsIgnoreCase(tagName)){
 			// continue;
 			// }
@@ -120,10 +115,8 @@ public class EntityPathExtractorImpl implements IEntityPathExtractor {
 			// node.
 			LeafNode leafNode = new LeafNode(LeafType.Term, textualDescription);
 
-			/*
-			 * If the last node has no textual description, skip this Web Page
-			 * Path
-			 */
+			// If the last node has no textual description, skip this Web Page
+			// Path
 			if (TextProcessingUtils.isStringEmpty(textualDescription)) {
 				continue;
 			}
@@ -183,10 +176,10 @@ public class EntityPathExtractorImpl implements IEntityPathExtractor {
 			/*
 			 * 
 			 */
-			EntityPath termPath = new EntityPath(webPagePath, leafNode);
-			termPath.addEntities(allEntities);
-			entityPaths.add(termPath);
-			constructedEntityPaths.put(pathID, termPath);
+			EntityPath entityPath = new EntityPath(webPagePath, leafNode);
+			entityPath.addEntities(allEntities);
+			entityPaths.add(entityPath);
+			constructedEntityPaths.put(pathID, entityPath);
 			// System.out.print("# All topics: ");
 			// for(Entity topic : allEntities) {
 			// System.out.print(" {" + topic.getEntityLabel() + "} ");

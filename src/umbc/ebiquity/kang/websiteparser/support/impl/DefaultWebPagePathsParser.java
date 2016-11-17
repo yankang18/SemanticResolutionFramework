@@ -15,7 +15,7 @@ import umbc.ebiquity.kang.websiteparser.ILeafNodeDetermintor;
 import umbc.ebiquity.kang.websiteparser.IWebPage;
 import umbc.ebiquity.kang.websiteparser.IWebPagePath;
 import umbc.ebiquity.kang.websiteparser.impl.WebPageNode;
-import umbc.ebiquity.kang.websiteparser.impl.WebPathPath;
+import umbc.ebiquity.kang.websiteparser.impl.WebPagePath;
 import umbc.ebiquity.kang.websiteparser.object.HTMLTags;
 import umbc.ebiquity.kang.websiteparser.support.IWebPageParsedPathsHolder;
 
@@ -49,7 +49,7 @@ public class DefaultWebPagePathsParser {
 			String childTagName = elem.tagName().toLowerCase();
 			// System.out.println("## " + childTagName);
 			if (isTargetTagName(childTagName)) {
-				WebPathPath path = new WebPathPath();
+				WebPagePath path = new WebPagePath();
 				this.webPagePathList.add(path);
 				// path.setHost(this.getPageURLAsString());
 				WebPageNode webPageNode = this.createWebPageNode(elem);
@@ -67,7 +67,7 @@ public class DefaultWebPagePathsParser {
 		return !HTMLTags.getEliminatedTags().contains(childTagName) && !HTMLTags.getIgnoredTags().contains(childTagName);
 	}
 
-	private void appendWebPagePathNode(WebPathPath path, Element elem) {
+	private void appendWebPagePathNode(WebPagePath path, Element elem) {
 
 //		if (this.containsOnlyOneTextNode(elem)) {
 		if (leafNodeDetermintor.isLeafNode(elem)) {
@@ -84,9 +84,9 @@ public class DefaultWebPagePathsParser {
 
 			// Clone paths before navigating children of current element.
 			int numOfPaths = numOfChildrenNode;
-			WebPathPath[] webPagePaths = null;
+			WebPagePath[] webPagePaths = null;
 			if (numOfPaths > 0) {
-				webPagePaths = new WebPathPath[numOfPaths];
+				webPagePaths = new WebPagePath[numOfPaths];
 
 				/*
 				 * The first path is not cloned but the path that has already
@@ -138,7 +138,7 @@ public class DefaultWebPagePathsParser {
 						if (textContent != null && !TextProcessingUtils.isStringEmpty(textContent)) {
 							WebPageNode newWebPageNode = this.createWebPageNode(textContent);
 							newWebPageNode.setLeafNode(true);
-							WebPathPath webPagePath = webPagePaths[indexOfPath];
+							WebPagePath webPagePath = webPagePaths[indexOfPath];
 							webPagePath.addNode(newWebPageNode);
 
 							/*
@@ -159,7 +159,7 @@ public class DefaultWebPagePathsParser {
 							// combinedText);
 							WebPageNode newWebPageNode = this.createWebPageNode(elementNode);
 							newWebPageNode.setLeafNode(true);
-							WebPathPath webPagePath = webPagePaths[indexOfPath];
+							WebPagePath webPagePath = webPagePaths[indexOfPath];
 							webPagePath.addNode(newWebPageNode);
 							if (indexOfPath != 0) {
 								// System.out.println("#### *content: " +
@@ -175,7 +175,7 @@ public class DefaultWebPagePathsParser {
 						if (textContent != null && !TextProcessingUtils.isStringEmpty(textContent)) {
 							WebPageNode newWebPageNode = this.createWebPageNode(textContent);
 							newWebPageNode.setLeafNode(true);
-							WebPathPath webPagePath = webPagePaths[indexOfPath];
+							WebPagePath webPagePath = webPagePaths[indexOfPath];
 							webPagePath.addNode(newWebPageNode);
 							if (indexOfPath != 0) {
 								this.webPagePathList.add(webPagePath);
@@ -189,7 +189,7 @@ public class DefaultWebPagePathsParser {
 						if (textContent != null && !TextProcessingUtils.isStringEmpty(textContent)) {
 							WebPageNode newWebPageNode = this.createWebPageNode(textContent);
 							newWebPageNode.setLeafNode(true);
-							WebPathPath webPagePath = webPagePaths[indexOfPath];
+							WebPagePath webPagePath = webPagePaths[indexOfPath];
 							webPagePath.addNode(newWebPageNode);
 							if (indexOfPath != 0) {
 								this.webPagePathList.add(webPagePath);
@@ -203,7 +203,7 @@ public class DefaultWebPagePathsParser {
 							// Here should create a unique number for each newly
 							// created WebPageNode
 							WebPageNode newWebPageNode = this.createWebPageNode(elementNode);
-							WebPathPath webPagePath = webPagePaths[indexOfPath];
+							WebPagePath webPagePath = webPagePaths[indexOfPath];
 							webPagePath.addNode(newWebPageNode);
 							if (indexOfPath != 0) {
 								this.webPagePathList.add(webPagePath);
@@ -223,7 +223,7 @@ public class DefaultWebPagePathsParser {
 			if (textContent != null && !TextProcessingUtils.isStringEmpty(textContent)) {
 				WebPageNode newWebPageNode = this.createWebPageNode(textContent);
 				newWebPageNode.setLeafNode(true);
-				WebPathPath webPagePath = webPagePaths[indexOfPath];
+				WebPagePath webPagePath = webPagePaths[indexOfPath];
 				webPagePath.addNode(newWebPageNode);
 				if (indexOfPath != 0) {
 					this.webPagePathList.add(webPagePath);
