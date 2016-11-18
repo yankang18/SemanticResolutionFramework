@@ -9,6 +9,7 @@ import umbc.ebiquity.kang.entityframework.impl.EntityGraph;
 import umbc.ebiquity.kang.entityframework.impl.EntityPathExtractorImpl;
 import umbc.ebiquity.kang.instanceconstructor.IInstanceDescriptionModel;
 import umbc.ebiquity.kang.instanceconstructor.impl.FileModelRepository;
+import umbc.ebiquity.kang.instanceconstructor.impl.FileSystemRepository;
 import umbc.ebiquity.kang.ontologyinitializator.utilities.FileUtility;
 import umbc.ebiquity.kang.websiteparser.ICrawledWebSite;
 import umbc.ebiquity.kang.websiteparser.impl.WebSiteCrawlerFactory;
@@ -44,7 +45,8 @@ public class InstanceDescriptionModelFactory {
 		String webSiteURLString = "http://www.accutrex.com";
 		URL webSiteURL = new URL(webSiteURLString);
 		IInstanceDescriptionModel extractedTripleStore = InstanceDescriptionModelFactory.construct(webSiteURL);
-		FileModelRepository repo = new FileModelRepository();
-		repo.save(extractedTripleStore, "testRepo7");
+//		FileModelRepository repo = new FileModelRepository();
+		FileSystemRepository repo = new FileSystemRepository();
+		repo.save(extractedTripleStore, "testRepo8");
 	}
 }

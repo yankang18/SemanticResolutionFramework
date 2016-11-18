@@ -50,12 +50,12 @@ public class DefaultWebPagePathsParser {
 			// System.out.println("## " + childTagName);
 			if (isTargetTagName(childTagName)) {
 				WebPagePath path = new WebPagePath();
-				this.webPagePathList.add(path);
+				webPagePathList.add(path);
 				// path.setHost(this.getPageURLAsString());
 				WebPageNode webPageNode = this.createWebPageNode(elem);
 				webPageNode.setLeafNode(false);
 				path.addNode(webPageNode);
-				this.appendWebPagePathNode(path, elem);
+				appendWebPagePathNode(path, elem);
 			}
 		}
 		parsed = true;

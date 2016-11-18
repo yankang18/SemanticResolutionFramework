@@ -156,7 +156,7 @@ public class FileModelRepository implements IInstanceDescriptionModelRepository 
 			String filePath = tripleFullPath;
 			String fileName = repositoryName;
 			String fileFullName = filePath + fileName;
-			return this.saveTripleString(fileFullName, triplesStringBuilder.toString());
+			return this.save(fileFullName, triplesStringBuilder.toString());
 		}
 		return true;
 	}
@@ -178,7 +178,7 @@ public class FileModelRepository implements IInstanceDescriptionModelRepository 
 		return model;
 	}
 
-	private boolean saveTripleString(String fileFullName, String tripleString) {
+	private boolean save(String fileFullName, String tripleString) {
 
 		File file = new File(fileFullName);
 		Writer writer = null;
