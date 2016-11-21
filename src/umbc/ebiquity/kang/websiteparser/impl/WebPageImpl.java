@@ -52,7 +52,6 @@ public class WebPageImpl implements IWebPage {
 	private boolean loaded;
 	private boolean linksExtracted;
 	private UrlValidator urlValidator;
-	private Set<EntityPath> entityPaths;
 	private Set<String> webPageTopics;
 	private String webPageMainTopic;
 	private Map<String, Integer> tagCounterMapper;
@@ -67,7 +66,6 @@ public class WebPageImpl implements IWebPage {
 		this.externalLinks = new LinkedHashMap<String, String>();
 		this.tagCounterMapper = new HashMap<String, Integer>();
 		this.webPagePathList = new ArrayList<WebPagePath>();
-		this.entityPaths = new LinkedHashSet<EntityPath>();
 		this.webPageTopics = new LinkedHashSet<String>();
 		String[] schemes = { "http", "https" };
 		this.urlValidator = new UrlValidator(schemes);
@@ -567,16 +565,6 @@ public class WebPageImpl implements IWebPage {
 //		} else {
 //			return false;
 //		}
-	}
-	
-	
-	public void addEntityPath(EntityPath entityPath){
-		this.entityPaths.add(entityPath);
-//		entityPath.setWebPage(this);
-	}
-
-	public Collection<EntityPath> getEntityPaths(){
-		return this.entityPaths;
 	}
 	
 	public Map<String, String> getExternalLinks(){

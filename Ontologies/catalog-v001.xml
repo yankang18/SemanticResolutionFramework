@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-    <group id="Folder Repository, directory=, recursive=true, Auto-Update=true, version=1" prefer="public" xml:base="">
-        <uri id="Automatically generated entry, Timestamp=1355108010867" name="http://www.semanticweb.org/ontologies/2012/4/SMO.owl" uri="SMO.owl"/>
-        <uri id="Automatically generated entry, Timestamp=1366395481425" name="http://www.owl-ontologies.com/Ontology1236208666.owl" uri="MSDL-Fullv1.owl"/>
-        <uri id="Automatically generated entry, Timestamp=1366411731380" name="http://www.umbc.edu/ebiquity/msdl.owl" uri="MSDL-Fullv2.owl"/>
-    </group>
-</catalog>

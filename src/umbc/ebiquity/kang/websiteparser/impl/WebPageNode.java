@@ -8,9 +8,7 @@ import java.util.Set;
 
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.TextNode;
 
-import umbc.ebiquity.kang.entityframework.object.Entity;
 import umbc.ebiquity.kang.textprocessing.util.TextProcessingUtils;
 import umbc.ebiquity.kang.websiteparser.IWebPageNode;
 import umbc.ebiquity.kang.websiteparser.object.HTMLTags;
