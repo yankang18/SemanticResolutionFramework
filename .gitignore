@@ -28,7 +28,7 @@ atlassian-ide-plugin.xml
 
 # project specific folders and files
 *.txt
-ManufacutringLexiconRepository
+ManufacturingLexiconRepository
 Ontologies
 OntologyRepository
 Repositories
